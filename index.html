@@ -13,95 +13,72 @@
 :root {
   --bg:     #08080D;
   --ink:    #F5F5F7;
-  --muted:  rgba(245,245,247,0.55);
-  --dim:    rgba(245,245,247,0.28);
-  --line:   rgba(255,255,255,0.08);
+  --muted:  rgba(245,245,247,0.5);
+  --dim:    rgba(245,245,247,0.25);
+  --line:   rgba(255,255,255,0.07);
+  --line2:  rgba(255,255,255,0.11);
   --purple: #4F5A97;
   --accent: #A8B4E8;
   --sans:   "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
   --serif:  "Instrument Serif","Times New Roman",serif;
+  --mono:   ui-monospace,"SF Mono",monospace;
   --pad:    clamp(24px,6vw,80px);
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{
-  background:var(--bg);
-  color:var(--ink);
-  font-family:var(--sans);
-  -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input{font-family:inherit}
 ::selection{background:var(--purple);color:#fff}
 
+body::before{
+  content:"";position:fixed;top:-25vh;left:-15vw;
+  width:80vw;height:80vw;max-width:900px;max-height:900px;
+  background:radial-gradient(circle,rgba(79,90,151,0.1) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+
 /* ── Nav ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  height:52px;
-  display:flex;align-items:center;justify-content:space-between;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
   padding:0 var(--pad);
-  background:rgba(8,8,13,0.78);
+  background:rgba(8,8,13,0.8);
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
   border-bottom:1px solid var(--line);
 }
 .brand{display:flex;align-items:center;gap:10px}
-.brand-word{font-size:15px;font-weight:600;letter-spacing:-0.025em;color:var(--ink)}
-.nav-btn{
-  font-size:13px;font-weight:500;color:var(--accent);
-  transition:opacity .15s;
-}
-.nav-btn:hover{opacity:.7}
+.brand-word{font-size:15px;font-weight:600;letter-spacing:-0.025em}
+.nav-btn{font-size:13px;font-weight:500;color:var(--accent);transition:opacity .15s}
+.nav-btn:hover{opacity:.65}
 
 /* ── Sections ── */
 section{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  text-align:center;
-  padding:140px var(--pad);
-  min-height:100svh;
-  position:relative;
+  text-align:center;padding:140px var(--pad);min-height:100svh;position:relative;
 }
-section.short{min-height:auto;padding:120px var(--pad)}
+section.short{min-height:auto;padding:100px var(--pad)}
 
 /* ── Hero ── */
-.hero-eyebrow{
-  font-size:13px;font-weight:400;
-  color:var(--accent);letter-spacing:0.01em;
-  margin-bottom:28px;
-  display:flex;align-items:center;gap:8px;
+.eyebrow{
+  font-size:13px;color:var(--accent);letter-spacing:0.01em;
+  margin-bottom:28px;display:inline-flex;align-items:center;gap:8px;
 }
-.hero-eyebrow-dot{
-  width:5px;height:5px;border-radius:50%;
-  background:var(--accent);
-  animation:blink 2.5s ease-in-out infinite;
-}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2.5s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
 
 h1{
-  font-size:clamp(52px,8.5vw,128px);
-  font-weight:600;
-  line-height:1.0;
-  letter-spacing:-0.05em;
-  margin-bottom:28px;
-  max-width:14ch;
+  font-size:clamp(52px,8.5vw,120px);font-weight:600;
+  line-height:1.0;letter-spacing:-0.05em;
+  margin-bottom:28px;max-width:14ch;
 }
-h1 em{
-  font-family:var(--serif);
-  font-style:italic;
-  font-weight:400;
-  letter-spacing:-0.03em;
-}
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-0.03em}
 
 .hero-sub{
-  font-size:clamp(17px,1.8vw,22px);
-  color:var(--muted);
-  line-height:1.6;
-  max-width:34ch;
-  margin-bottom:52px;
-  font-weight:400;
+  font-size:clamp(17px,1.7vw,21px);color:var(--muted);
+  line-height:1.6;max-width:34ch;margin-bottom:52px;
   letter-spacing:-0.01em;
 }
 
@@ -109,80 +86,181 @@ h1 em{
 .form-wrap{width:100%;max-width:380px}
 .form-row{
   display:flex;align-items:center;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.13);
-  border-radius:980px;
-  padding:5px 5px 5px 22px;
+  background:rgba(255,255,255,0.07);border:1px solid var(--line2);
+  border-radius:999px;padding:5px 5px 5px 22px;
   transition:border-color .2s,background .2s;
 }
-.form-row:focus-within{
-  border-color:rgba(168,180,232,0.4);
-  background:rgba(255,255,255,0.09);
-}
+.form-row:focus-within{border-color:rgba(168,180,232,0.45);background:rgba(255,255,255,0.09)}
 .form-row input{
   flex:1;background:none;border:none;outline:none;
-  font-size:15px;color:#fff;padding:11px 0;min-width:0;
-  letter-spacing:-0.005em;
+  font-size:15px;color:#fff;padding:11px 0;min-width:0;letter-spacing:-0.005em;
 }
-.form-row input::placeholder{color:rgba(255,255,255,0.25)}
+.form-row input::placeholder{color:rgba(255,255,255,0.22)}
 .form-btn{
-  background:#fff;color:#08080D;
-  padding:11px 22px;border-radius:999px;
-  font-size:13px;font-weight:600;
-  white-space:nowrap;flex-shrink:0;
+  background:#fff;color:#08080D;padding:11px 22px;border-radius:999px;
+  font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;
   transition:opacity .15s,transform .1s;
 }
-.form-btn:hover:not(:disabled){opacity:.85}
+.form-btn:hover:not(:disabled){opacity:.82}
 .form-btn:active{transform:scale(.98)}
 .form-btn:disabled{opacity:.3;cursor:default}
-.form-note{
-  font-size:12px;color:var(--dim);
-  margin-top:14px;letter-spacing:.01em;
-}
+.form-note{font-size:12px;color:var(--dim);margin-top:14px;letter-spacing:.01em}
 .form-error{font-size:12px;color:#F87171;margin-top:10px}
-.form-thanks{
-  font-size:clamp(20px,2vw,26px);
-  font-weight:500;letter-spacing:-0.03em;
-  color:var(--accent);line-height:1.45;
-}
+.form-thanks{font-size:clamp(20px,2vw,26px);font-weight:500;letter-spacing:-0.03em;color:var(--accent);line-height:1.45}
 
-/* ── Big section headlines ── */
+/* ── Section headlines ── */
 h2{
-  font-size:clamp(38px,6vw,90px);
-  font-weight:600;
-  line-height:1.02;
-  letter-spacing:-0.048em;
-  max-width:18ch;
+  font-size:clamp(38px,6vw,86px);font-weight:600;
+  line-height:1.02;letter-spacing:-0.048em;max-width:18ch;
 }
-h2 em{
-  font-family:var(--serif);font-style:italic;
-  font-weight:400;letter-spacing:-0.025em;
-}
+h2 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-0.025em}
 h2 .dim{color:var(--muted)}
+.section-sub{font-size:clamp(16px,1.5vw,19px);color:var(--muted);max-width:36ch;line-height:1.65;margin-top:18px;letter-spacing:-0.008em}
 
-.section-sub{
-  font-size:clamp(16px,1.5vw,20px);
-  color:var(--muted);
-  max-width:36ch;
-  line-height:1.65;
-  margin-top:20px;
-  letter-spacing:-0.008em;
+/* ── Dashboard preview ── */
+.preview-section{
+  padding:0 var(--pad) 120px;
+  min-height:auto;
+}
+.preview-label{
+  font-size:12px;color:var(--dim);letter-spacing:0.06em;
+  text-transform:uppercase;font-family:var(--mono);
+  margin-bottom:32px;
+}
+.browser-frame{
+  width:100%;max-width:1000px;
+  border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,0.1);
+  box-shadow:0 40px 120px rgba(0,0,0,0.55),0 8px 32px rgba(0,0,0,0.35);
+}
+.browser-bar{
+  background:#1C1C24;
+  padding:12px 16px;
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.browser-dots{display:flex;gap:6px}
+.browser-dot{width:10px;height:10px;border-radius:50%}
+.browser-url{
+  flex:1;background:rgba(255,255,255,0.06);
+  border-radius:6px;padding:5px 14px;
+  font-size:11px;color:rgba(255,255,255,0.3);font-family:var(--mono);
+  text-align:center;letter-spacing:0.01em;
 }
 
-/* ── Feature list (Apple-style underneath) ── */
+/* Dashboard inside */
+.dash{
+  background:#F7F7F5;
+  display:grid;grid-template-columns:220px 1fr;
+  min-height:520px;
+  font-family:var(--sans);
+}
+@media(max-width:700px){.dash{grid-template-columns:1fr}}
+
+/* Sidebar */
+.dash-sidebar{
+  background:#EFEEEB;
+  border-right:1px solid rgba(0,0,0,0.07);
+  padding:20px 16px;
+  display:flex;flex-direction:column;gap:0;
+}
+@media(max-width:700px){.dash-sidebar{display:none}}
+.ds-brand{display:flex;align-items:center;gap:8px;margin-bottom:20px;padding:4px 8px}
+.ds-brand-word{font-size:14px;font-weight:600;letter-spacing:-0.025em;color:#0D0D0D}
+.ds-new{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 10px;border-radius:8px;margin-bottom:16px;
+  font-size:12px;color:#555;cursor:pointer;
+}
+.ds-new:hover{background:rgba(0,0,0,0.04)}
+.ds-section{font-size:10px;color:#AAA;text-transform:uppercase;letter-spacing:0.08em;font-family:var(--mono);padding:4px 10px;margin-bottom:4px}
+.ds-item{
+  font-size:12px;color:#555;padding:7px 10px;border-radius:7px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;
+}
+.ds-item:hover{background:rgba(0,0,0,0.05);color:#1A1A1A}
+.ds-item.active{background:rgba(79,90,151,0.1);color:#4F5A97}
+.ds-foot{margin-top:auto;padding:12px 10px;border-top:1px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:9px}
+.ds-avatar{width:28px;height:28px;border-radius:50%;background:#4F5A97;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;flex-shrink:0}
+.ds-foot-name{font-size:12px;font-weight:500;color:#1A1A1A}
+.ds-foot-plan{font-size:10px;color:#AAA;font-family:var(--mono)}
+
+/* Main area */
+.dash-main{
+  padding:36px 40px;
+  display:flex;flex-direction:column;gap:28px;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(79,90,151,0.06) 0%, transparent 70%),
+    #F7F7F5;
+}
+@media(max-width:700px){.dash-main{padding:24px 20px}}
+
+.dash-greeting{
+  font-size:clamp(24px,3vw,34px);font-weight:600;
+  letter-spacing:-0.04em;color:#0D0D0D;line-height:1.1;
+}
+.dash-greeting em{font-family:var(--serif);font-style:italic;font-weight:400;color:#4F5A97}
+.dash-sub{font-size:13px;color:#777;margin-top:6px;line-height:1.55;max-width:56ch}
+
+/* Stat cards */
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:560px){.dash-stats{grid-template-columns:1fr 1fr}}
+.ds-card{
+  background:white;border:1px solid rgba(0,0,0,0.07);
+  border-radius:14px;padding:18px 20px;
+}
+.ds-card-label{
+  font-size:9px;color:#AAA;text-transform:uppercase;letter-spacing:0.1em;
+  font-family:var(--mono);margin-bottom:8px;
+}
+.ds-card-val{font-size:clamp(18px,2.2vw,26px);font-weight:600;letter-spacing:-0.04em;color:#0D0D0D}
+.ds-card-change{font-size:11px;margin-top:4px}
+.ds-up{color:#2A7A4F}
+.ds-down{color:#B03030}
+.ds-neutral{color:#888}
+
+/* Sparkline */
+.sparkline{margin-top:10px}
+.spark-svg{width:100%;height:28px}
+
+/* Prompts */
+.dash-prompts-label{
+  font-size:10px;color:#AAA;text-transform:uppercase;
+  letter-spacing:0.08em;font-family:var(--mono);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.dash-prompts-label span{font-family:var(--sans);text-transform:none;letter-spacing:0;font-size:10px;color:#BBB}
+.dash-prompts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+@media(max-width:500px){.dash-prompts{grid-template-columns:1fr}}
+.dp{
+  background:white;border:1px solid rgba(0,0,0,0.07);border-radius:12px;
+  padding:14px 16px;cursor:pointer;transition:border-color .15s;
+}
+.dp:hover{border-color:rgba(79,90,151,0.35)}
+.dp-icon{font-size:16px;margin-bottom:8px}
+.dp-title{font-size:12px;font-weight:500;color:#1A1A1A;letter-spacing:-0.015em;margin-bottom:3px}
+.dp-sub{font-size:11px;color:#AAA;line-height:1.4}
+
+/* Input bar at bottom */
+.dash-input-bar{
+  background:white;border:1px solid rgba(0,0,0,0.1);
+  border-radius:12px;padding:13px 16px;
+  display:flex;align-items:center;gap:12px;
+  color:#AAA;font-size:13px;
+}
+.dash-input-send{
+  margin-left:auto;
+  width:30px;height:30px;border-radius:8px;
+  background:#4F5A97;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+
+/* ── Feature list ── */
 .feat-list{
-  margin-top:72px;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:0;
-  border-top:1px solid var(--line);
-  max-width:900px;width:100%;
-  text-align:left;
+  margin-top:72px;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border-top:1px solid var(--line);max-width:900px;width:100%;text-align:left;
 }
 @media(max-width:640px){.feat-list{grid-template-columns:1fr}}
-.feat{
-  padding:40px 36px 40px 0;
-  border-right:1px solid var(--line);
-}
+.feat{padding:40px 36px 40px 0;border-right:1px solid var(--line)}
 .feat:last-child{border-right:none;padding-right:0;padding-left:36px}
 .feat:nth-child(2){padding-left:36px}
 @media(max-width:640px){
@@ -190,55 +268,31 @@ h2 .dim{color:var(--muted)}
   .feat:last-child{border-bottom:none}
   .feat,.feat:nth-child(2),.feat:last-child{padding-left:0;padding-right:0}
 }
-.feat-title{
-  font-size:17px;font-weight:600;
-  letter-spacing:-0.03em;margin-bottom:10px;
-}
+.feat-title{font-size:17px;font-weight:600;letter-spacing:-0.03em;margin-bottom:10px}
 .feat-body{font-size:14px;color:var(--muted);line-height:1.65}
 
-/* ── How section ── */
+/* ── How ── */
 .how-items{
-  margin-top:72px;
-  display:flex;flex-direction:column;
-  gap:0;
-  max-width:680px;width:100%;
-  text-align:left;
+  margin-top:72px;display:flex;flex-direction:column;gap:0;
+  max-width:680px;width:100%;text-align:left;
 }
-.how-item{
-  display:flex;align-items:flex-start;gap:32px;
-  padding:40px 0;
-  border-bottom:1px solid var(--line);
-}
+.how-item{display:flex;align-items:flex-start;gap:32px;padding:40px 0;border-bottom:1px solid var(--line)}
 .how-item:first-child{border-top:1px solid var(--line)}
-.how-n{
-  font-size:13px;color:var(--dim);
-  font-weight:500;letter-spacing:0.02em;
-  min-width:28px;margin-top:2px;
-  flex-shrink:0;
-}
+.how-n{font-size:13px;color:var(--dim);font-weight:500;letter-spacing:0.02em;min-width:28px;margin-top:2px;flex-shrink:0}
 .how-title{font-size:18px;font-weight:500;letter-spacing:-0.03em;margin-bottom:8px}
 .how-body{font-size:14px;color:var(--muted);line-height:1.65}
 
 /* ── Price ── */
 .price-pair{
-  margin-top:72px;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:18px;overflow:hidden;
-  max-width:640px;width:100%;text-align:left;
+  margin-top:72px;display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:18px;overflow:hidden;max-width:640px;width:100%;text-align:left;
 }
 @media(max-width:520px){.price-pair{grid-template-columns:1fr}}
 .pc{background:var(--bg);padding:36px}
 .pc.hi{background:#111116}
-.pc-tier{
-  font-size:11px;font-weight:500;letter-spacing:0.08em;
-  text-transform:uppercase;color:var(--dim);
-  margin-bottom:18px;
-}
-.pc-price{
-  font-size:48px;font-weight:600;letter-spacing:-0.05em;
-  margin-bottom:4px;
-}
+.pc-tier{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-bottom:18px}
+.pc-price{font-size:48px;font-weight:600;letter-spacing:-0.05em;margin-bottom:4px}
 .pc-price sup{font-size:22px;font-weight:500;vertical-align:top;margin-top:10px;display:inline-block}
 .pc-per{font-size:14px;color:var(--muted)}
 .pc-hr{border:none;border-top:1px solid var(--line);margin:28px 0}
@@ -246,28 +300,13 @@ h2 .dim{color:var(--muted)}
 .pc-item{font-size:13.5px;color:var(--muted);display:flex;gap:12px;align-items:baseline}
 .pc-item-check{color:var(--accent);flex-shrink:0;font-size:12px}
 
-.price-cta{
-  margin-top:72px;
-  display:flex;flex-direction:column;align-items:center;gap:0;
-}
-.price-cta-h{
-  font-size:clamp(26px,3vw,40px);font-weight:600;
-  letter-spacing:-0.04em;line-height:1.1;
-  margin-bottom:36px;
-}
+.price-cta{margin-top:72px;display:flex;flex-direction:column;align-items:center}
+.price-cta-h{font-size:clamp(26px,3vw,40px);font-weight:600;letter-spacing:-0.04em;line-height:1.1;margin-bottom:36px}
 .price-cta-h em{font-family:var(--serif);font-style:italic;font-weight:400}
 .price-note{font-size:12px;color:var(--dim);margin-top:14px;letter-spacing:.01em}
 
-/* ── Divider ── */
-.div-line{border:none;border-top:1px solid var(--line)}
-
 /* ── Footer ── */
-footer{
-  padding:48px var(--pad);
-  border-top:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:16px;
-}
+footer{padding:48px var(--pad);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .foot-brand{display:flex;align-items:center;gap:9px}
 .foot-word{font-size:14px;font-weight:600;letter-spacing:-0.025em}
 .foot-copy{font-size:13px;color:var(--dim)}
@@ -276,31 +315,20 @@ footer{
 .foot-link:hover{color:var(--ink)}
 
 /* ── Sticky ── */
-.sticky{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  z-index:200;transition:opacity .3s,transform .3s;
-  pointer-events:all;
-}
+.sticky{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:200;transition:opacity .3s,transform .3s}
 .sticky.hide{opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none}
 .sticky-inner{
   display:flex;align-items:center;gap:14px;
-  background:rgba(16,16,22,0.9);
+  background:rgba(16,16,22,0.92);
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:999px;
+  border:1px solid var(--line2);border-radius:999px;
   padding:8px 8px 8px 24px;
   box-shadow:0 8px 40px rgba(0,0,0,0.6);
 }
-.sticky-text{font-size:13px;color:rgba(255,255,255,0.68);white-space:nowrap;letter-spacing:-0.01em}
-.sticky-btn{
-  background:#fff;color:#08080D;
-  padding:10px 22px;border-radius:999px;
-  font-size:13px;font-weight:600;
-  transition:opacity .15s;white-space:nowrap;
-}
+.sticky-text{font-size:13px;color:rgba(255,255,255,0.65);white-space:nowrap;letter-spacing:-0.01em}
+.sticky-btn{background:#fff;color:#08080D;padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;transition:opacity .15s;white-space:nowrap}
 .sticky-btn:hover{opacity:.85}
 
-/* reveal */
 .rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
   </style>
@@ -319,10 +347,10 @@ footer{
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
-const Mark = ({ size = 24 }) => (
+const Mark = ({ size=24, color="#A8B4E8", bg="#08080D" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
     width={size} height={size} style={{display:"block",width:size,height:size,flexShrink:0}}>
-    <g fill="#A8B4E8">
+    <g fill={color}>
       <rect x="46" y="14" width="8" height="8" rx="1.5"/>
       <rect x="78" y="46" width="8" height="8" rx="1.5"/>
       <rect x="46" y="78" width="8" height="8" rx="1.5"/>
@@ -332,26 +360,23 @@ const Mark = ({ size = 24 }) => (
       <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
       <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
       <circle cx="50" cy="50" r="17"/>
-      <circle cx="50" cy="50" r="11" fill="#08080D"/>
+      <circle cx="50" cy="50" r="11" fill={bg}/>
       <circle cx="50" cy="50" r="6"/>
-      <circle cx="50" cy="50" r="2.2" fill="#08080D"/>
+      <circle cx="50" cy="50" r="2.2" fill={bg}/>
     </g>
   </svg>
 );
 
-const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
-  const [v, setV] = useState("");
-  const [ok, setOk] = useState(false);
-  const [ld, setLd] = useState(false);
-  const [er, setEr] = useState("");
+const Form = ({ source, btn="Join waitlist", ph="your@email.com" }) => {
+  const [v,setV]=useState(""), [ok,setOk]=useState(false), [ld,setLd]=useState(false), [er,setEr]=useState("");
   const go = async e => {
     e.preventDefault();
     if (!v.includes("@")) { setEr("Enter a valid email."); return; }
     setLd(true); setEr("");
     try {
       const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      const { error } = await sb.from("waitlist").insert([{ email: v, source: source || "landing" }]);
-      if (error && error.code !== "23505") setEr("Something went wrong. Try again.");
+      const { error } = await sb.from("waitlist").insert([{ email:v, source:source||"landing" }]);
+      if (error && error.code!=="23505") setEr("Something went wrong. Try again.");
       else setOk(true);
     } catch { setEr("Something went wrong. Try again."); }
     finally { setLd(false); }
@@ -361,7 +386,7 @@ const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
     <div className="form-wrap">
       <form className="form-row" onSubmit={go}>
         <input type="email" value={v} onChange={e=>{setV(e.target.value);setEr("")}} placeholder={ph} autoComplete="email"/>
-        <button className="form-btn" type="submit" disabled={ld}>{ld ? "…" : btn}</button>
+        <button className="form-btn" type="submit" disabled={ld}>{ld?"…":btn}</button>
       </form>
       {er && <div className="form-error">{er}</div>}
       <div className="form-note">Free to join. No credit card.</div>
@@ -372,25 +397,151 @@ const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
 const useReveal = () => {
   const r = useRef(null);
   useEffect(() => {
-    const el = r.current; if (!el) return;
-    const o = new IntersectionObserver(es => {
-      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); o.unobserve(e.target); }});
-    }, { threshold: 0.08 });
-    o.observe(el); return () => o.disconnect();
-  }, []);
+    const el=r.current; if(!el) return;
+    const o=new IntersectionObserver(es=>{
+      es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add("in");o.unobserve(e.target);} });
+    },{threshold:0.07});
+    o.observe(el); return ()=>o.disconnect();
+  },[]);
   return r;
 };
 
+/* Sparkline path */
+const Spark = ({ points, color="#4F5A97" }) => {
+  const w=200, h=28;
+  const min=Math.min(...points), max=Math.max(...points);
+  const xs=points.map((_,i)=>(i/(points.length-1))*w);
+  const ys=points.map(p=>h-((p-min)/(max-min||1))*(h-4)-2);
+  const d="M"+xs.map((x,i)=>`${x},${ys[i]}`).join(" L");
+  return (
+    <svg className="spark-svg" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
+      <path d={d} fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+};
+
+/* ── Dashboard preview component ── */
+const DashPreview = () => (
+  <div className="browser-frame">
+    <div className="browser-bar">
+      <div className="browser-dots">
+        <div className="browser-dot" style={{background:"#FF5F57"}}/>
+        <div className="browser-dot" style={{background:"#FFBD2E"}}/>
+        <div className="browser-dot" style={{background:"#28CA41"}}/>
+      </div>
+      <div className="browser-url">app.meet-luca.com</div>
+    </div>
+
+    <div className="dash">
+      {/* Sidebar */}
+      <div className="dash-sidebar">
+        <div className="ds-brand">
+          <Mark size={20} color="#4F5A97" bg="#F7F7F5"/>
+          <span className="ds-brand-word">Luca</span>
+        </div>
+        <div className="ds-new">
+          <span>New conversation</span>
+          <span style={{fontSize:"11px",color:"#CCC"}}>⌘N</span>
+        </div>
+        <div className="ds-section">Today</div>
+        <div className="ds-item active">Home</div>
+        <div className="ds-item">Did I overspend this month?</div>
+        <div className="ds-item">Should I open an HSA?</div>
+        <div className="ds-section" style={{marginTop:"12px"}}>Yesterday</div>
+        <div className="ds-item">Roth vs Traditional 401(k)</div>
+        <div className="ds-item">How much house can I afford?</div>
+        <div className="ds-section" style={{marginTop:"12px"}}>This week</div>
+        <div className="ds-item">Budget for Lisbon trip</div>
+        <div className="ds-item">Refinancing student loans</div>
+        <div className="ds-foot">
+          <div className="ds-avatar">JM</div>
+          <div>
+            <div className="ds-foot-name">James M.</div>
+            <div className="ds-foot-plan">Luca · Pro</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main */}
+      <div className="dash-main">
+        <div>
+          <div className="dash-greeting">
+            Good morning, <em>James.</em>
+          </div>
+          <div className="dash-sub">
+            You're tracking 4% ahead of your savings goal this month. Want to look at your investment allocation, or something else?
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="dash-stats">
+          <div className="ds-card">
+            <div className="ds-card-label">Net worth · this month</div>
+            <div className="ds-card-val">$148,302</div>
+            <div className="ds-card-change ds-up">▲ 2.1% vs. last month</div>
+            <div className="sparkline"><Spark points={[120,118,124,121,130,128,135,132,138,148]} color="#2A7A4F"/></div>
+          </div>
+          <div className="ds-card">
+            <div className="ds-card-label">Cash on hand</div>
+            <div className="ds-card-val">$12,448</div>
+            <div className="ds-card-change ds-neutral">4 accounts linked</div>
+            <div className="sparkline"><Spark points={[14,13,15,12,11,13,12,14,13,12]} color="#4F5A97"/></div>
+          </div>
+          <div className="ds-card">
+            <div className="ds-card-label">Monthly spend · 30d</div>
+            <div className="ds-card-val">$4,829</div>
+            <div className="ds-card-change ds-down">▼ 6.2% tighter than last month</div>
+            <div className="sparkline"><Spark points={[55,58,54,60,57,52,50,48,51,48]} color="#B03030"/></div>
+          </div>
+        </div>
+
+        {/* Prompt suggestions */}
+        <div>
+          <div className="dash-prompts-label">
+            Things you might ask
+            <span>based on your last 30 days</span>
+          </div>
+          <div className="dash-prompts">
+            {[
+              {icon:"📊", title:"Where did my money go in April?", sub:"Categorize and surface unusual spend."},
+              {icon:"🏠", title:"Plan for a 20% house down payment", sub:"Reverse-engineer the monthly savings."},
+              {icon:"🛡️", title:"Is my emergency fund big enough?", sub:"Based on your current burn rate."},
+              {icon:"📈", title:"Rebalance my portfolio", sub:"Drift analysis with tax-aware moves."},
+            ].map(({icon,title,sub})=>(
+              <div key={title} className="dp">
+                <div className="dp-icon">{icon}</div>
+                <div className="dp-title">{title}</div>
+                <div className="dp-sub">{sub}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Input bar */}
+        <div className="dash-input-bar">
+          <span>Ask Luca about your money…</span>
+          <div className="dash-input-send">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 const App = () => {
-  const [bar, setBar] = useState(false);
-  const heroRef = useRef(null);
+  const [bar,setBar]=useState(false);
+  const heroRef=useRef(null);
   const r1=useReveal(), r2=useReveal(), r3=useReveal(), r4=useReveal();
 
-  useEffect(() => {
-    const o = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { threshold: 0.15 });
-    if (heroRef.current) o.observe(heroRef.current);
-    return () => o.disconnect();
-  }, []);
+  useEffect(()=>{
+    const o=new IntersectionObserver(([e])=>setBar(!e.isIntersecting),{threshold:0.15});
+    if(heroRef.current) o.observe(heroRef.current);
+    return ()=>o.disconnect();
+  },[]);
 
   return (<>
     {/* Nav */}
@@ -401,31 +552,29 @@ const App = () => {
 
     {/* Hero */}
     <section ref={heroRef}>
-      <div className="hero-eyebrow"><span className="hero-eyebrow-dot"/>Early access open</div>
-      <h1>
-        Your money<br/>
-        has a lot to<br/>
-        <em>say.</em>
-      </h1>
-      <p className="hero-sub">
-        Luca listens to your accounts<br/>and finally tells you the truth.
-      </p>
+      <div className="eyebrow"><span className="eyebrow-dot"/>Early access open</div>
+      <h1>Your money<br/>has a lot to<br/><em>say.</em></h1>
+      <p className="hero-sub">Luca listens to your accounts<br/>and finally tells you the truth.</p>
       <Form source="hero" btn="Get early access" ph="your@email.com"/>
+    </section>
+
+    {/* Dashboard preview */}
+    <section className="preview-section short rv" ref={r1}>
+      <div className="preview-label">A sneak peek</div>
+      <DashPreview/>
     </section>
 
     {/* Statement 1 */}
     <section className="short">
-      <div className="rv" ref={r1}>
+      <div className="rv" ref={r2}>
         <h2>Most people<br/>have <em className="dim">no idea</em><br/>where it goes.</h2>
-        <p className="section-sub">
-          Luca connects to every account you have and shows you exactly what's happening — without you having to figure it out.
-        </p>
+        <p className="section-sub">Luca connects to every account you have and shows you exactly what's happening — without you having to figure it out.</p>
         <div className="feat-list">
           {[
             ["Ask anything","\"Can I afford this?\" \"Why is my balance low?\" \"What should I do with $500?\" Real answers, instantly."],
             ["Your real numbers","Not averages. Not estimates. Your actual spending, income, and savings — updated daily."],
             ["A clear next step","Luca doesn't just show data. It tells you what to do — and why."],
-          ].map(([t,b]) => (
+          ].map(([t,b])=>(
             <div key={t} className="feat">
               <div className="feat-title">{t}</div>
               <div className="feat-body">{b}</div>
@@ -437,7 +586,7 @@ const App = () => {
 
     {/* Statement 2 */}
     <section className="short">
-      <div className="rv" ref={r2}>
+      <div className="rv" ref={r3}>
         <h2>Simple as<br/>sending a<br/><em>text.</em></h2>
         <p className="section-sub">No spreadsheets. No learning curve. Just ask.</p>
         <div className="how-items">
@@ -445,22 +594,19 @@ const App = () => {
             ["01","Connect your accounts","Link everything in 60 seconds via Plaid. Read-only access. Your data never moves."],
             ["02","Ask Luca anything","Type like you'd text a friend. Luca knows your full picture."],
             ["03","Get a real plan","Specific steps. Real numbers. No generic advice."],
-          ].map(([n,t,b]) => (
+          ].map(([n,t,b])=>(
             <div key={n} className="how-item">
               <div className="how-n">{n}</div>
-              <div>
-                <div className="how-title">{t}</div>
-                <div className="how-body">{b}</div>
-              </div>
+              <div><div className="how-title">{t}</div><div className="how-body">{b}</div></div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    {/* Pricing */}
+    {/* Price */}
     <section className="short" id="waitlist">
-      <div className="rv" ref={r3}>
+      <div className="rv" ref={r4}>
         <h2>Simple<br/><em>pricing.</em></h2>
         <p className="section-sub">Start free. Upgrade when it clicks.</p>
         <div className="price-pair">
