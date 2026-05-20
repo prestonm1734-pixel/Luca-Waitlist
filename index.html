@@ -117,13 +117,13 @@ h2 .soft{color:var(--muted)}
 @media(max-width:440px){.prompts-grid{grid-template-columns:1fr}}
 .prompt-card{
   background:#080808;border:1px solid var(--line2);border-radius:16px;
-  padding:22px 24px;cursor:default;
+  padding:24px 26px;cursor:default;
   transition:border-color .2s,background .2s;
 }
-.prompt-card:hover{border-color:rgba(168,180,232,.25);background:#0D0D0D}
-.prompt-icon{font-size:20px;margin-bottom:12px}
-.prompt-q{font-size:15px;font-weight:500;letter-spacing:-.025em;color:var(--ink);line-height:1.35}
-.prompt-tag{display:inline-block;margin-top:10px;font-size:11px;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
+.prompt-card:hover{border-color:rgba(168,180,232,.28);background:#0C0C0C}
+.prompt-icon{width:32px;height:32px;margin-bottom:16px;opacity:.7}
+.prompt-q{font-size:15px;font-weight:500;letter-spacing:-.025em;color:var(--ink);line-height:1.4}
+.prompt-tag{display:inline-block;margin-top:12px;font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase}
 
 /* ── Chat UI ── */
 .chat-frame{
@@ -342,13 +342,46 @@ const SendIcon = () => (
   </svg>
 );
 
+const ICONS = {
+  Spending: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+    </svg>
+  ),
+  Goals: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/>
+    </svg>
+  ),
+  Investing: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+    </svg>
+  ),
+  Savings: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    </svg>
+  ),
+  Planning: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+    </svg>
+  ),
+  Retirement: (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  ),
+};
+
 const PROMPTS = [
-  { icon:"💸", q:"Where did all my money go this month?", tag:"Spending" },
-  { icon:"🏠", q:"Can I actually afford a house right now?", tag:"Goals" },
-  { icon:"📈", q:"Should I invest or pay off debt first?", tag:"Investing" },
-  { icon:"🛡️", q:"Is my emergency fund big enough?", tag:"Savings" },
-  { icon:"✈️", q:"Can I afford a trip to Europe in June?", tag:"Planning" },
-  { icon:"💼", q:"Am I saving enough for retirement?", tag:"Retirement" },
+  { tag:"Spending",   q:"Where did all my money go this month?" },
+  { tag:"Goals",      q:"Can I actually afford a house right now?" },
+  { tag:"Investing",  q:"Should I invest or pay off debt first?" },
+  { tag:"Savings",    q:"Is my emergency fund big enough?" },
+  { tag:"Planning",   q:"Can I afford a trip to Europe in June?" },
+  { tag:"Retirement", q:"Am I saving enough for retirement?" },
 ];
 
 const App = () => {
@@ -386,9 +419,9 @@ const App = () => {
         <h2>Any question.<br/><em>Real answers.</em></h2>
         <p className="ssub">Type exactly what you'd ask a financial advisor. Luca knows your full picture.</p>
         <div className="prompts-grid">
-          {PROMPTS.map(({icon,q,tag})=>(
+          {PROMPTS.map(({q,tag})=>(
             <div key={q} className="prompt-card">
-              <div className="prompt-icon">{icon}</div>
+              <div className="prompt-icon">{ICONS[tag]}</div>
               <div className="prompt-q">{q}</div>
               <div className="prompt-tag">{tag}</div>
             </div>
