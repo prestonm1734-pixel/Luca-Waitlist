@@ -5,49 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luca — talk to your money.</title>
   <meta name="description" content="Luca connects to your real accounts and tells you exactly what to do with your money.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%234F5A97'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='white'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='white'/></g></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23A8B4E8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230C0C11'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230C0C11'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
 :root {
-  --bg:         #F5F4F0;
-  --bg-2:       #EEEDE8;
-  --bg-card:    #FFFFFF;
-  --ink:        #0D0D0D;
-  --ink-2:      #1C1C1C;
-  --muted:      #737373;
-  --muted-2:    #A8A8A8;
-  --line:       #E2E1DC;
-  --line-2:     #D4D3CD;
-
-  --dark:       #0C0C11;
-  --dark-2:     #111118;
-  --dark-card:  #18181F;
-  --dark-line:  rgba(255,255,255,0.07);
-  --dark-line2: rgba(255,255,255,0.12);
-
+  --bg:         #0C0C11;
+  --bg-2:       #111118;
+  --bg-card:    #17171F;
+  --bg-card-2:  #1C1C26;
+  --ink:        #FFFFFF;
+  --muted:      rgba(255,255,255,0.45);
+  --muted-2:    rgba(255,255,255,0.25);
+  --line:       rgba(255,255,255,0.07);
+  --line-2:     rgba(255,255,255,0.12);
   --purple:     #4F5A97;
   --purple-2:   #6672AA;
-  --purple-soft:#E8EBF6;
   --purple-text:#A8B4E8;
-  --purple-glow:rgba(79,90,151,0.18);
-  --green:      #2A6B45;
-  --green-bg:   #EBF5EF;
-  --red:        #B03030;
-  --red-bg:     #FAEAEA;
-
+  --purple-glow:rgba(79,90,151,0.15);
+  --green:      #4ADE80;
+  --red:        #F87171;
   --sans:  "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
   --mono:  "Geist Mono",ui-monospace,"SF Mono",monospace;
   --serif: "Instrument Serif","Times New Roman",serif;
-  --maxw:  1200px;
-  --pad:   clamp(20px, 5vw, 64px);
-
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.10), 0 2px 6px rgba(0,0,0,0.07);
-  --shadow-lg:  0 12px 40px rgba(0,0,0,0.13), 0 4px 12px rgba(0,0,0,0.08);
-  --shadow-xl:  0 24px 64px rgba(0,0,0,0.16), 0 8px 24px rgba(0,0,0,0.10);
+  --maxw:  1100px;
+  --pad:   clamp(20px, 5vw, 60px);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -68,770 +52,352 @@ input { font-family: inherit; }
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
 
 /* ── Reveal ── */
-.reveal { opacity: 0; transform: translateY(22px); transition: opacity .65s ease, transform .65s ease; }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.in { opacity: 1; transform: none; }
 
 /* ── Nav ── */
 .nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-  padding: 12px var(--pad);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(12,12,17,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
 }
 .nav-inner {
   max-width: var(--maxw); margin: 0 auto;
   display: flex; align-items: center; justify-content: space-between;
-  background: rgba(245,244,240,0.85);
-  backdrop-filter: blur(20px) saturate(1.6);
-  -webkit-backdrop-filter: blur(20px) saturate(1.6);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 10px 10px 10px 18px;
-  box-shadow: var(--shadow-sm);
+  height: 58px; padding: 0 var(--pad);
 }
 .nav-brand { display: flex; align-items: center; gap: 10px; }
-.nav-word { font-weight: 600; font-size: 17px; letter-spacing: -0.03em; color: var(--ink); }
-.nav-links { display: flex; align-items: center; gap: 4px; }
-.nav-link {
-  font-size: 14px; color: var(--muted); font-weight: 400;
-  padding: 7px 14px; border-radius: 10px;
-  transition: color .15s, background .15s;
-}
-.nav-link:hover { color: var(--ink); background: var(--bg-2); }
+.nav-word { font-weight: 600; font-size: 16px; letter-spacing: -0.03em; color: white; }
 .nav-cta {
-  background: var(--ink); color: white;
-  padding: 9px 20px; border-radius: 10px;
-  font-size: 13.5px; font-weight: 500; letter-spacing: -0.01em;
-  transition: background .15s, transform .1s, box-shadow .15s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  background: white; color: #0C0C11;
+  padding: 8px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
+  transition: opacity .15s, transform .1s;
 }
-.nav-cta:hover { background: var(--purple); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(79,90,151,0.35); }
+.nav-cta:hover { opacity: 0.88; }
 .nav-cta:active { transform: scale(0.97); }
 
 /* ── Hero ── */
 .hero {
   min-height: 100svh;
-  padding: 140px var(--pad) 80px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 48px;
-  max-width: var(--maxw);
-  margin: 0 auto;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 130px var(--pad) 100px;
+  max-width: var(--maxw); margin: 0 auto;
   position: relative;
 }
-@media (max-width: 860px) {
-  .hero { grid-template-columns: 1fr; padding-top: 110px; }
-  .hero-visual { display: none; }
+
+/* ambient glow */
+.hero::before {
+  content: "";
+  position: fixed; top: -20vh; left: -10vw;
+  width: 80vw; height: 80vw; max-width: 900px; max-height: 900px;
+  background: radial-gradient(circle, rgba(79,90,151,0.13) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Hero left */
-.hero-label {
-  font-family: var(--mono); font-size: 11px;
-  text-transform: uppercase; letter-spacing: 0.12em;
-  color: var(--purple);
+.hero-content { position: relative; z-index: 1; max-width: 760px; }
+
+.hero-badge {
   display: inline-flex; align-items: center; gap: 9px;
-  margin-bottom: 32px;
-  background: var(--purple-soft);
-  padding: 5px 12px 5px 8px;
-  border-radius: 999px;
+  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--purple-text);
+  border: 1px solid rgba(168,180,232,0.2);
+  background: rgba(79,90,151,0.1);
+  border-radius: 999px; padding: 5px 14px 5px 10px;
+  margin-bottom: 40px;
 }
-.hero-label-dot {
+.hero-badge-dot {
   width: 6px; height: 6px; border-radius: 50%;
-  background: var(--purple);
-  animation: blink 2.2s ease-in-out infinite;
+  background: var(--purple-text);
+  animation: blink 2.4s ease-in-out infinite;
 }
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
-.hero h1 {
-  font-size: clamp(40px, 5.2vw, 78px);
-  font-weight: 500; line-height: 1.04;
+h1 {
+  font-size: clamp(44px, 6vw, 92px);
+  font-weight: 500; line-height: 1.02;
   letter-spacing: -0.045em;
-  margin-bottom: 24px;
-  color: var(--ink);
+  margin-bottom: 28px;
 }
-.hero h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
-.hero h1 .hi { color: var(--purple); }
+h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
+h1 .dim { color: var(--muted); }
 
 .hero-sub {
-  font-size: clamp(15px, 1.3vw, 18px);
+  font-size: clamp(16px, 1.4vw, 19px);
   color: var(--muted);
-  max-width: 42ch; line-height: 1.7; margin-bottom: 44px;
+  max-width: 48ch; line-height: 1.7;
+  margin-bottom: 48px;
   letter-spacing: -0.005em;
 }
 
-/* ── Email form (hero) ── */
-.form-wrap { max-width: 400px; }
+/* ── Form ── */
+.form-wrap { max-width: 420px; }
 .form-row {
   display: flex; align-items: center;
-  background: white;
+  background: rgba(255,255,255,0.06);
   border: 1px solid var(--line-2);
-  border-radius: 14px; padding: 5px 5px 5px 18px;
-  box-shadow: var(--shadow-sm);
-  transition: border-color .2s, box-shadow .2s;
+  border-radius: 14px; padding: 5px 5px 5px 20px;
+  transition: border-color .2s, background .2s;
 }
-.form-row:focus-within { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(79,90,151,0.12); }
+.form-row:focus-within {
+  border-color: rgba(79,90,151,0.6);
+  background: rgba(255,255,255,0.08);
+}
 .form-row input {
   flex: 1; background: none; border: none; outline: none;
-  font-size: 15px; color: var(--ink); padding: 12px 0; min-width: 0;
+  font-size: 15px; color: white; padding: 12px 0; min-width: 0;
 }
 .form-row input::placeholder { color: var(--muted-2); }
 .form-btn {
-  background: var(--ink); color: white;
-  padding: 11px 18px; border-radius: 10px;
+  background: var(--purple); color: white;
+  padding: 11px 20px; border-radius: 10px;
   font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
   white-space: nowrap; flex-shrink: 0;
-  transition: opacity .15s, transform .1s, background .15s;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: opacity .15s, transform .1s;
 }
-.form-btn:hover:not(:disabled) { background: var(--purple); }
+.form-btn:hover:not(:disabled) { opacity: 0.82; }
 .form-btn:active { transform: scale(0.97); }
-.form-btn:disabled { opacity: 0.4; cursor: default; }
+.form-btn:disabled { opacity: 0.35; cursor: default; }
 .form-note {
   font-family: var(--mono); font-size: 11px;
   color: var(--muted-2); margin-top: 12px;
   letter-spacing: 0.05em; text-transform: uppercase;
 }
-.form-error { font-size: 12px; color: var(--red); margin-top: 10px; font-family: var(--mono); }
-.form-thanks { font-size: 19px; font-weight: 500; letter-spacing: -0.025em; color: var(--purple); line-height: 1.4; }
-
-/* Light form variant */
-.form-dark .form-row {
-  background: rgba(255,255,255,0.07);
-  border-color: rgba(255,255,255,0.12);
-}
-.form-dark .form-row:focus-within { border-color: rgba(79,90,151,0.7); box-shadow: 0 0 0 3px rgba(79,90,151,0.15); }
-.form-dark .form-row input { color: white; }
-.form-dark .form-row input::placeholder { color: rgba(255,255,255,0.3); }
-.form-dark .form-btn { background: var(--purple); box-shadow: 0 2px 12px rgba(79,90,151,0.4); }
-.form-dark .form-note { color: rgba(255,255,255,0.28); }
-.form-dark .form-thanks { color: var(--purple-text); }
+.form-error { font-family: var(--mono); font-size: 12px; color: var(--red); margin-top: 10px; }
+.form-thanks { font-size: 20px; font-weight: 500; letter-spacing: -0.03em; color: var(--purple-text); line-height: 1.4; }
 
 /* Claude pill */
-.claude-pill {
+.ai-pill {
   display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 36px; padding: 7px 14px 7px 7px;
-  border-radius: 999px;
-  border: 1px solid var(--line-2);
-  background: white;
-  box-shadow: var(--shadow-sm);
+  margin-top: 32px;
+  font-size: 12.5px; color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px; padding: 6px 14px 6px 8px;
+  letter-spacing: -0.005em;
 }
-.claude-dot {
-  width: 24px; height: 24px; border-radius: 50%;
+.ai-pill-icon {
+  width: 22px; height: 22px; border-radius: 50%;
   background: linear-gradient(135deg,#CC785C,#E8A87C);
-  flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-}
-.claude-dot svg { width: 14px; height: 14px; }
-.claude-pill-text { font-size: 12px; color: var(--muted); letter-spacing: -0.005em; }
-.claude-pill-text strong { color: var(--ink); font-weight: 500; }
-
-/* ── Hero visual (phone mockups) ── */
-.hero-visual {
-  position: relative;
-  height: 580px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Phone frame */
-.phone {
-  width: 260px;
-  border-radius: 40px;
-  background: #0D0D12;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  box-shadow:
-    0 0 0 6px rgba(255,255,255,0.03),
-    var(--shadow-xl),
-    inset 0 0 0 1px rgba(255,255,255,0.05);
-  overflow: hidden;
-  position: relative;
   flex-shrink: 0;
 }
-.phone::before {
-  content: "";
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 110px; height: 30px;
-  background: #0D0D12;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  border-left: 1px solid rgba(255,255,255,0.06);
-  border-right: 1px solid rgba(255,255,255,0.06);
-}
-.phone-screen {
-  padding: 44px 0 0;
-  background: #0C0C11;
-}
-.phone-status {
-  padding: 0 16px 8px;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.phone-time { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; }
-.phone-icons { display: flex; gap: 4px; align-items: center; }
-.phone-icon-bar {
-  display: flex; gap: 1.5px; align-items: flex-end;
-}
-.phone-icon-bar span {
-  width: 3px; background: rgba(255,255,255,0.7); border-radius: 1px;
-}
+.ai-pill strong { color: rgba(255,255,255,0.75); font-weight: 500; }
 
-/* Chat screen inside phone */
-.phone-chat {
-  padding: 10px 14px 20px;
-  display: flex; flex-direction: column; gap: 10px;
-  min-height: 420px;
-}
-.phone-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 0 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 4px;
-}
-.phone-header-icon {
-  width: 32px; height: 32px; border-radius: 10px;
-  background: var(--purple);
-  display: flex; align-items: center; justify-content: center;
-}
-.phone-header-title { font-size: 13px; font-weight: 600; color: white; letter-spacing: -0.02em; }
-.phone-header-sub { font-size: 10px; color: rgba(255,255,255,0.4); }
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid var(--line); }
 
-.chat-msg {
-  display: flex; flex-direction: column; gap: 2px;
-}
-.chat-msg.ai { align-items: flex-start; }
-.chat-msg.user { align-items: flex-end; }
-.chat-bubble {
-  padding: 9px 13px;
-  border-radius: 16px;
-  font-size: 12px; line-height: 1.5;
-  max-width: 88%;
-}
-.chat-msg.ai .chat-bubble {
-  background: rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.85);
-  border-bottom-left-radius: 4px;
-}
-.chat-msg.user .chat-bubble {
-  background: var(--purple);
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-.chat-amount {
-  font-size: 18px; font-weight: 600;
-  color: white; letter-spacing: -0.03em;
-  margin-bottom: 2px;
-}
-.chat-amount-label { font-size: 10px; color: rgba(255,255,255,0.4); }
-
-.chat-action-row {
-  display: flex; gap: 6px; margin-top: 4px;
-}
-.chat-action {
-  padding: 6px 10px; border-radius: 8px;
-  background: rgba(79,90,151,0.2);
-  border: 1px solid rgba(79,90,151,0.3);
-  color: var(--purple-text);
-  font-size: 10px; font-weight: 500;
-  cursor: pointer;
-}
-
-/* Phone input bar */
-.phone-input-bar {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 12px;
-  padding: 9px 10px;
-  margin-top: 8px;
-}
-.phone-input-text { font-size: 11px; color: rgba(255,255,255,0.3); flex: 1; }
-.phone-send {
-  width: 26px; height: 26px; border-radius: 8px;
-  background: var(--purple);
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Floating cards */
-.float-card {
-  position: absolute;
-  background: white;
-  border-radius: 18px;
-  padding: 14px 16px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--line);
-  min-width: 170px;
-}
-.float-card-sm {
-  position: absolute;
-  background: white;
-  border-radius: 14px;
-  padding: 11px 14px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--line);
-}
-.fc-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted-2); margin-bottom: 4px; }
-.fc-value { font-size: 22px; font-weight: 600; letter-spacing: -0.04em; color: var(--ink); }
-.fc-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-.fc-green { color: var(--green); font-size: 11px; font-weight: 500; }
-.fc-red { color: var(--red); font-size: 11px; font-weight: 500; }
-
-.fc-notif {
-  display: flex; align-items: flex-start; gap: 10px;
-}
-.fc-notif-icon {
-  width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 15px;
-}
-.fc-notif-title { font-size: 12px; font-weight: 500; letter-spacing: -0.015em; color: var(--ink); }
-.fc-notif-sub { font-size: 11px; color: var(--muted); margin-top: 1px; }
-
-/* Float animations */
-@keyframes floatA {
-  0%,100% { transform: translateY(0px) rotate(-3deg); }
-  50% { transform: translateY(-10px) rotate(-3deg); }
-}
-@keyframes floatB {
-  0%,100% { transform: translateY(0px) rotate(2deg); }
-  50% { transform: translateY(-7px) rotate(2deg); }
-}
-@keyframes floatC {
-  0%,100% { transform: translateY(0px) rotate(-1deg); }
-  50% { transform: translateY(8px) rotate(-1deg); }
-}
-@keyframes floatPhone {
-  0%,100% { transform: translateY(0px) rotate(-2deg); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
-}
-
-/* ── Logos bar ── */
-.logos-bar {
-  padding: 48px 0;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-2);
-}
-.logos-inner {
-  display: flex; align-items: center; gap: 40px;
-  flex-wrap: wrap; justify-content: center;
-}
-.logos-label {
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--muted-2);
-  white-space: nowrap;
-}
-.logo-chip {
-  font-size: 13px; font-weight: 500; color: var(--muted);
-  letter-spacing: -0.01em;
-  padding: 5px 14px;
-  border-radius: 999px;
-  border: 1px solid var(--line-2);
-  background: var(--bg-card);
-}
-
-/* ── Features ── */
-.features {
-  padding: 100px var(--pad);
-  max-width: var(--maxw); margin: 0 auto;
-}
+/* ── Section commons ── */
+.section { padding: 100px var(--pad); }
+.section-inner { max-width: var(--maxw); margin: 0 auto; }
 .section-label {
   font-family: var(--mono); font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--purple);
-  margin-bottom: 16px;
+  letter-spacing: 0.1em; color: var(--purple-text);
+  margin-bottom: 20px;
 }
 .section-h {
-  font-size: clamp(30px, 3.5vw, 50px);
-  font-weight: 500; letter-spacing: -0.04em;
-  line-height: 1.1; margin-bottom: 16px;
+  font-size: clamp(30px, 3.5vw, 52px);
+  font-weight: 500; letter-spacing: -0.04em; line-height: 1.08;
+  margin-bottom: 16px;
 }
 .section-h .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
 .section-sub {
   font-size: 16px; color: var(--muted);
-  max-width: 46ch; line-height: 1.7;
+  max-width: 48ch; line-height: 1.7;
 }
 
-.features-grid {
+/* ── How it works ── */
+.steps {
   margin-top: 64px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: var(--line);
+  border-radius: 20px; overflow: hidden;
 }
-@media (max-width: 760px) {
-  .features-grid { grid-template-columns: 1fr; }
-}
+@media (max-width: 700px) { .steps { grid-template-columns: 1fr; } }
 
-.feat-card {
-  background: white;
-  padding: 32px;
-  border-radius: 0;
-  position: relative;
-  overflow: hidden;
+.step {
+  background: var(--bg-card);
+  padding: 36px 32px;
 }
-.feat-card:first-child { border-radius: 20px 0 0 20px; }
-.feat-card:last-child { border-radius: 0 20px 20px 0; }
-@media (max-width: 760px) {
-  .feat-card:first-child { border-radius: 20px 20px 0 0; }
-  .feat-card:last-child { border-radius: 0 0 20px 20px; }
-}
-
-.feat-icon {
-  width: 44px; height: 44px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  background: var(--purple-soft);
+.step-num {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--purple-text); letter-spacing: 0.06em;
   margin-bottom: 20px;
 }
-.feat-title {
-  font-size: 16px; font-weight: 600;
-  letter-spacing: -0.025em; margin-bottom: 8px;
+.step-title {
+  font-size: 16px; font-weight: 500;
+  letter-spacing: -0.025em; margin-bottom: 10px;
 }
-.feat-body {
-  font-size: 14px; color: var(--muted);
-  line-height: 1.65;
-}
+.step-body { font-size: 14px; color: var(--muted); line-height: 1.65; }
 
-/* ── Chat section (dark) ── */
-.chat-section {
-  background: var(--dark);
-  padding: 100px var(--pad);
-  position: relative;
+/* ── Chat preview ── */
+.chat-preview {
+  margin-top: 64px;
+  background: var(--bg-card);
+  border: 1px solid var(--line-2);
+  border-radius: 20px;
   overflow: hidden;
 }
-.chat-section::before {
-  content: "";
-  position: absolute; top: -30%; right: -5%;
-  width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
-  background: radial-gradient(circle, rgba(79,90,151,0.12) 0%, transparent 65%);
-  pointer-events: none;
+.chat-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--line);
 }
-.chat-inner {
-  max-width: var(--maxw); margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr;
-  align-items: center; gap: 80px;
-}
-@media (max-width: 860px) {
-  .chat-inner { grid-template-columns: 1fr; gap: 48px; }
-}
-.chat-section .section-label { color: var(--purple-text); }
-.chat-section .section-h { color: white; }
-.chat-section .section-sub { color: rgba(255,255,255,0.48); }
-
-/* Full-width phone mockup in chat section */
-.chat-visual {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-.chat-phone {
-  width: 280px;
-  border-radius: 44px;
-  background: #0A0A0F;
-  border: 1.5px solid rgba(255,255,255,0.1);
-  box-shadow:
-    0 0 0 8px rgba(255,255,255,0.02),
-    0 40px 100px rgba(0,0,0,0.6),
-    0 12px 32px rgba(0,0,0,0.4);
-  overflow: hidden;
-  position: relative;
-}
-.chat-phone::before {
-  content: "";
-  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 32px;
-  background: #0A0A0F;
-  border-bottom-left-radius: 18px;
-  border-bottom-right-radius: 18px;
-  z-index: 10;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  border-left: 1px solid rgba(255,255,255,0.05);
-  border-right: 1px solid rgba(255,255,255,0.05);
-}
-.chat-phone-inner {
-  padding: 48px 0 28px;
-  background: #0C0C13;
-}
-.chat-phone-header {
-  display: flex; align-items: center; gap: 10px;
-  padding: 0 16px 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.chat-phone-avatar {
-  width: 34px; height: 34px; border-radius: 11px;
-  background: var(--purple);
-  display: flex; align-items: center; justify-content: center;
-}
-.chat-phone-name { font-size: 14px; font-weight: 600; color: white; letter-spacing: -0.02em; }
-.chat-phone-status { font-size: 10px; color: rgba(255,255,255,0.4); display: flex; align-items: center; gap: 4px; }
-.online-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ADE80; }
-
-.chat-msgs {
-  padding: 16px 14px;
-  display: flex; flex-direction: column; gap: 10px;
-}
-.cm { display: flex; flex-direction: column; }
-.cm.ai { align-items: flex-start; }
-.cm.user { align-items: flex-end; }
-.cm-bubble {
-  padding: 10px 13px;
-  border-radius: 16px;
-  font-size: 12px; line-height: 1.5;
-  max-width: 85%;
-}
-.cm.ai .cm-bubble {
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.82);
-  border-bottom-left-radius: 4px;
-}
-.cm.user .cm-bubble {
-  background: var(--purple);
-  color: white;
-  border-bottom-right-radius: 4px;
-}
-.cm-card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 12px 14px;
-  margin-top: 6px;
-  max-width: 88%;
-}
-.cm-card-label { font-size: 10px; color: rgba(255,255,255,0.35); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; }
-.cm-card-value { font-size: 20px; font-weight: 600; color: white; letter-spacing: -0.04em; margin: 2px 0; }
-.cm-card-change { font-size: 11px; color: #4ADE80; }
-.cm-card-row { display: flex; justify-content: space-between; align-items: baseline; }
-
-/* Typing indicator */
-.typing-dots {
-  display: flex; gap: 3px; align-items: center;
-  padding: 10px 13px;
-  background: rgba(255,255,255,0.08);
-  border-radius: 16px;
-  border-bottom-left-radius: 4px;
-  align-self: flex-start;
-}
-.typing-dots span {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: rgba(255,255,255,0.4);
-  animation: typeDot 1.4s ease-in-out infinite;
-}
-.typing-dots span:nth-child(2) { animation-delay: .2s; }
-.typing-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes typeDot { 0%,60%,100%{opacity:.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.2)} }
-
-.chat-phone-input {
-  display: flex; align-items: center; gap: 8px;
-  padding: 12px 14px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-  margin-top: 4px;
-}
-.chat-phone-input-field {
-  flex: 1; background: rgba(255,255,255,0.07); border-radius: 10px;
-  padding: 9px 12px; font-size: 11px; color: rgba(255,255,255,0.35);
-}
-.chat-phone-send {
-  width: 30px; height: 30px; border-radius: 9px;
+.chat-avatar {
+  width: 36px; height: 36px; border-radius: 11px;
   background: var(--purple);
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
+.chat-name { font-size: 14px; font-weight: 600; letter-spacing: -0.02em; }
+.chat-online { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
+.chat-online::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+.chat-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+.msg { display: flex; flex-direction: column; }
+.msg.ai { align-items: flex-start; }
+.msg.user { align-items: flex-end; }
+.bubble {
+  padding: 11px 16px; border-radius: 16px;
+  font-size: 14px; line-height: 1.55; max-width: 75%;
+}
+.msg.ai .bubble {
+  background: var(--bg-card-2); color: rgba(255,255,255,0.85);
+  border-bottom-left-radius: 4px;
+}
+.msg.user .bubble {
+  background: var(--purple); color: white;
+  border-bottom-right-radius: 4px;
+}
+.data-card {
+  background: var(--bg); border: 1px solid var(--line-2);
+  border-radius: 14px; padding: 16px 18px;
+  max-width: 78%; margin-top: 4px;
+  display: flex; gap: 32px;
+  flex-wrap: wrap;
+}
+.dc-item { display: flex; flex-direction: column; gap: 3px; }
+.dc-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted-2); }
+.dc-value { font-size: 20px; font-weight: 600; letter-spacing: -0.04em; }
+.dc-sub { font-size: 11px; }
+.dc-green { color: var(--green); }
+.dc-red { color: var(--red); }
+.typing {
+  display: flex; gap: 4px; align-items: center;
+  padding: 11px 16px;
+  background: var(--bg-card-2); border-radius: 16px; border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+.typing span {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--muted-2);
+  animation: dot 1.4s ease-in-out infinite;
+}
+.typing span:nth-child(2) { animation-delay: .18s; }
+.typing span:nth-child(3) { animation-delay: .36s; }
+@keyframes dot { 0%,60%,100%{opacity:.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.15)} }
 
-/* Chat section floating cards */
-.chat-float-1 {
-  position: absolute; top: 20px; right: -20px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 14px 16px;
-  animation: floatA 4s ease-in-out infinite;
-}
-.chat-float-2 {
-  position: absolute; bottom: 10px; left: -30px;
-  background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 14px 16px;
-  animation: floatC 5.5s ease-in-out infinite;
-}
-.cf-label { font-size: 10px; color: rgba(255,255,255,0.35); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
-.cf-value { font-size: 19px; font-weight: 600; color: white; letter-spacing: -0.04em; }
-.cf-green { font-size: 11px; color: #4ADE80; margin-top: 2px; }
-.cf-red { font-size: 11px; color: #F87171; margin-top: 2px; }
-
-/* Chat section bullets */
-.chat-bullets { margin-top: 40px; display: flex; flex-direction: column; gap: 16px; }
-.chat-bullet {
-  display: flex; gap: 14px; align-items: flex-start;
-}
-.chat-bullet-num {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: rgba(79,90,151,0.2);
-  border: 1px solid rgba(79,90,151,0.3);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 11px; color: var(--purple-text);
-  flex-shrink: 0; margin-top: 1px;
-}
-.chat-bullet-title { font-size: 14px; font-weight: 500; color: white; letter-spacing: -0.02em; margin-bottom: 2px; }
-.chat-bullet-body { font-size: 13px; color: rgba(255,255,255,0.42); line-height: 1.55; }
-
-/* ── Moments section ── */
-.moments {
-  padding: 100px var(--pad);
-  max-width: var(--maxw); margin: 0 auto;
-}
+/* ── Moments ── */
 .moments-grid {
   margin-top: 64px;
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 12px;
 }
-@media (max-width: 760px) {
-  .moments-grid { grid-template-columns: 1fr; }
-}
-.moment-card {
-  background: white;
-  border-radius: 24px;
-  border: 1px solid var(--line);
-  padding: 32px;
-  box-shadow: var(--shadow-sm);
-  position: relative; overflow: hidden;
-  transition: transform .25s ease, box-shadow .25s ease;
-}
-.moment-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
-.moment-tag {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 4px 10px; border-radius: 999px;
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-  letter-spacing: 0.08em; margin-bottom: 20px;
-}
-.moment-tag.earn { background: #EBF5EF; color: var(--green); }
-.moment-tag.save { background: var(--purple-soft); color: var(--purple); }
-.moment-tag.invest { background: #FFF5E6; color: #8A5A00; }
-.moment-title { font-size: 17px; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 10px; line-height: 1.35; }
-.moment-body { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin-bottom: 24px; }
+@media (max-width: 700px) { .moments-grid { grid-template-columns: 1fr; } }
 
-/* Mini phone mockup inside moment card */
-.moment-phone-wrap {
-  margin: 0 -32px -32px;
-  background: var(--dark);
-  border-radius: 0 0 24px 24px;
-  padding: 20px 20px 24px;
-  overflow: hidden;
-  position: relative;
+.moment {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 20px; padding: 28px;
+  transition: border-color .2s;
 }
-.moment-mini-msg {
-  display: flex; flex-direction: column; gap: 8px;
+.moment:hover { border-color: var(--line-2); }
+.moment-tag {
+  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--purple-text);
+  margin-bottom: 16px;
 }
-.mini-bubble {
-  padding: 8px 12px;
-  border-radius: 12px;
-  font-size: 11.5px; line-height: 1.5;
-  max-width: 90%;
+.moment-title { font-size: 16px; font-weight: 500; letter-spacing: -0.025em; margin-bottom: 10px; line-height: 1.35; }
+.moment-body { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
+.moment-stat {
+  margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid var(--line);
 }
-.mini-bubble.ai {
-  background: rgba(255,255,255,0.09);
-  color: rgba(255,255,255,0.8);
-  border-bottom-left-radius: 3px;
-}
-.mini-bubble.user {
-  background: var(--purple);
-  color: white;
-  border-bottom-right-radius: 3px;
-  align-self: flex-end;
-}
-.mini-stat {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-top: 4px;
-}
-.mini-stat-val { font-size: 15px; font-weight: 600; color: white; letter-spacing: -0.03em; }
-.mini-stat-lbl { font-size: 10px; color: rgba(255,255,255,0.35); font-family: var(--mono); }
+.moment-stat-val { font-size: 22px; font-weight: 600; letter-spacing: -0.04em; color: var(--green); }
+.moment-stat-lbl { font-size: 11px; color: var(--muted-2); margin-top: 2px; font-family: var(--mono); }
 
 /* ── Price ── */
-.price {
-  background: var(--dark);
-  padding: 100px var(--pad);
-  position: relative; overflow: hidden;
+.price-row {
+  margin-top: 64px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; max-width: 680px;
 }
-.price::before {
-  content: "";
-  position: absolute; bottom: -20%; left: -5%;
-  width: 60vw; height: 60vw; max-width: 800px; max-height: 800px;
-  background: radial-gradient(circle, rgba(79,90,151,0.1) 0%, transparent 65%);
-  pointer-events: none;
-}
-.price-inner { max-width: var(--maxw); margin: 0 auto; }
-.price .section-label { color: var(--purple-text); }
-.price .section-h { color: white; }
-.price .section-sub { color: rgba(255,255,255,0.5); margin-bottom: 56px; }
-
-.price-cards {
-  display: grid; grid-template-columns: repeat(2,1fr);
-  gap: 16px; max-width: 720px; margin-bottom: 64px;
-}
-@media (max-width: 680px) { .price-cards { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .price-row { grid-template-columns: 1fr; } }
 
 .price-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 24px;
-  padding: 32px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 20px; padding: 32px;
 }
 .price-card.featured {
   background: var(--purple);
   border-color: transparent;
-  box-shadow: 0 8px 32px rgba(79,90,151,0.4);
+  box-shadow: 0 8px 32px rgba(79,90,151,0.35);
 }
-.price-tier { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase; font-family: var(--mono); margin-bottom: 16px; }
-.price-card.featured .price-tier { color: rgba(255,255,255,0.7); }
-.price-amount { font-size: 40px; font-weight: 600; color: white; letter-spacing: -0.05em; margin-bottom: 4px; }
-.price-amount sup { font-size: 20px; font-weight: 500; vertical-align: top; margin-top: 8px; display: inline-block; }
-.price-period { font-size: 13px; color: rgba(255,255,255,0.4); }
-.price-card.featured .price-period { color: rgba(255,255,255,0.65); }
-.price-divider { border: none; border-top: 1px solid rgba(255,255,255,0.1); margin: 24px 0; }
-.price-card.featured .price-divider { border-color: rgba(255,255,255,0.2); }
-.price-features { display: flex; flex-direction: column; gap: 10px; }
-.price-feat { font-size: 13.5px; color: rgba(255,255,255,0.65); display: flex; align-items: center; gap: 10px; }
-.price-card.featured .price-feat { color: rgba(255,255,255,0.9); }
-.price-check { color: rgba(255,255,255,0.4); font-size: 13px; flex-shrink: 0; }
-.price-card.featured .price-check { color: rgba(255,255,255,0.7); }
+.price-tier { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-2); margin-bottom: 16px; }
+.price-card.featured .price-tier { color: rgba(255,255,255,0.65); }
+.price-amt { font-size: 42px; font-weight: 600; letter-spacing: -0.05em; }
+.price-amt sup { font-size: 22px; vertical-align: top; margin-top: 8px; display: inline-block; font-weight: 500; }
+.price-period { font-size: 13px; color: var(--muted-2); margin-top: 2px; }
+.price-card.featured .price-period { color: rgba(255,255,255,0.55); }
+.price-hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
+.price-card.featured .price-hr { border-color: rgba(255,255,255,0.18); }
+.price-features { display: flex; flex-direction: column; gap: 9px; }
+.price-feat { font-size: 13.5px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+.price-card.featured .price-feat { color: rgba(255,255,255,0.85); }
+.price-check { font-size: 12px; color: var(--purple-text); flex-shrink: 0; }
+.price-card.featured .price-check { color: rgba(255,255,255,0.65); }
 
-.price-cta-wrap { max-width: 440px; }
-.price-h2 { font-size: clamp(26px, 3vw, 38px); font-weight: 500; color: white; letter-spacing: -0.04em; margin-bottom: 12px; line-height: 1.2; }
-.price-h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
-.price-note { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 12px; font-family: var(--mono); }
+.price-cta { margin-top: 56px; max-width: 440px; }
+.price-cta-h {
+  font-size: clamp(24px, 2.8vw, 36px); font-weight: 500;
+  letter-spacing: -0.04em; line-height: 1.15;
+  margin-bottom: 28px;
+}
+.price-cta-h .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.price-small { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-2); margin-top: 14px; }
 
 /* ── Sticky bar ── */
-.sticky-bar {
+.sticky {
   position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  z-index: 300; transition: opacity .3s, transform .3s;
+  z-index: 200; transition: opacity .3s, transform .3s;
 }
-.sticky-bar.hidden { opacity: 0; transform: translateX(-50%) translateY(20px); pointer-events: none; }
+.sticky.hide { opacity: 0; transform: translateX(-50%) translateY(16px); pointer-events: none; }
 .sticky-inner {
-  display: flex; align-items: center; gap: 12px;
-  background: rgba(13,13,18,0.92);
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(20,20,28,0.92);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--line-2);
   border-radius: 999px;
   padding: 8px 8px 8px 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
 }
-.sticky-text { font-size: 13.5px; color: rgba(255,255,255,0.82); letter-spacing: -0.015em; white-space: nowrap; }
+.sticky-text { font-size: 13.5px; color: rgba(255,255,255,0.75); white-space: nowrap; letter-spacing: -0.01em; }
 .sticky-btn {
-  background: var(--purple); color: white;
+  background: white; color: var(--bg);
   padding: 10px 22px; border-radius: 999px;
-  font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
-  transition: opacity .15s, transform .1s;
+  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
+  transition: opacity .15s;
 }
 .sticky-btn:hover { opacity: 0.88; }
-.sticky-btn:active { transform: scale(0.97); }
 
 /* ── Footer ── */
 .footer {
-  padding: 48px var(--pad);
+  padding: 44px var(--pad);
   border-top: 1px solid var(--line);
-  background: var(--bg);
 }
 .footer-inner {
   max-width: var(--maxw); margin: 0 auto;
@@ -839,38 +405,32 @@ input { font-family: inherit; }
   flex-wrap: wrap; gap: 16px;
 }
 .footer-brand { display: flex; align-items: center; gap: 9px; }
-.footer-word { font-weight: 600; font-size: 15px; letter-spacing: -0.03em; }
+.footer-word { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; }
 .footer-copy { font-size: 13px; color: var(--muted-2); }
 .footer-links { display: flex; gap: 24px; }
 .footer-link { font-size: 13px; color: var(--muted); transition: color .15s; }
-.footer-link:hover { color: var(--ink); }
+.footer-link:hover { color: white; }
   </style>
 
-  <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <!-- Credentials -->
   <script>
     window.SUPABASE_URL      = 'https://ioeqnfqparfunotdjosy.supabase.co';
     window.SUPABASE_ANON_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
   </script>
-  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-
 <div id="root"></div>
-
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
-/* ── Logo ── */
-const LucaMark = ({ size = 24, dark = false }) => (
+const LucaMark = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
     width={size} height={size}
     style={{ display:"block", width:size, height:size, flexShrink:0 }}>
-    <g fill={dark ? "#A8B4E8" : "#4F5A97"}>
+    <g fill="#A8B4E8">
       <rect x="46" y="14" width="8" height="8" rx="1.5"/>
       <rect x="78" y="46" width="8" height="8" rx="1.5"/>
       <rect x="46" y="78" width="8" height="8" rx="1.5"/>
@@ -880,15 +440,14 @@ const LucaMark = ({ size = 24, dark = false }) => (
       <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
       <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
       <circle cx="50" cy="50" r="17"/>
-      <circle cx="50" cy="50" r="11" fill={dark ? "#0C0C11" : "white"}/>
+      <circle cx="50" cy="50" r="11" fill="#0C0C11"/>
       <circle cx="50" cy="50" r="6"/>
-      <circle cx="50" cy="50" r="2.2" fill={dark ? "#0C0C11" : "white"}/>
+      <circle cx="50" cy="50" r="2.2" fill="#0C0C11"/>
     </g>
   </svg>
 );
 
-/* ── Email form ── */
-const EmailForm = ({ source, dark, placeholder = "your@email.com", btnText = "Join waitlist" }) => {
+const EmailForm = ({ source, btnText = "Join waitlist", placeholder = "your@email.com" }) => {
   const [email, setEmail]     = useState("");
   const [done, setDone]       = useState(false);
   const [loading, setLoading] = useState(false);
@@ -907,14 +466,10 @@ const EmailForm = ({ source, dark, placeholder = "your@email.com", btnText = "Jo
     finally { setLoading(false); }
   };
 
-  if (done) return (
-    <div className="form-thanks">
-      You're on the list.<br/>We'll be in touch.
-    </div>
-  );
+  if (done) return <div className="form-thanks">You're on the list. We'll be in touch.</div>;
 
   return (
-    <div className={`form-wrap ${dark ? "form-dark" : ""}`}>
+    <div className="form-wrap">
       <form className="form-row" onSubmit={submit}>
         <input
           type="email" value={email}
@@ -932,459 +487,228 @@ const EmailForm = ({ source, dark, placeholder = "your@email.com", btnText = "Jo
   );
 };
 
-/* ── Scroll reveal hook ── */
 const useReveal = () => {
   const ref = useRef(null);
   useEffect(() => {
     const el = ref.current; if (!el) return;
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+    }, { threshold: 0.1 });
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
   return ref;
 };
 
-/* ── Send icon ── */
-const SendIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="22" y1="2" x2="11" y2="13"/>
-    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-  </svg>
-);
-
-/* ── Hero phone mockup ── */
-const HeroPhone = () => (
-  <div className="phone" style={{ animation:"floatPhone 5s ease-in-out infinite" }}>
-    <div className="phone-screen">
-      <div className="phone-status">
-        <span className="phone-time">9:41</span>
-        <div className="phone-icons">
-          <div className="phone-icon-bar">
-            <span style={{height:"5px"}}/>
-            <span style={{height:"8px"}}/>
-            <span style={{height:"11px"}}/>
-            <span style={{height:"14px"}}/>
-          </div>
-        </div>
-      </div>
-      <div className="phone-chat">
-        <div className="phone-header">
-          <div className="phone-header-icon">
-            <LucaMark size={18} dark />
-          </div>
-          <div>
-            <div className="phone-header-title">Luca</div>
-            <div className="phone-header-sub">AI money advisor</div>
-          </div>
-        </div>
-
-        <div className="chat-msg ai">
-          <div className="chat-bubble">
-            Good morning, James. Your savings rate is 14% this month — up from 9%.
-          </div>
-        </div>
-
-        <div style={{background:"rgba(255,255,255,0.06)",border:"1px solid rgba(255,255,255,0.08)",borderRadius:"12px",padding:"11px 13px",maxWidth:"90%"}}>
-          <div className="chat-amount-label">Net savings · Oct</div>
-          <div className="chat-amount">$1,240</div>
-          <div style={{fontSize:"10px",color:"#4ADE80",marginTop:"2px"}}>↑ $380 vs last month</div>
-        </div>
-
-        <div className="chat-msg user">
-          <div className="chat-bubble">Should I move more to investing?</div>
-        </div>
-
-        <div className="chat-msg ai">
-          <div className="chat-bubble">
-            Yes — you have 3 months emergency fund. Move $500/mo to your index fund.
-          </div>
-          <div className="chat-action-row">
-            <div className="chat-action">Set it up →</div>
-          </div>
-        </div>
-
-        <div className="phone-input-bar">
-          <div className="phone-input-text">Ask anything…</div>
-          <div className="phone-send"><SendIcon /></div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-/* ── App ── */
 const App = () => {
-  const [stickyVisible, setStickyVisible] = useState(false);
+  const [sticky, setSticky] = useState(false);
   const heroRef = useRef(null);
-
-  // Reveal refs
-  const featRef  = useReveal();
-  const chatRef  = useReveal();
-  const momRef   = useReveal();
-  const priceRef = useReveal();
+  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal(), r4 = useReveal();
 
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      ([e]) => setStickyVisible(!e.isIntersecting),
-      { threshold: 0.3 }
-    );
+    const obs = new IntersectionObserver(([e]) => setSticky(!e.isIntersecting), { threshold: 0.2 });
     if (heroRef.current) obs.observe(heroRef.current);
     return () => obs.disconnect();
   }, []);
 
   return (
     <>
-      {/* ── Nav ── */}
+      {/* Nav */}
       <nav className="nav">
         <div className="nav-inner">
           <div className="nav-brand">
             <LucaMark size={26} />
             <span className="nav-word">Luca</span>
           </div>
-          <div className="nav-links">
-            <a href="#how" className="nav-link">How it works</a>
-            <a href="#price" className="nav-link">Pricing</a>
-          </div>
           <a href="#price" className="nav-cta">Join waitlist</a>
         </div>
       </nav>
 
-      {/* ── Hero ── */}
-      <section style={{background:"var(--bg)", paddingTop:"80px"}}>
-        <div className="hero" ref={heroRef}>
-          {/* Left */}
-          <div>
-            <div className="hero-label">
-              <div className="hero-label-dot"/>
+      {/* Hero */}
+      <div style={{maxWidth:"var(--maxw)",margin:"0 auto"}}>
+        <section className="hero" ref={heroRef}>
+          <div className="hero-content">
+            <div className="hero-badge">
+              <div className="hero-badge-dot"/>
               Early access open
             </div>
             <h1>
-              Your money,<br/>
-              <span className="ital hi">finally</span> explained.
+              Talk to your<br/>
+              <span className="ital dim">money.</span>
             </h1>
             <p className="hero-sub">
-              Luca connects to your real accounts and gives you clear, honest advice — like a CFP in your pocket, available 24/7.
+              Luca connects to your real accounts and tells you exactly what to do — like a CFP in your pocket, available any time.
             </p>
-            <EmailForm source="hero" placeholder="Enter your email" btnText="Get early access" />
-            <div className="claude-pill">
-              <div className="claude-dot">
-                <svg viewBox="0 0 24 24" fill="none" width="14" height="14">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <EmailForm source="hero" btnText="Get early access" placeholder="Enter your email" />
+            <div className="ai-pill">
+              <div className="ai-pill-icon">
+                <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
               </div>
-              <span className="claude-pill-text">Powered by <strong>Claude AI</strong> — your data stays private</span>
+              Powered by <strong style={{color:"rgba(255,255,255,0.75)",fontWeight:500,margin:"0 3px"}}>Claude AI</strong> · your data stays private
             </div>
           </div>
-
-          {/* Right — floating phone + cards */}
-          <div className="hero-visual">
-            <HeroPhone />
-
-            {/* Floating card: net worth */}
-            <div className="float-card" style={{
-              top: "10px", left: "-10px",
-              animation: "floatA 4.5s ease-in-out infinite"
-            }}>
-              <div className="fc-label">Net worth</div>
-              <div className="fc-value">$48,200</div>
-              <div className="fc-green">↑ $2,100 this month</div>
-            </div>
-
-            {/* Floating card: spend notification */}
-            <div className="float-card-sm" style={{
-              bottom: "80px", right: "-20px",
-              animation: "floatB 5s ease-in-out infinite"
-            }}>
-              <div className="fc-notif">
-                <div className="fc-notif-icon" style={{background:"#FFECEA"}}>🔔</div>
-                <div>
-                  <div className="fc-notif-title">Dining over budget</div>
-                  <div className="fc-notif-sub">$340 of $200 limit</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating card: savings rate */}
-            <div className="float-card-sm" style={{
-              bottom: "200px", left: "-40px",
-              animation: "floatC 6s ease-in-out infinite"
-            }}>
-              <div className="fc-label">Savings rate</div>
-              <div style={{fontSize:"20px",fontWeight:"600",letterSpacing:"-0.03em",color:"var(--ink)"}}>14.2%</div>
-              <div className="fc-green">↑ best month yet</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Logos ── */}
-      <div className="logos-bar">
-        <div className="wrap">
-          <div className="logos-inner">
-            <span className="logos-label">Connects to</span>
-            <span className="logo-chip">Chase</span>
-            <span className="logo-chip">Bank of America</span>
-            <span className="logo-chip">Wells Fargo</span>
-            <span className="logo-chip">Fidelity</span>
-            <span className="logo-chip">Robinhood</span>
-            <span className="logo-chip">+ 10,000 more</span>
-          </div>
-        </div>
+        </section>
       </div>
 
-      {/* ── Features ── */}
-      <section className="features">
-        <div className="reveal" ref={featRef}>
+      <hr className="divider"/>
+
+      {/* How it works */}
+      <section className="section">
+        <div className="section-inner reveal" ref={r1} id="how">
           <div className="section-label">How it works</div>
-          <h2 className="section-h" id="how">
-            Smart advice,<br/><span className="ital">zero jargon.</span>
-          </h2>
-          <p className="section-sub">
-            Luca reads your real transactions, spots what matters, and tells you exactly what to do next.
-          </p>
-          <div className="features-grid" style={{marginTop:"48px"}}>
-            <div className="feat-card">
-              <div className="feat-icon">🔗</div>
-              <div className="feat-title">Connect your accounts</div>
-              <div className="feat-body">Bank, credit, investment — all linked in 60 seconds via Plaid. Read-only, always.</div>
-            </div>
-            <div className="feat-card">
-              <div className="feat-icon">💬</div>
-              <div className="feat-title">Ask anything</div>
-              <div className="feat-body">"Can I afford a vacation?" "Why is my savings lower?" Luca answers in plain English.</div>
-            </div>
-            <div className="feat-card">
-              <div className="feat-icon">📈</div>
-              <div className="feat-title">Get a real plan</div>
-              <div className="feat-body">Specific steps: how much to save, where to invest, what to cut. Not generic tips.</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Chat section (dark) ── */}
-      <section className="chat-section" id="chat">
-        <div className="chat-inner">
-          {/* Left */}
-          <div className="reveal" ref={chatRef}>
-            <div className="section-label">Live conversation</div>
-            <h2 className="section-h">
-              Ask the hard<br/><span className="ital">questions.</span>
-            </h2>
-            <p className="section-sub">
-              Luca knows your full financial picture — income, spending, debt, investments — and gives answers your situation, not someone else's.
-            </p>
-            <div className="chat-bullets">
-              {[
-                ["Am I saving enough?", "Luca checks your take-home, expenses, and goals. Gives you a real number."],
-                ["Where is my money going?", "Categorized spending with week-over-week trends. No surprises."],
-                ["Should I pay off debt or invest?", "Compares your rates and returns. Gives a ranked action list."],
-              ].map(([title, body], i) => (
-                <div key={i} className="chat-bullet">
-                  <div className="chat-bullet-num">0{i+1}</div>
-                  <div>
-                    <div className="chat-bullet-title">{title}</div>
-                    <div className="chat-bullet-body">{body}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <h2 className="section-h">Simple as a text.<br/><span className="ital">Smarter than a banker.</span></h2>
+          <p className="section-sub">Connect your accounts once. Ask anything. Get real answers based on your actual numbers.</p>
+          <div className="steps">
+            {[
+              ["01","Connect your accounts","Link your bank, credit cards, and investments in 60 seconds via Plaid. Read-only. Always."],
+              ["02","Ask anything","\"Can I afford a vacation?\" \"Why is my balance low?\" \"Where should I put $500?\" Luca answers in plain English."],
+              ["03","Get a real plan","Not generic tips — specific steps tailored to your income, spending, debt, and goals."],
+            ].map(([num, title, body]) => (
+              <div key={num} className="step">
+                <div className="step-num">{num}</div>
+                <div className="step-title">{title}</div>
+                <div className="step-body">{body}</div>
+              </div>
+            ))}
           </div>
 
-          {/* Right — chat phone */}
-          <div className="chat-visual">
-            <div className="chat-phone" style={{animation:"floatPhone 6s ease-in-out infinite"}}>
-              <div className="chat-phone-inner">
-                <div className="chat-phone-header">
-                  <div className="chat-phone-avatar">
-                    <LucaMark size={18} dark />
-                  </div>
-                  <div>
-                    <div className="chat-phone-name">Luca</div>
-                    <div className="chat-phone-status">
-                      <div className="online-dot"/>
-                      Online
-                    </div>
-                  </div>
-                </div>
-                <div className="chat-msgs">
-                  <div className="cm user">
-                    <div className="cm-bubble">Should I pay off my student loans or invest?</div>
-                  </div>
-                  <div className="cm ai">
-                    <div className="cm-bubble">
-                      Your loans are at 5.8% — below your expected market return of ~7%. Invest the difference.
-                    </div>
-                  </div>
-                  <div className="cm-card">
-                    <div className="cm-card-label">Recommended split</div>
-                    <div className="cm-card-row">
-                      <div>
-                        <div className="cm-card-value">$300</div>
-                        <div style={{fontSize:"10px",color:"rgba(255,255,255,0.35)"}}>Extra loan payment</div>
-                      </div>
-                      <div style={{textAlign:"right"}}>
-                        <div className="cm-card-value">$500</div>
-                        <div style={{fontSize:"10px",color:"rgba(255,255,255,0.35)"}}>Index fund</div>
-                      </div>
-                    </div>
-                    <div className="cm-card-change" style={{marginTop:"8px"}}>Net gain over 10yr: +$12,400 vs. paying off first</div>
-                  </div>
-                  <div className="cm user">
-                    <div className="cm-bubble">Which index fund?</div>
-                  </div>
-                  <div className="typing-dots">
-                    <span/><span/><span/>
-                  </div>
-                </div>
-                <div className="chat-phone-input">
-                  <div className="chat-phone-input-field">Ask anything…</div>
-                  <div className="chat-phone-send"><SendIcon /></div>
-                </div>
+          {/* Chat preview */}
+          <div className="chat-preview" style={{marginTop:"48px"}}>
+            <div className="chat-header">
+              <div className="chat-avatar"><LucaMark size={18}/></div>
+              <div>
+                <div className="chat-name">Luca</div>
+                <div className="chat-online">Online now</div>
               </div>
             </div>
-
-            {/* Floating cards around dark phone */}
-            <div className="chat-float-1">
-              <div className="cf-label">Loan balance</div>
-              <div className="cf-value">$18,400</div>
-              <div className="cf-red">5.8% APR</div>
-            </div>
-            <div className="chat-float-2">
-              <div className="cf-label">Portfolio</div>
-              <div className="cf-value">$6,200</div>
-              <div className="cf-green">↑ 11.2% YTD</div>
+            <div className="chat-body">
+              <div className="msg user">
+                <div className="bubble">Should I pay off my student loans or start investing?</div>
+              </div>
+              <div className="msg ai">
+                <div className="bubble">
+                  Your loans are at 5.8% — below the expected market return of ~7%. Invest the difference, but keep up minimum payments.
+                </div>
+              </div>
+              <div className="msg ai">
+                <div className="data-card">
+                  <div className="dc-item">
+                    <div className="dc-label">Loan payoff first</div>
+                    <div className="dc-value">$0</div>
+                    <div className="dc-sub dc-red">Net gain in 10yr</div>
+                  </div>
+                  <div className="dc-item">
+                    <div className="dc-label">Invest now</div>
+                    <div className="dc-value">+$12,400</div>
+                    <div className="dc-sub dc-green">Net gain in 10yr</div>
+                  </div>
+                </div>
+              </div>
+              <div className="msg user">
+                <div className="bubble">Which index fund should I use?</div>
+              </div>
+              <div className="msg ai">
+                <div className="typing"><span/><span/><span/></div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Money moments ── */}
-      <section className="moments">
-        <div className="reveal" ref={momRef}>
+      <hr className="divider"/>
+
+      {/* Moments */}
+      <section className="section">
+        <div className="section-inner reveal" ref={r2}>
           <div className="section-label">Built for every moment</div>
-          <h2 className="section-h">
-            Earn more. Save more.<br/><span className="ital">Stress less.</span>
-          </h2>
-          <p className="section-sub">
-            Luca gives you the right advice for wherever you are in your financial life.
-          </p>
+          <h2 className="section-h">Earn more. Save more.<br/><span className="ital">Stress less.</span></h2>
+          <p className="section-sub">Luca gives you the right advice for wherever you are in your financial life.</p>
           <div className="moments-grid">
-            {/* Earn */}
-            <div className="moment-card">
-              <div className="moment-tag earn">
-                <span>💰</span> Earn
-              </div>
-              <div className="moment-title">Find extra money in your paycheck</div>
-              <div className="moment-body">Luca spots unused benefits, tax withholding errors, and subscription overcharges — averaging $340/month found per user.</div>
-              <div className="moment-phone-wrap">
-                <div className="moment-mini-msg">
-                  <div className="mini-bubble user">Am I leaving money on the table?</div>
-                  <div className="mini-bubble ai">Yes — you're over-withholding by $210/month. Let's fix that.</div>
-                  <div className="mini-stat">
-                    <div className="mini-stat-lbl">Annual tax refund recovered</div>
-                    <div className="mini-stat-val" style={{color:"#4ADE80"}}>+$2,520/yr</div>
-                  </div>
+            {[
+              {
+                tag:"💰 Earn",
+                title:"Find money you're leaving on the table",
+                body:"Luca spots over-withholding, unused employer benefits, and forgotten subscriptions. Average user finds $340/month.",
+                val:"+$2,520/yr",
+                lbl:"From fixing tax withholding alone"
+              },
+              {
+                tag:"🎯 Save",
+                title:"Hit your goals on autopilot",
+                body:"Set a goal and Luca tells you exactly how much to move each week — adjusting as your spending changes.",
+                val:"$2,880",
+                lbl:"Saved in 6 months toward $6k goal"
+              },
+              {
+                tag:"📈 Invest",
+                title:"Grow your wealth without guessing",
+                body:"Luca tells you when you have money to invest, where to put it, and how much risk makes sense for you right now.",
+                val:"$68,000",
+                lbl:"Projected Roth IRA value by age 65"
+              },
+            ].map(({tag,title,body,val,lbl}) => (
+              <div key={tag} className="moment">
+                <div className="moment-tag">{tag}</div>
+                <div className="moment-title">{title}</div>
+                <div className="moment-body">{body}</div>
+                <div className="moment-stat">
+                  <div className="moment-stat-val">{val}</div>
+                  <div className="moment-stat-lbl">{lbl}</div>
                 </div>
               </div>
-            </div>
-
-            {/* Save */}
-            <div className="moment-card">
-              <div className="moment-tag save">
-                <span>🎯</span> Save
-              </div>
-              <div className="moment-title">Hit your goals on autopilot</div>
-              <div className="moment-body">Set a goal and Luca tells you exactly how much to transfer each week — adjusting as your spending changes.</div>
-              <div className="moment-phone-wrap">
-                <div className="moment-mini-msg">
-                  <div className="mini-bubble user">I want to buy a car in 12 months</div>
-                  <div className="mini-bubble ai">Save $480/mo. I'll remind you every Monday.</div>
-                  <div className="mini-stat">
-                    <div className="mini-stat-lbl">Goal: $6,000 down payment</div>
-                    <div className="mini-stat-val">$2,880 saved</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Invest */}
-            <div className="moment-card">
-              <div className="moment-tag invest">
-                <span>📊</span> Invest
-              </div>
-              <div className="moment-title">Grow your wealth without guessing</div>
-              <div className="moment-body">Luca tells you when you have money to invest, where to put it, and how much risk makes sense for your situation.</div>
-              <div className="moment-phone-wrap">
-                <div className="moment-mini-msg">
-                  <div className="mini-bubble user">Where should I put $1,000?</div>
-                  <div className="mini-bubble ai">Max your Roth IRA first. Here's why.</div>
-                  <div className="mini-stat">
-                    <div className="mini-stat-lbl">Tax-free growth projection</div>
-                    <div className="mini-stat-val" style={{color:"#4ADE80"}}>$68,000 by 65</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Price ── */}
-      <section className="price" id="price">
-        <div className="price-inner">
-          <div className="reveal" ref={priceRef}>
-            <div className="section-label">Pricing</div>
-            <h2 className="section-h">Simple pricing.</h2>
-            <p className="section-sub">Less than one cup of coffee a week — and Luca finds you far more than that.</p>
+      <hr className="divider"/>
 
-            <div className="price-cards">
-              <div className="price-card">
-                <div className="price-tier">Free</div>
-                <div className="price-amount"><sup>$</sup>0</div>
-                <div className="price-period">forever</div>
-                <hr className="price-divider"/>
-                <div className="price-features">
-                  {["Connect 1 bank account","Monthly spending summary","3 AI questions/month"].map(f => (
-                    <div key={f} className="price-feat">
-                      <span className="price-check">✓</span>{f}
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="price-card featured">
-                <div className="price-tier">Pro</div>
-                <div className="price-amount"><sup>$</sup>14</div>
-                <div className="price-period">per month</div>
-                <hr className="price-divider"/>
-                <div className="price-features">
-                  {["Unlimited accounts","Unlimited AI conversations","Goal tracking + alerts","Investment advice","Priority support"].map(f => (
-                    <div key={f} className="price-feat">
-                      <span className="price-check">✓</span>{f}
-                    </div>
-                  ))}
-                </div>
+      {/* Price */}
+      <section className="section" id="price">
+        <div className="section-inner reveal" ref={r3}>
+          <div className="section-label">Pricing</div>
+          <h2 className="section-h">Simple pricing.</h2>
+          <p className="section-sub">Less than a coffee a week — and Luca finds you far more than that.</p>
+          <div className="price-row">
+            <div className="price-card">
+              <div className="price-tier">Free</div>
+              <div className="price-amt"><sup>$</sup>0</div>
+              <div className="price-period">forever</div>
+              <hr className="price-hr"/>
+              <div className="price-features">
+                {["1 bank account","Monthly summary","3 AI questions/month"].map(f => (
+                  <div key={f} className="price-feat"><span className="price-check">✓</span>{f}</div>
+                ))}
               </div>
             </div>
-
-            <div className="price-cta-wrap">
-              <h3 className="price-h2">
-                Get <span className="ital">6 months free</span><br/>when we launch.
-              </h3>
-              <EmailForm source="price" dark placeholder="your@email.com" btnText="Claim early access" />
-              <div className="price-note">Waitlist only · No credit card needed</div>
+            <div className="price-card featured">
+              <div className="price-tier">Pro</div>
+              <div className="price-amt"><sup>$</sup>14</div>
+              <div className="price-period">per month</div>
+              <hr className="price-hr"/>
+              <div className="price-features">
+                {["Unlimited accounts","Unlimited conversations","Goal tracking + alerts","Investment guidance","Priority support"].map(f => (
+                  <div key={f} className="price-feat"><span className="price-check">✓</span>{f}</div>
+                ))}
+              </div>
             </div>
+          </div>
+          <div className="price-cta">
+            <div className="price-cta-h">Get <span className="ital">6 months free</span><br/>when we launch.</div>
+            <EmailForm source="price" btnText="Claim your spot" />
+            <div className="price-small">Waitlist only · No credit card needed</div>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ── */}
+      {/* Footer */}
+      <hr className="divider"/>
       <footer className="footer">
         <div className="footer-inner">
           <div className="footer-brand">
-            <LucaMark size={22} />
+            <LucaMark size={22}/>
             <span className="footer-word">Luca</span>
           </div>
           <span className="footer-copy">© 2025 Luca. Talk to your money.</span>
@@ -1396,10 +720,10 @@ const App = () => {
         </div>
       </footer>
 
-      {/* ── Sticky bar ── */}
-      <div className={`sticky-bar ${stickyVisible ? "" : "hidden"}`}>
+      {/* Sticky bar */}
+      <div className={`sticky ${sticky ? "" : "hide"}`}>
         <div className="sticky-inner">
-          <span className="sticky-text">Get 6 months free when we launch →</span>
+          <span className="sticky-text">6 months free when we launch →</span>
           <a href="#price" className="sticky-btn">Join waitlist</a>
         </div>
       </div>
