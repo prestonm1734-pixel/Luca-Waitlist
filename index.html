@@ -4,31 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luca — talk to your money.</title>
-  <meta name="description" content="Most people have no idea what their money is actually doing. Luca fixes that.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23A8B4E8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230C0C11'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230C0C11'/></g></svg>">
+  <meta name="description" content="Your money, finally explained. Luca is the AI financial advisor that knows your real numbers.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23A8B4E8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%2308080D'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%2308080D'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
 :root {
-  --bg:        #0C0C11;
-  --bg-2:      #111118;
-  --card:      #16161E;
-  --card-2:    #1C1C26;
-  --ink:       #FFFFFF;
-  --muted:     rgba(255,255,255,0.42);
-  --dim:       rgba(255,255,255,0.18);
-  --line:      rgba(255,255,255,0.07);
-  --line-2:    rgba(255,255,255,0.11);
-  --purple:    #4F5A97;
-  --purple-hi: #A8B4E8;
-  --green:     #4ADE80;
-  --sans:  "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --serif: "Instrument Serif","Times New Roman",serif;
-  --mono:  "Geist Mono",ui-monospace,monospace;
-  --pad:   clamp(24px,5vw,64px);
-  --max:   1060px;
+  --bg:     #08080D;
+  --ink:    #F5F5F7;
+  --muted:  rgba(245,245,247,0.55);
+  --dim:    rgba(245,245,247,0.28);
+  --line:   rgba(255,255,255,0.08);
+  --purple: #4F5A97;
+  --accent: #A8B4E8;
+  --sans:   "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:  "Instrument Serif","Times New Roman",serif;
+  --pad:    clamp(24px,6vw,80px);
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -45,279 +37,271 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 input{font-family:inherit}
 ::selection{background:var(--purple);color:#fff}
 
-/* glow */
-body::before{
-  content:"";
-  position:fixed;top:-30vh;left:-20vw;
-  width:90vw;height:90vw;max-width:1000px;max-height:1000px;
-  background:radial-gradient(circle,rgba(79,90,151,0.11) 0%,transparent 65%);
-  pointer-events:none;z-index:0;
-}
-
-.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
-
 /* ── Nav ── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:0 var(--pad);
-  border-bottom:1px solid var(--line);
-  background:rgba(12,12,17,0.8);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-}
-.nav-row{
-  max-width:var(--max);margin:0 auto;
+  height:52px;
   display:flex;align-items:center;justify-content:space-between;
-  height:56px;
+  padding:0 var(--pad);
+  background:rgba(8,8,13,0.78);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:1px solid var(--line);
 }
 .brand{display:flex;align-items:center;gap:10px}
-.brand-word{font-size:16px;font-weight:600;letter-spacing:-0.03em}
+.brand-word{font-size:15px;font-weight:600;letter-spacing:-0.025em;color:var(--ink)}
 .nav-btn{
-  background:#fff;color:var(--bg);
-  padding:8px 18px;border-radius:999px;
-  font-size:13px;font-weight:600;letter-spacing:-0.01em;
+  font-size:13px;font-weight:500;color:var(--accent);
   transition:opacity .15s;
 }
-.nav-btn:hover{opacity:.85}
+.nav-btn:hover{opacity:.7}
+
+/* ── Sections ── */
+section{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;
+  padding:140px var(--pad);
+  min-height:100svh;
+  position:relative;
+}
+section.short{min-height:auto;padding:120px var(--pad)}
 
 /* ── Hero ── */
-.hero{
-  position:relative;z-index:1;
-  min-height:100svh;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:120px var(--pad) 100px;
-  max-width:var(--max);margin:0 auto;
+.hero-eyebrow{
+  font-size:13px;font-weight:400;
+  color:var(--accent);letter-spacing:0.01em;
+  margin-bottom:28px;
+  display:flex;align-items:center;gap:8px;
 }
-
-.eyebrow{
-  font-family:var(--mono);font-size:11px;
-  text-transform:uppercase;letter-spacing:0.12em;
-  color:var(--purple-hi);
-  display:inline-flex;align-items:center;gap:8px;
-  margin-bottom:36px;
-}
-.eyebrow-dot{
+.hero-eyebrow-dot{
   width:5px;height:5px;border-radius:50%;
-  background:var(--purple-hi);
-  animation:pulse 2.5s ease-in-out infinite;
+  background:var(--accent);
+  animation:blink 2.5s ease-in-out infinite;
 }
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
 
-.hero-h{
-  font-size:clamp(50px,7.5vw,112px);
-  font-weight:500;line-height:1.0;
+h1{
+  font-size:clamp(52px,8.5vw,128px);
+  font-weight:600;
+  line-height:1.0;
   letter-spacing:-0.05em;
-  margin-bottom:32px;
+  margin-bottom:28px;
   max-width:14ch;
 }
-.hero-h em{
-  font-family:var(--serif);font-style:italic;
-  font-weight:400;letter-spacing:-0.025em;
+h1 em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-0.03em;
 }
-.hero-h .fade{color:var(--muted)}
 
 .hero-sub{
-  font-size:clamp(16px,1.5vw,20px);
+  font-size:clamp(17px,1.8vw,22px);
   color:var(--muted);
-  line-height:1.65;
-  max-width:38ch;
-  margin-bottom:48px;
+  line-height:1.6;
+  max-width:34ch;
+  margin-bottom:52px;
+  font-weight:400;
   letter-spacing:-0.01em;
 }
 
 /* ── Form ── */
-.form-wrap{max-width:400px}
+.form-wrap{width:100%;max-width:380px}
 .form-row{
   display:flex;align-items:center;
-  background:rgba(255,255,255,0.055);
-  border:1px solid var(--line-2);
-  border-radius:14px;padding:5px 5px 5px 20px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.13);
+  border-radius:980px;
+  padding:5px 5px 5px 22px;
   transition:border-color .2s,background .2s;
 }
 .form-row:focus-within{
-  border-color:rgba(79,90,151,0.55);
-  background:rgba(255,255,255,0.08);
+  border-color:rgba(168,180,232,0.4);
+  background:rgba(255,255,255,0.09);
 }
 .form-row input{
   flex:1;background:none;border:none;outline:none;
-  font-size:15px;color:#fff;padding:12px 0;min-width:0;
+  font-size:15px;color:#fff;padding:11px 0;min-width:0;
+  letter-spacing:-0.005em;
 }
 .form-row input::placeholder{color:rgba(255,255,255,0.25)}
 .form-btn{
-  background:var(--purple);color:#fff;
-  padding:11px 20px;border-radius:10px;
-  font-size:13px;font-weight:500;letter-spacing:-0.01em;
+  background:#fff;color:#08080D;
+  padding:11px 22px;border-radius:999px;
+  font-size:13px;font-weight:600;
   white-space:nowrap;flex-shrink:0;
   transition:opacity .15s,transform .1s;
 }
-.form-btn:hover:not(:disabled){opacity:.8}
-.form-btn:active{transform:scale(.97)}
-.form-btn:disabled{opacity:.35;cursor:default}
+.form-btn:hover:not(:disabled){opacity:.85}
+.form-btn:active{transform:scale(.98)}
+.form-btn:disabled{opacity:.3;cursor:default}
 .form-note{
-  font-family:var(--mono);font-size:11px;
-  color:var(--dim);margin-top:12px;
-  letter-spacing:0.05em;text-transform:uppercase;
+  font-size:12px;color:var(--dim);
+  margin-top:14px;letter-spacing:.01em;
 }
-.form-error{font-size:12px;color:#F87171;margin-top:8px;font-family:var(--mono)}
+.form-error{font-size:12px;color:#F87171;margin-top:10px}
 .form-thanks{
-  font-size:20px;font-weight:500;
-  letter-spacing:-0.03em;color:var(--purple-hi);line-height:1.4;
+  font-size:clamp(20px,2vw,26px);
+  font-weight:500;letter-spacing:-0.03em;
+  color:var(--accent);line-height:1.45;
 }
 
-/* ── Divider ── */
-hr{border:none;border-top:1px solid var(--line)}
+/* ── Big section headlines ── */
+h2{
+  font-size:clamp(38px,6vw,90px);
+  font-weight:600;
+  line-height:1.02;
+  letter-spacing:-0.048em;
+  max-width:18ch;
+}
+h2 em{
+  font-family:var(--serif);font-style:italic;
+  font-weight:400;letter-spacing:-0.025em;
+}
+h2 .dim{color:var(--muted)}
 
-/* ── Sections ── */
-.section{
-  position:relative;z-index:1;
-  padding:96px var(--pad);
-}
-.section-inner{max-width:var(--max);margin:0 auto}
-
-.label{
-  font-family:var(--mono);font-size:11px;
-  text-transform:uppercase;letter-spacing:0.1em;
-  color:var(--purple-hi);margin-bottom:20px;
-}
-.sh{
-  font-size:clamp(32px,4vw,58px);
-  font-weight:500;letter-spacing:-0.045em;line-height:1.07;
-  margin-bottom:16px;
-}
-.sh em{font-family:var(--serif);font-style:italic;font-weight:400}
-.sp{
-  font-size:16px;color:var(--muted);
-  max-width:44ch;line-height:1.7;letter-spacing:-0.005em;
+.section-sub{
+  font-size:clamp(16px,1.5vw,20px);
+  color:var(--muted);
+  max-width:36ch;
+  line-height:1.65;
+  margin-top:20px;
+  letter-spacing:-0.008em;
 }
 
-/* ── Three pillars ── */
-.pillars{
-  margin-top:56px;
+/* ── Feature list (Apple-style underneath) ── */
+.feat-list{
+  margin-top:72px;
   display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:var(--line);
-  border:1px solid var(--line);
-  border-radius:20px;overflow:hidden;
+  gap:0;
+  border-top:1px solid var(--line);
+  max-width:900px;width:100%;
+  text-align:left;
 }
-@media(max-width:640px){.pillars{grid-template-columns:1fr}}
-.pillar{
-  background:var(--card);
-  padding:36px 30px;
+@media(max-width:640px){.feat-list{grid-template-columns:1fr}}
+.feat{
+  padding:40px 36px 40px 0;
+  border-right:1px solid var(--line);
 }
-.pillar-n{
-  font-family:var(--mono);font-size:11px;
-  color:var(--purple-hi);letter-spacing:0.06em;
-  margin-bottom:18px;
+.feat:last-child{border-right:none;padding-right:0;padding-left:36px}
+.feat:nth-child(2){padding-left:36px}
+@media(max-width:640px){
+  .feat{border-right:none;border-bottom:1px solid var(--line);padding:36px 0}
+  .feat:last-child{border-bottom:none}
+  .feat,.feat:nth-child(2),.feat:last-child{padding-left:0;padding-right:0}
 }
-.pillar-t{
-  font-size:17px;font-weight:500;
-  letter-spacing:-0.03em;margin-bottom:8px;
+.feat-title{
+  font-size:17px;font-weight:600;
+  letter-spacing:-0.03em;margin-bottom:10px;
 }
-.pillar-b{font-size:14px;color:var(--muted);line-height:1.65}
+.feat-body{font-size:14px;color:var(--muted);line-height:1.65}
 
-/* ── Stats ── */
-.stats{
-  margin-top:56px;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:12px;
+/* ── How section ── */
+.how-items{
+  margin-top:72px;
+  display:flex;flex-direction:column;
+  gap:0;
+  max-width:680px;width:100%;
+  text-align:left;
 }
-@media(max-width:640px){.stats{grid-template-columns:1fr}}
-.stat{
-  background:var(--card);border:1px solid var(--line);
-  border-radius:18px;padding:28px 26px;
+.how-item{
+  display:flex;align-items:flex-start;gap:32px;
+  padding:40px 0;
+  border-bottom:1px solid var(--line);
 }
-.stat-val{
-  font-size:clamp(36px,4vw,52px);
-  font-weight:600;letter-spacing:-0.05em;
-  color:var(--green);margin-bottom:6px;
+.how-item:first-child{border-top:1px solid var(--line)}
+.how-n{
+  font-size:13px;color:var(--dim);
+  font-weight:500;letter-spacing:0.02em;
+  min-width:28px;margin-top:2px;
+  flex-shrink:0;
 }
-.stat-lbl{font-size:13px;color:var(--muted);line-height:1.5;max-width:22ch}
+.how-title{font-size:18px;font-weight:500;letter-spacing:-0.03em;margin-bottom:8px}
+.how-body{font-size:14px;color:var(--muted);line-height:1.65}
 
 /* ── Price ── */
-.price-cards{
-  margin-top:56px;
-  display:grid;grid-template-columns:repeat(2,1fr);
-  gap:12px;max-width:640px;
+.price-pair{
+  margin-top:72px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:18px;overflow:hidden;
+  max-width:640px;width:100%;text-align:left;
 }
-@media(max-width:560px){.price-cards{grid-template-columns:1fr}}
-.pc{
-  background:var(--card);border:1px solid var(--line);
-  border-radius:20px;padding:30px;
-}
-.pc.hi{
-  background:var(--purple);border-color:transparent;
-  box-shadow:0 8px 32px rgba(79,90,151,0.35);
-}
+@media(max-width:520px){.price-pair{grid-template-columns:1fr}}
+.pc{background:var(--bg);padding:36px}
+.pc.hi{background:#111116}
 .pc-tier{
-  font-family:var(--mono);font-size:10px;
-  text-transform:uppercase;letter-spacing:0.08em;
-  color:var(--muted);margin-bottom:14px;
+  font-size:11px;font-weight:500;letter-spacing:0.08em;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:18px;
 }
-.pc.hi .pc-tier{color:rgba(255,255,255,0.6)}
-.pc-amt{font-size:40px;font-weight:600;letter-spacing:-0.05em}
-.pc-amt sup{font-size:20px;font-weight:500;vertical-align:top;margin-top:7px;display:inline-block}
-.pc-period{font-size:13px;color:var(--muted);margin-top:2px}
-.pc.hi .pc-period{color:rgba(255,255,255,0.5)}
-.pc-line{border:none;border-top:1px solid var(--line);margin:22px 0}
-.pc.hi .pc-line{border-color:rgba(255,255,255,0.15)}
-.pc-list{display:flex;flex-direction:column;gap:9px}
-.pc-item{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:10px}
-.pc.hi .pc-item{color:rgba(255,255,255,0.82)}
-.pc-check{font-size:12px;color:var(--purple-hi);flex-shrink:0}
-.pc.hi .pc-check{color:rgba(255,255,255,0.55)}
+.pc-price{
+  font-size:48px;font-weight:600;letter-spacing:-0.05em;
+  margin-bottom:4px;
+}
+.pc-price sup{font-size:22px;font-weight:500;vertical-align:top;margin-top:10px;display:inline-block}
+.pc-per{font-size:14px;color:var(--muted)}
+.pc-hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+.pc-items{display:flex;flex-direction:column;gap:10px}
+.pc-item{font-size:13.5px;color:var(--muted);display:flex;gap:12px;align-items:baseline}
+.pc-item-check{color:var(--accent);flex-shrink:0;font-size:12px}
 
-.price-cta{margin-top:52px;max-width:420px}
+.price-cta{
+  margin-top:72px;
+  display:flex;flex-direction:column;align-items:center;gap:0;
+}
 .price-cta-h{
-  font-size:clamp(24px,2.8vw,36px);
-  font-weight:500;letter-spacing:-0.04em;
-  line-height:1.15;margin-bottom:26px;
+  font-size:clamp(26px,3vw,40px);font-weight:600;
+  letter-spacing:-0.04em;line-height:1.1;
+  margin-bottom:36px;
 }
 .price-cta-h em{font-family:var(--serif);font-style:italic;font-weight:400}
-.price-small{
-  font-family:var(--mono);font-size:11px;
-  text-transform:uppercase;letter-spacing:0.06em;
-  color:var(--dim);margin-top:14px;
+.price-note{font-size:12px;color:var(--dim);margin-top:14px;letter-spacing:.01em}
+
+/* ── Divider ── */
+.div-line{border:none;border-top:1px solid var(--line)}
+
+/* ── Footer ── */
+footer{
+  padding:48px var(--pad);
+  border-top:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
 }
+.foot-brand{display:flex;align-items:center;gap:9px}
+.foot-word{font-size:14px;font-weight:600;letter-spacing:-0.025em}
+.foot-copy{font-size:13px;color:var(--dim)}
+.foot-links{display:flex;gap:22px}
+.foot-link{font-size:13px;color:var(--muted);transition:color .15s}
+.foot-link:hover{color:var(--ink)}
 
 /* ── Sticky ── */
 .sticky{
   position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
   z-index:200;transition:opacity .3s,transform .3s;
+  pointer-events:all;
 }
-.sticky.hide{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none}
+.sticky.hide{opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none}
 .sticky-inner{
   display:flex;align-items:center;gap:14px;
-  background:rgba(18,18,26,0.92);
+  background:rgba(16,16,22,0.9);
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid var(--line-2);
+  border:1px solid rgba(255,255,255,0.1);
   border-radius:999px;
   padding:8px 8px 8px 24px;
-  box-shadow:0 8px 32px rgba(0,0,0,0.55);
+  box-shadow:0 8px 40px rgba(0,0,0,0.6);
 }
-.sticky-text{font-size:13.5px;color:rgba(255,255,255,0.72);white-space:nowrap;letter-spacing:-0.01em}
+.sticky-text{font-size:13px;color:rgba(255,255,255,0.68);white-space:nowrap;letter-spacing:-0.01em}
 .sticky-btn{
-  background:#fff;color:var(--bg);
+  background:#fff;color:#08080D;
   padding:10px 22px;border-radius:999px;
-  font-size:13px;font-weight:600;letter-spacing:-0.01em;
-  transition:opacity .15s;
+  font-size:13px;font-weight:600;
+  transition:opacity .15s;white-space:nowrap;
 }
-.sticky-btn:hover{opacity:.88}
-
-/* ── Footer ── */
-footer{padding:42px var(--pad)}
-.foot-row{
-  max-width:var(--max);margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:16px;
-}
-.foot-brand{display:flex;align-items:center;gap:9px}
-.foot-word{font-size:15px;font-weight:600;letter-spacing:-0.03em}
-.foot-copy{font-size:13px;color:var(--dim)}
-.foot-links{display:flex;gap:24px}
-.foot-link{font-size:13px;color:var(--muted);transition:color .15s}
-.foot-link:hover{color:#fff}
+.sticky-btn:hover{opacity:.85}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
   </style>
 
@@ -337,8 +321,7 @@ const { useState, useEffect, useRef } = React;
 
 const Mark = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
-    width={size} height={size}
-    style={{display:"block",width:size,height:size,flexShrink:0}}>
+    width={size} height={size} style={{display:"block",width:size,height:size,flexShrink:0}}>
     <g fill="#A8B4E8">
       <rect x="46" y="14" width="8" height="8" rx="1.5"/>
       <rect x="78" y="46" width="8" height="8" rx="1.5"/>
@@ -349,20 +332,19 @@ const Mark = ({ size = 24 }) => (
       <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
       <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
       <circle cx="50" cy="50" r="17"/>
-      <circle cx="50" cy="50" r="11" fill="#0C0C11"/>
+      <circle cx="50" cy="50" r="11" fill="#08080D"/>
       <circle cx="50" cy="50" r="6"/>
-      <circle cx="50" cy="50" r="2.2" fill="#0C0C11"/>
+      <circle cx="50" cy="50" r="2.2" fill="#08080D"/>
     </g>
   </svg>
 );
 
 const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
-  const [v, setV]   = useState("");
+  const [v, setV] = useState("");
   const [ok, setOk] = useState(false);
   const [ld, setLd] = useState(false);
   const [er, setEr] = useState("");
-
-  const go = async (e) => {
+  const go = async e => {
     e.preventDefault();
     if (!v.includes("@")) { setEr("Enter a valid email."); return; }
     setLd(true); setEr("");
@@ -374,16 +356,15 @@ const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
     } catch { setEr("Something went wrong. Try again."); }
     finally { setLd(false); }
   };
-
   if (ok) return <div className="form-thanks">You're on the list.<br/>We'll be in touch.</div>;
   return (
     <div className="form-wrap">
       <form className="form-row" onSubmit={go}>
         <input type="email" value={v} onChange={e=>{setV(e.target.value);setEr("")}} placeholder={ph} autoComplete="email"/>
-        <button className="form-btn" type="submit" disabled={ld}>{ld?"…":btn}</button>
+        <button className="form-btn" type="submit" disabled={ld}>{ld ? "…" : btn}</button>
       </form>
       {er && <div className="form-error">{er}</div>}
-      <div className="form-note">No spam · Free to join</div>
+      <div className="form-note">Free to join. No credit card.</div>
     </div>
   );
 };
@@ -394,7 +375,7 @@ const useReveal = () => {
     const el = r.current; if (!el) return;
     const o = new IntersectionObserver(es => {
       es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); o.unobserve(e.target); }});
-    }, { threshold: 0.1 });
+    }, { threshold: 0.08 });
     o.observe(el); return () => o.disconnect();
   }, []);
   return r;
@@ -403,10 +384,10 @@ const useReveal = () => {
 const App = () => {
   const [bar, setBar] = useState(false);
   const heroRef = useRef(null);
-  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal();
+  const r1=useReveal(), r2=useReveal(), r3=useReveal(), r4=useReveal();
 
   useEffect(() => {
-    const o = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { threshold: 0.2 });
+    const o = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { threshold: 0.15 });
     if (heroRef.current) o.observe(heroRef.current);
     return () => o.disconnect();
   }, []);
@@ -414,99 +395,94 @@ const App = () => {
   return (<>
     {/* Nav */}
     <nav>
-      <div className="nav-row">
-        <div className="brand"><Mark size={26}/><span className="brand-word">Luca</span></div>
-        <a href="#waitlist" className="nav-btn">Get early access</a>
-      </div>
+      <div className="brand"><Mark size={26}/><span className="brand-word">Luca</span></div>
+      <a href="#waitlist" className="nav-btn">Join the waitlist</a>
     </nav>
 
     {/* Hero */}
-    <section className="hero" ref={heroRef}>
-      <div className="eyebrow"><span className="eyebrow-dot"/>Early access · Limited spots</div>
-      <h1 className="hero-h">
-        You have no idea<br/>
-        what your money<br/>
-        <em className="fade">is doing.</em>
+    <section ref={heroRef}>
+      <div className="hero-eyebrow"><span className="hero-eyebrow-dot"/>Early access open</div>
+      <h1>
+        Your money<br/>
+        has a lot to<br/>
+        <em>say.</em>
       </h1>
       <p className="hero-sub">
-        Luca connects to your accounts and tells you — clearly, honestly, instantly.
+        Luca listens to your accounts<br/>and finally tells you the truth.
       </p>
-      <Form source="hero" btn="Get early access" ph="Enter your email"/>
+      <Form source="hero" btn="Get early access" ph="your@email.com"/>
     </section>
 
-    <hr/>
-
-    {/* How */}
-    <section className="section">
-      <div className="section-inner rv" ref={r1}>
-        <div className="label">What Luca does</div>
-        <h2 className="sh">Ask anything.<br/><em>Get a real answer.</em></h2>
-        <p className="sp">No dashboards to learn. No jargon. Just ask.</p>
-        <div className="pillars">
+    {/* Statement 1 */}
+    <section className="short">
+      <div className="rv" ref={r1}>
+        <h2>Most people<br/>have <em className="dim">no idea</em><br/>where it goes.</h2>
+        <p className="section-sub">
+          Luca connects to every account you have and shows you exactly what's happening — without you having to figure it out.
+        </p>
+        <div className="feat-list">
           {[
-            ["01","Where is it going?","See exactly where your money goes — week by week, category by category. No guessing."],
-            ["02","What should I do?","Luca tells you the next right move. Specific, ranked, based on your real numbers."],
-            ["03","Am I on track?","Know if you're ahead or behind — on savings, debt, goals, retirement. In one sentence."],
+            ["Ask anything","\"Can I afford this?\" \"Why is my balance low?\" \"What should I do with $500?\" Real answers, instantly."],
+            ["Your real numbers","Not averages. Not estimates. Your actual spending, income, and savings — updated daily."],
+            ["A clear next step","Luca doesn't just show data. It tells you what to do — and why."],
+          ].map(([t,b]) => (
+            <div key={t} className="feat">
+              <div className="feat-title">{t}</div>
+              <div className="feat-body">{b}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* Statement 2 */}
+    <section className="short">
+      <div className="rv" ref={r2}>
+        <h2>Simple as<br/>sending a<br/><em>text.</em></h2>
+        <p className="section-sub">No spreadsheets. No learning curve. Just ask.</p>
+        <div className="how-items">
+          {[
+            ["01","Connect your accounts","Link everything in 60 seconds via Plaid. Read-only access. Your data never moves."],
+            ["02","Ask Luca anything","Type like you'd text a friend. Luca knows your full picture."],
+            ["03","Get a real plan","Specific steps. Real numbers. No generic advice."],
           ].map(([n,t,b]) => (
-            <div key={n} className="pillar">
-              <div className="pillar-n">{n}</div>
-              <div className="pillar-t">{t}</div>
-              <div className="pillar-b">{b}</div>
+            <div key={n} className="how-item">
+              <div className="how-n">{n}</div>
+              <div>
+                <div className="how-title">{t}</div>
+                <div className="how-body">{b}</div>
+              </div>
             </div>
           ))}
         </div>
       </div>
     </section>
 
-    <hr/>
-
-    {/* Stats */}
-    <section className="section">
-      <div className="section-inner rv" ref={r2}>
-        <div className="label">The average Luca user</div>
-        <h2 className="sh">The numbers<br/><em>speak for themselves.</em></h2>
-        <div className="stats">
-          {[
-            ["$340","Found per month they didn't know was there"],
-            ["11 min","To connect all accounts and get your first insight"],
-            ["6×","More likely to hit a savings goal with Luca than without"],
-          ].map(([v,l]) => (
-            <div key={v} className="stat">
-              <div className="stat-val">{v}</div>
-              <div className="stat-lbl">{l}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <hr/>
-
-    {/* Price */}
-    <section className="section" id="waitlist">
-      <div className="section-inner rv" ref={r3}>
-        <div className="label">Pricing</div>
-        <h2 className="sh">Start free.<br/><em>Upgrade when it clicks.</em></h2>
-        <div className="price-cards">
+    {/* Pricing */}
+    <section className="short" id="waitlist">
+      <div className="rv" ref={r3}>
+        <h2>Simple<br/><em>pricing.</em></h2>
+        <p className="section-sub">Start free. Upgrade when it clicks.</p>
+        <div className="price-pair">
           <div className="pc">
             <div className="pc-tier">Free</div>
-            <div className="pc-amt"><sup>$</sup>0</div>
-            <div className="pc-period">forever</div>
-            <hr className="pc-line"/>
-            <div className="pc-list">
-              {["1 bank account","Monthly summary","3 questions/month"].map(f=>(
-                <div key={f} className="pc-item"><span className="pc-check">✓</span>{f}</div>
+            <div className="pc-price"><sup>$</sup>0</div>
+            <div className="pc-per">forever</div>
+            <hr className="pc-hr"/>
+            <div className="pc-items">
+              {["1 bank account","Monthly snapshot","3 questions/month"].map(f=>(
+                <div key={f} className="pc-item"><span className="pc-item-check">✓</span>{f}</div>
               ))}
             </div>
           </div>
           <div className="pc hi">
             <div className="pc-tier">Pro</div>
-            <div className="pc-amt"><sup>$</sup>14</div>
-            <div className="pc-period">per month</div>
-            <hr className="pc-line"/>
-            <div className="pc-list">
-              {["Unlimited accounts","Unlimited questions","Goals + alerts","Investment guidance","Priority support"].map(f=>(
-                <div key={f} className="pc-item"><span className="pc-check">✓</span>{f}</div>
+            <div className="pc-price"><sup>$</sup>14</div>
+            <div className="pc-per">per month</div>
+            <hr className="pc-hr"/>
+            <div className="pc-items">
+              {["Unlimited accounts","Unlimited questions","Goal tracking","Investment guidance","Priority support"].map(f=>(
+                <div key={f} className="pc-item"><span className="pc-item-check">✓</span>{f}</div>
               ))}
             </div>
           </div>
@@ -514,21 +490,18 @@ const App = () => {
         <div className="price-cta">
           <div className="price-cta-h">Get <em>6 months free</em><br/>when we launch.</div>
           <Form source="price" btn="Claim your spot" ph="your@email.com"/>
-          <div className="price-small">No credit card · Cancel anytime</div>
+          <div className="price-note">No credit card. No spam.</div>
         </div>
       </div>
     </section>
 
     {/* Footer */}
-    <hr/>
     <footer>
-      <div className="foot-row">
-        <div className="foot-brand"><Mark size={20}/><span className="foot-word">Luca</span></div>
-        <span className="foot-copy">© 2025 Luca</span>
-        <div className="foot-links">
-          <a href="#" className="foot-link">Privacy</a>
-          <a href="#" className="foot-link">Security</a>
-        </div>
+      <div className="foot-brand"><Mark size={20}/><span className="foot-word">Luca</span></div>
+      <span className="foot-copy">© 2025 Luca</span>
+      <div className="foot-links">
+        <a href="#" className="foot-link">Privacy</a>
+        <a href="#" className="foot-link">Security</a>
       </div>
     </footer>
 
