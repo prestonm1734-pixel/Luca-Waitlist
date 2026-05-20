@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luca — talk to your money.</title>
-  <meta name="description" content="Luca connects to your real accounts and tells you exactly what to do with your money.">
+  <meta name="description" content="Most people have no idea what their money is actually doing. Luca fixes that.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23A8B4E8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230C0C11'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230C0C11'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,404 +12,313 @@
 
   <style>
 :root {
-  --bg:         #0C0C11;
-  --bg-2:       #111118;
-  --bg-card:    #17171F;
-  --bg-card-2:  #1C1C26;
-  --ink:        #FFFFFF;
-  --muted:      rgba(255,255,255,0.45);
-  --muted-2:    rgba(255,255,255,0.25);
-  --line:       rgba(255,255,255,0.07);
-  --line-2:     rgba(255,255,255,0.12);
-  --purple:     #4F5A97;
-  --purple-2:   #6672AA;
-  --purple-text:#A8B4E8;
-  --purple-glow:rgba(79,90,151,0.15);
-  --green:      #4ADE80;
-  --red:        #F87171;
+  --bg:        #0C0C11;
+  --bg-2:      #111118;
+  --card:      #16161E;
+  --card-2:    #1C1C26;
+  --ink:       #FFFFFF;
+  --muted:     rgba(255,255,255,0.42);
+  --dim:       rgba(255,255,255,0.18);
+  --line:      rgba(255,255,255,0.07);
+  --line-2:    rgba(255,255,255,0.11);
+  --purple:    #4F5A97;
+  --purple-hi: #A8B4E8;
+  --green:     #4ADE80;
   --sans:  "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --mono:  "Geist Mono",ui-monospace,"SF Mono",monospace;
   --serif: "Instrument Serif","Times New Roman",serif;
-  --maxw:  1100px;
-  --pad:   clamp(20px, 5vw, 60px);
+  --mono:  "Geist Mono",ui-monospace,monospace;
+  --pad:   clamp(24px,5vw,64px);
+  --max:   1060px;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-size: 17px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; border: none; background: none; }
-input { font-family: inherit; }
-::selection { background: var(--purple); color: white; }
-.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input{font-family:inherit}
+::selection{background:var(--purple);color:#fff}
 
-/* ── Reveal ── */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.in { opacity: 1; transform: none; }
+/* glow */
+body::before{
+  content:"";
+  position:fixed;top:-30vh;left:-20vw;
+  width:90vw;height:90vw;max-width:1000px;max-height:1000px;
+  background:radial-gradient(circle,rgba(79,90,151,0.11) 0%,transparent 65%);
+  pointer-events:none;z-index:0;
+}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
 
 /* ── Nav ── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(12,12,17,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--line);
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:0 var(--pad);
+  border-bottom:1px solid var(--line);
+  background:rgba(12,12,17,0.8);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
 }
-.nav-inner {
-  max-width: var(--maxw); margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  height: 58px; padding: 0 var(--pad);
+.nav-row{
+  max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:56px;
 }
-.nav-brand { display: flex; align-items: center; gap: 10px; }
-.nav-word { font-weight: 600; font-size: 16px; letter-spacing: -0.03em; color: white; }
-.nav-cta {
-  background: white; color: #0C0C11;
-  padding: 8px 18px; border-radius: 999px;
-  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
-  transition: opacity .15s, transform .1s;
+.brand{display:flex;align-items:center;gap:10px}
+.brand-word{font-size:16px;font-weight:600;letter-spacing:-0.03em}
+.nav-btn{
+  background:#fff;color:var(--bg);
+  padding:8px 18px;border-radius:999px;
+  font-size:13px;font-weight:600;letter-spacing:-0.01em;
+  transition:opacity .15s;
 }
-.nav-cta:hover { opacity: 0.88; }
-.nav-cta:active { transform: scale(0.97); }
+.nav-btn:hover{opacity:.85}
 
 /* ── Hero ── */
-.hero {
-  min-height: 100svh;
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 130px var(--pad) 100px;
-  max-width: var(--maxw); margin: 0 auto;
-  position: relative;
+.hero{
+  position:relative;z-index:1;
+  min-height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:120px var(--pad) 100px;
+  max-width:var(--max);margin:0 auto;
 }
 
-/* ambient glow */
-.hero::before {
-  content: "";
-  position: fixed; top: -20vh; left: -10vw;
-  width: 80vw; height: 80vw; max-width: 900px; max-height: 900px;
-  background: radial-gradient(circle, rgba(79,90,151,0.13) 0%, transparent 65%);
-  pointer-events: none;
-  z-index: 0;
+.eyebrow{
+  font-family:var(--mono);font-size:11px;
+  text-transform:uppercase;letter-spacing:0.12em;
+  color:var(--purple-hi);
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:36px;
 }
-
-.hero-content { position: relative; z-index: 1; max-width: 760px; }
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 9px;
-  font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--purple-text);
-  border: 1px solid rgba(168,180,232,0.2);
-  background: rgba(79,90,151,0.1);
-  border-radius: 999px; padding: 5px 14px 5px 10px;
-  margin-bottom: 40px;
+.eyebrow-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--purple-hi);
+  animation:pulse 2.5s ease-in-out infinite;
 }
-.hero-badge-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--purple-text);
-  animation: blink 2.4s ease-in-out infinite;
-}
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-h1 {
-  font-size: clamp(44px, 6vw, 92px);
-  font-weight: 500; line-height: 1.02;
-  letter-spacing: -0.045em;
-  margin-bottom: 28px;
+.hero-h{
+  font-size:clamp(50px,7.5vw,112px);
+  font-weight:500;line-height:1.0;
+  letter-spacing:-0.05em;
+  margin-bottom:32px;
+  max-width:14ch;
 }
-h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; letter-spacing: -0.02em; }
-h1 .dim { color: var(--muted); }
+.hero-h em{
+  font-family:var(--serif);font-style:italic;
+  font-weight:400;letter-spacing:-0.025em;
+}
+.hero-h .fade{color:var(--muted)}
 
-.hero-sub {
-  font-size: clamp(16px, 1.4vw, 19px);
-  color: var(--muted);
-  max-width: 48ch; line-height: 1.7;
-  margin-bottom: 48px;
-  letter-spacing: -0.005em;
+.hero-sub{
+  font-size:clamp(16px,1.5vw,20px);
+  color:var(--muted);
+  line-height:1.65;
+  max-width:38ch;
+  margin-bottom:48px;
+  letter-spacing:-0.01em;
 }
 
 /* ── Form ── */
-.form-wrap { max-width: 420px; }
-.form-row {
-  display: flex; align-items: center;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--line-2);
-  border-radius: 14px; padding: 5px 5px 5px 20px;
-  transition: border-color .2s, background .2s;
+.form-wrap{max-width:400px}
+.form-row{
+  display:flex;align-items:center;
+  background:rgba(255,255,255,0.055);
+  border:1px solid var(--line-2);
+  border-radius:14px;padding:5px 5px 5px 20px;
+  transition:border-color .2s,background .2s;
 }
-.form-row:focus-within {
-  border-color: rgba(79,90,151,0.6);
-  background: rgba(255,255,255,0.08);
+.form-row:focus-within{
+  border-color:rgba(79,90,151,0.55);
+  background:rgba(255,255,255,0.08);
 }
-.form-row input {
-  flex: 1; background: none; border: none; outline: none;
-  font-size: 15px; color: white; padding: 12px 0; min-width: 0;
+.form-row input{
+  flex:1;background:none;border:none;outline:none;
+  font-size:15px;color:#fff;padding:12px 0;min-width:0;
 }
-.form-row input::placeholder { color: var(--muted-2); }
-.form-btn {
-  background: var(--purple); color: white;
-  padding: 11px 20px; border-radius: 10px;
-  font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
-  white-space: nowrap; flex-shrink: 0;
-  transition: opacity .15s, transform .1s;
+.form-row input::placeholder{color:rgba(255,255,255,0.25)}
+.form-btn{
+  background:var(--purple);color:#fff;
+  padding:11px 20px;border-radius:10px;
+  font-size:13px;font-weight:500;letter-spacing:-0.01em;
+  white-space:nowrap;flex-shrink:0;
+  transition:opacity .15s,transform .1s;
 }
-.form-btn:hover:not(:disabled) { opacity: 0.82; }
-.form-btn:active { transform: scale(0.97); }
-.form-btn:disabled { opacity: 0.35; cursor: default; }
-.form-note {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--muted-2); margin-top: 12px;
-  letter-spacing: 0.05em; text-transform: uppercase;
+.form-btn:hover:not(:disabled){opacity:.8}
+.form-btn:active{transform:scale(.97)}
+.form-btn:disabled{opacity:.35;cursor:default}
+.form-note{
+  font-family:var(--mono);font-size:11px;
+  color:var(--dim);margin-top:12px;
+  letter-spacing:0.05em;text-transform:uppercase;
 }
-.form-error { font-family: var(--mono); font-size: 12px; color: var(--red); margin-top: 10px; }
-.form-thanks { font-size: 20px; font-weight: 500; letter-spacing: -0.03em; color: var(--purple-text); line-height: 1.4; }
-
-/* Claude pill */
-.ai-pill {
-  display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 32px;
-  font-size: 12.5px; color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 999px; padding: 6px 14px 6px 8px;
-  letter-spacing: -0.005em;
+.form-error{font-size:12px;color:#F87171;margin-top:8px;font-family:var(--mono)}
+.form-thanks{
+  font-size:20px;font-weight:500;
+  letter-spacing:-0.03em;color:var(--purple-hi);line-height:1.4;
 }
-.ai-pill-icon {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: linear-gradient(135deg,#CC785C,#E8A87C);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.ai-pill strong { color: rgba(255,255,255,0.75); font-weight: 500; }
 
 /* ── Divider ── */
-.divider { border: none; border-top: 1px solid var(--line); }
+hr{border:none;border-top:1px solid var(--line)}
 
-/* ── Section commons ── */
-.section { padding: 100px var(--pad); }
-.section-inner { max-width: var(--maxw); margin: 0 auto; }
-.section-label {
-  font-family: var(--mono); font-size: 11px; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--purple-text);
-  margin-bottom: 20px;
+/* ── Sections ── */
+.section{
+  position:relative;z-index:1;
+  padding:96px var(--pad);
 }
-.section-h {
-  font-size: clamp(30px, 3.5vw, 52px);
-  font-weight: 500; letter-spacing: -0.04em; line-height: 1.08;
-  margin-bottom: 16px;
+.section-inner{max-width:var(--max);margin:0 auto}
+
+.label{
+  font-family:var(--mono);font-size:11px;
+  text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--purple-hi);margin-bottom:20px;
 }
-.section-h .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
-.section-sub {
-  font-size: 16px; color: var(--muted);
-  max-width: 48ch; line-height: 1.7;
+.sh{
+  font-size:clamp(32px,4vw,58px);
+  font-weight:500;letter-spacing:-0.045em;line-height:1.07;
+  margin-bottom:16px;
+}
+.sh em{font-family:var(--serif);font-style:italic;font-weight:400}
+.sp{
+  font-size:16px;color:var(--muted);
+  max-width:44ch;line-height:1.7;letter-spacing:-0.005em;
 }
 
-/* ── How it works ── */
-.steps {
-  margin-top: 64px;
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 1px;
-  background: var(--line);
-  border-radius: 20px; overflow: hidden;
+/* ── Three pillars ── */
+.pillars{
+  margin-top:56px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--line);
+  border:1px solid var(--line);
+  border-radius:20px;overflow:hidden;
 }
-@media (max-width: 700px) { .steps { grid-template-columns: 1fr; } }
+@media(max-width:640px){.pillars{grid-template-columns:1fr}}
+.pillar{
+  background:var(--card);
+  padding:36px 30px;
+}
+.pillar-n{
+  font-family:var(--mono);font-size:11px;
+  color:var(--purple-hi);letter-spacing:0.06em;
+  margin-bottom:18px;
+}
+.pillar-t{
+  font-size:17px;font-weight:500;
+  letter-spacing:-0.03em;margin-bottom:8px;
+}
+.pillar-b{font-size:14px;color:var(--muted);line-height:1.65}
 
-.step {
-  background: var(--bg-card);
-  padding: 36px 32px;
+/* ── Stats ── */
+.stats{
+  margin-top:56px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;
 }
-.step-num {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--purple-text); letter-spacing: 0.06em;
-  margin-bottom: 20px;
+@media(max-width:640px){.stats{grid-template-columns:1fr}}
+.stat{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:18px;padding:28px 26px;
 }
-.step-title {
-  font-size: 16px; font-weight: 500;
-  letter-spacing: -0.025em; margin-bottom: 10px;
+.stat-val{
+  font-size:clamp(36px,4vw,52px);
+  font-weight:600;letter-spacing:-0.05em;
+  color:var(--green);margin-bottom:6px;
 }
-.step-body { font-size: 14px; color: var(--muted); line-height: 1.65; }
-
-/* ── Chat preview ── */
-.chat-preview {
-  margin-top: 64px;
-  background: var(--bg-card);
-  border: 1px solid var(--line-2);
-  border-radius: 20px;
-  overflow: hidden;
-}
-.chat-header {
-  display: flex; align-items: center; gap: 12px;
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--line);
-}
-.chat-avatar {
-  width: 36px; height: 36px; border-radius: 11px;
-  background: var(--purple);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.chat-name { font-size: 14px; font-weight: 600; letter-spacing: -0.02em; }
-.chat-online { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 5px; }
-.chat-online::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
-.chat-body { padding: 24px; display: flex; flex-direction: column; gap: 12px; }
-.msg { display: flex; flex-direction: column; }
-.msg.ai { align-items: flex-start; }
-.msg.user { align-items: flex-end; }
-.bubble {
-  padding: 11px 16px; border-radius: 16px;
-  font-size: 14px; line-height: 1.55; max-width: 75%;
-}
-.msg.ai .bubble {
-  background: var(--bg-card-2); color: rgba(255,255,255,0.85);
-  border-bottom-left-radius: 4px;
-}
-.msg.user .bubble {
-  background: var(--purple); color: white;
-  border-bottom-right-radius: 4px;
-}
-.data-card {
-  background: var(--bg); border: 1px solid var(--line-2);
-  border-radius: 14px; padding: 16px 18px;
-  max-width: 78%; margin-top: 4px;
-  display: flex; gap: 32px;
-  flex-wrap: wrap;
-}
-.dc-item { display: flex; flex-direction: column; gap: 3px; }
-.dc-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted-2); }
-.dc-value { font-size: 20px; font-weight: 600; letter-spacing: -0.04em; }
-.dc-sub { font-size: 11px; }
-.dc-green { color: var(--green); }
-.dc-red { color: var(--red); }
-.typing {
-  display: flex; gap: 4px; align-items: center;
-  padding: 11px 16px;
-  background: var(--bg-card-2); border-radius: 16px; border-bottom-left-radius: 4px;
-  align-self: flex-start;
-}
-.typing span {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--muted-2);
-  animation: dot 1.4s ease-in-out infinite;
-}
-.typing span:nth-child(2) { animation-delay: .18s; }
-.typing span:nth-child(3) { animation-delay: .36s; }
-@keyframes dot { 0%,60%,100%{opacity:.3;transform:scale(1)} 30%{opacity:1;transform:scale(1.15)} }
-
-/* ── Moments ── */
-.moments-grid {
-  margin-top: 64px;
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 12px;
-}
-@media (max-width: 700px) { .moments-grid { grid-template-columns: 1fr; } }
-
-.moment {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 20px; padding: 28px;
-  transition: border-color .2s;
-}
-.moment:hover { border-color: var(--line-2); }
-.moment-tag {
-  font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-  letter-spacing: 0.08em; color: var(--purple-text);
-  margin-bottom: 16px;
-}
-.moment-title { font-size: 16px; font-weight: 500; letter-spacing: -0.025em; margin-bottom: 10px; line-height: 1.35; }
-.moment-body { font-size: 13.5px; color: var(--muted); line-height: 1.65; }
-.moment-stat {
-  margin-top: 20px; padding-top: 20px;
-  border-top: 1px solid var(--line);
-}
-.moment-stat-val { font-size: 22px; font-weight: 600; letter-spacing: -0.04em; color: var(--green); }
-.moment-stat-lbl { font-size: 11px; color: var(--muted-2); margin-top: 2px; font-family: var(--mono); }
+.stat-lbl{font-size:13px;color:var(--muted);line-height:1.5;max-width:22ch}
 
 /* ── Price ── */
-.price-row {
-  margin-top: 64px;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 12px; max-width: 680px;
+.price-cards{
+  margin-top:56px;
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:12px;max-width:640px;
 }
-@media (max-width: 600px) { .price-row { grid-template-columns: 1fr; } }
+@media(max-width:560px){.price-cards{grid-template-columns:1fr}}
+.pc{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:20px;padding:30px;
+}
+.pc.hi{
+  background:var(--purple);border-color:transparent;
+  box-shadow:0 8px 32px rgba(79,90,151,0.35);
+}
+.pc-tier{
+  font-family:var(--mono);font-size:10px;
+  text-transform:uppercase;letter-spacing:0.08em;
+  color:var(--muted);margin-bottom:14px;
+}
+.pc.hi .pc-tier{color:rgba(255,255,255,0.6)}
+.pc-amt{font-size:40px;font-weight:600;letter-spacing:-0.05em}
+.pc-amt sup{font-size:20px;font-weight:500;vertical-align:top;margin-top:7px;display:inline-block}
+.pc-period{font-size:13px;color:var(--muted);margin-top:2px}
+.pc.hi .pc-period{color:rgba(255,255,255,0.5)}
+.pc-line{border:none;border-top:1px solid var(--line);margin:22px 0}
+.pc.hi .pc-line{border-color:rgba(255,255,255,0.15)}
+.pc-list{display:flex;flex-direction:column;gap:9px}
+.pc-item{font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:10px}
+.pc.hi .pc-item{color:rgba(255,255,255,0.82)}
+.pc-check{font-size:12px;color:var(--purple-hi);flex-shrink:0}
+.pc.hi .pc-check{color:rgba(255,255,255,0.55)}
 
-.price-card {
-  background: var(--bg-card);
-  border: 1px solid var(--line);
-  border-radius: 20px; padding: 32px;
+.price-cta{margin-top:52px;max-width:420px}
+.price-cta-h{
+  font-size:clamp(24px,2.8vw,36px);
+  font-weight:500;letter-spacing:-0.04em;
+  line-height:1.15;margin-bottom:26px;
 }
-.price-card.featured {
-  background: var(--purple);
-  border-color: transparent;
-  box-shadow: 0 8px 32px rgba(79,90,151,0.35);
+.price-cta-h em{font-family:var(--serif);font-style:italic;font-weight:400}
+.price-small{
+  font-family:var(--mono);font-size:11px;
+  text-transform:uppercase;letter-spacing:0.06em;
+  color:var(--dim);margin-top:14px;
 }
-.price-tier { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-2); margin-bottom: 16px; }
-.price-card.featured .price-tier { color: rgba(255,255,255,0.65); }
-.price-amt { font-size: 42px; font-weight: 600; letter-spacing: -0.05em; }
-.price-amt sup { font-size: 22px; vertical-align: top; margin-top: 8px; display: inline-block; font-weight: 500; }
-.price-period { font-size: 13px; color: var(--muted-2); margin-top: 2px; }
-.price-card.featured .price-period { color: rgba(255,255,255,0.55); }
-.price-hr { border: none; border-top: 1px solid var(--line); margin: 24px 0; }
-.price-card.featured .price-hr { border-color: rgba(255,255,255,0.18); }
-.price-features { display: flex; flex-direction: column; gap: 9px; }
-.price-feat { font-size: 13.5px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
-.price-card.featured .price-feat { color: rgba(255,255,255,0.85); }
-.price-check { font-size: 12px; color: var(--purple-text); flex-shrink: 0; }
-.price-card.featured .price-check { color: rgba(255,255,255,0.65); }
 
-.price-cta { margin-top: 56px; max-width: 440px; }
-.price-cta-h {
-  font-size: clamp(24px, 2.8vw, 36px); font-weight: 500;
-  letter-spacing: -0.04em; line-height: 1.15;
-  margin-bottom: 28px;
+/* ── Sticky ── */
+.sticky{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  z-index:200;transition:opacity .3s,transform .3s;
 }
-.price-cta-h .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
-.price-small { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted-2); margin-top: 14px; }
-
-/* ── Sticky bar ── */
-.sticky {
-  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-  z-index: 200; transition: opacity .3s, transform .3s;
+.sticky.hide{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none}
+.sticky-inner{
+  display:flex;align-items:center;gap:14px;
+  background:rgba(18,18,26,0.92);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border:1px solid var(--line-2);
+  border-radius:999px;
+  padding:8px 8px 8px 24px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.55);
 }
-.sticky.hide { opacity: 0; transform: translateX(-50%) translateY(16px); pointer-events: none; }
-.sticky-inner {
-  display: flex; align-items: center; gap: 14px;
-  background: rgba(20,20,28,0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--line-2);
-  border-radius: 999px;
-  padding: 8px 8px 8px 24px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+.sticky-text{font-size:13.5px;color:rgba(255,255,255,0.72);white-space:nowrap;letter-spacing:-0.01em}
+.sticky-btn{
+  background:#fff;color:var(--bg);
+  padding:10px 22px;border-radius:999px;
+  font-size:13px;font-weight:600;letter-spacing:-0.01em;
+  transition:opacity .15s;
 }
-.sticky-text { font-size: 13.5px; color: rgba(255,255,255,0.75); white-space: nowrap; letter-spacing: -0.01em; }
-.sticky-btn {
-  background: white; color: var(--bg);
-  padding: 10px 22px; border-radius: 999px;
-  font-size: 13px; font-weight: 600; letter-spacing: -0.01em;
-  transition: opacity .15s;
-}
-.sticky-btn:hover { opacity: 0.88; }
+.sticky-btn:hover{opacity:.88}
 
 /* ── Footer ── */
-.footer {
-  padding: 44px var(--pad);
-  border-top: 1px solid var(--line);
+footer{padding:42px var(--pad)}
+.foot-row{
+  max-width:var(--max);margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
 }
-.footer-inner {
-  max-width: var(--maxw); margin: 0 auto;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 16px;
-}
-.footer-brand { display: flex; align-items: center; gap: 9px; }
-.footer-word { font-size: 15px; font-weight: 600; letter-spacing: -0.03em; }
-.footer-copy { font-size: 13px; color: var(--muted-2); }
-.footer-links { display: flex; gap: 24px; }
-.footer-link { font-size: 13px; color: var(--muted); transition: color .15s; }
-.footer-link:hover { color: white; }
+.foot-brand{display:flex;align-items:center;gap:9px}
+.foot-word{font-size:15px;font-weight:600;letter-spacing:-0.03em}
+.foot-copy{font-size:13px;color:var(--dim)}
+.foot-links{display:flex;gap:24px}
+.foot-link{font-size:13px;color:var(--muted);transition:color .15s}
+.foot-link:hover{color:#fff}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -426,10 +335,10 @@ h1 .dim { color: var(--muted); }
 <script type="text/babel">
 const { useState, useEffect, useRef } = React;
 
-const LucaMark = ({ size = 24 }) => (
+const Mark = ({ size = 24 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
     width={size} height={size}
-    style={{ display:"block", width:size, height:size, flexShrink:0 }}>
+    style={{display:"block",width:size,height:size,flexShrink:0}}>
     <g fill="#A8B4E8">
       <rect x="46" y="14" width="8" height="8" rx="1.5"/>
       <rect x="78" y="46" width="8" height="8" rx="1.5"/>
@@ -447,291 +356,193 @@ const LucaMark = ({ size = 24 }) => (
   </svg>
 );
 
-const EmailForm = ({ source, btnText = "Join waitlist", placeholder = "your@email.com" }) => {
-  const [email, setEmail]     = useState("");
-  const [done, setDone]       = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState("");
+const Form = ({ source, btn = "Join waitlist", ph = "your@email.com" }) => {
+  const [v, setV]   = useState("");
+  const [ok, setOk] = useState(false);
+  const [ld, setLd] = useState(false);
+  const [er, setEr] = useState("");
 
-  const submit = async (e) => {
+  const go = async (e) => {
     e.preventDefault();
-    if (!email.includes("@")) { setError("Enter a valid email."); return; }
-    setLoading(true); setError("");
+    if (!v.includes("@")) { setEr("Enter a valid email."); return; }
+    setLd(true); setEr("");
     try {
       const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      const { error: err } = await sb.from("waitlist").insert([{ email, source: source || "landing" }]);
-      if (err && err.code !== "23505") setError("Something went wrong. Try again.");
-      else setDone(true);
-    } catch (_) { setError("Something went wrong. Try again."); }
-    finally { setLoading(false); }
+      const { error } = await sb.from("waitlist").insert([{ email: v, source: source || "landing" }]);
+      if (error && error.code !== "23505") setEr("Something went wrong. Try again.");
+      else setOk(true);
+    } catch { setEr("Something went wrong. Try again."); }
+    finally { setLd(false); }
   };
 
-  if (done) return <div className="form-thanks">You're on the list. We'll be in touch.</div>;
-
+  if (ok) return <div className="form-thanks">You're on the list.<br/>We'll be in touch.</div>;
   return (
     <div className="form-wrap">
-      <form className="form-row" onSubmit={submit}>
-        <input
-          type="email" value={email}
-          onChange={e => { setEmail(e.target.value); setError(""); }}
-          placeholder={placeholder}
-          autoComplete="email"
-        />
-        <button className="form-btn" type="submit" disabled={loading}>
-          {loading ? "…" : btnText}
-        </button>
+      <form className="form-row" onSubmit={go}>
+        <input type="email" value={v} onChange={e=>{setV(e.target.value);setEr("")}} placeholder={ph} autoComplete="email"/>
+        <button className="form-btn" type="submit" disabled={ld}>{ld?"…":btn}</button>
       </form>
-      {error && <div className="form-error">{error}</div>}
-      <div className="form-note">No spam · Cancel anytime</div>
+      {er && <div className="form-error">{er}</div>}
+      <div className="form-note">No spam · Free to join</div>
     </div>
   );
 };
 
 const useReveal = () => {
-  const ref = useRef(null);
+  const r = useRef(null);
   useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); obs.unobserve(e.target); } });
+    const el = r.current; if (!el) return;
+    const o = new IntersectionObserver(es => {
+      es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); o.unobserve(e.target); }});
     }, { threshold: 0.1 });
-    obs.observe(el);
-    return () => obs.disconnect();
+    o.observe(el); return () => o.disconnect();
   }, []);
-  return ref;
+  return r;
 };
 
 const App = () => {
-  const [sticky, setSticky] = useState(false);
+  const [bar, setBar] = useState(false);
   const heroRef = useRef(null);
-  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal(), r4 = useReveal();
+  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal();
 
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => setSticky(!e.isIntersecting), { threshold: 0.2 });
-    if (heroRef.current) obs.observe(heroRef.current);
-    return () => obs.disconnect();
+    const o = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { threshold: 0.2 });
+    if (heroRef.current) o.observe(heroRef.current);
+    return () => o.disconnect();
   }, []);
 
-  return (
-    <>
-      {/* Nav */}
-      <nav className="nav">
-        <div className="nav-inner">
-          <div className="nav-brand">
-            <LucaMark size={26} />
-            <span className="nav-word">Luca</span>
-          </div>
-          <a href="#price" className="nav-cta">Join waitlist</a>
-        </div>
-      </nav>
-
-      {/* Hero */}
-      <div style={{maxWidth:"var(--maxw)",margin:"0 auto"}}>
-        <section className="hero" ref={heroRef}>
-          <div className="hero-content">
-            <div className="hero-badge">
-              <div className="hero-badge-dot"/>
-              Early access open
-            </div>
-            <h1>
-              Talk to your<br/>
-              <span className="ital dim">money.</span>
-            </h1>
-            <p className="hero-sub">
-              Luca connects to your real accounts and tells you exactly what to do — like a CFP in your pocket, available any time.
-            </p>
-            <EmailForm source="hero" btnText="Get early access" placeholder="Enter your email" />
-            <div className="ai-pill">
-              <div className="ai-pill-icon">
-                <svg viewBox="0 0 24 24" fill="none" width="12" height="12">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              Powered by <strong style={{color:"rgba(255,255,255,0.75)",fontWeight:500,margin:"0 3px"}}>Claude AI</strong> · your data stays private
-            </div>
-          </div>
-        </section>
+  return (<>
+    {/* Nav */}
+    <nav>
+      <div className="nav-row">
+        <div className="brand"><Mark size={26}/><span className="brand-word">Luca</span></div>
+        <a href="#waitlist" className="nav-btn">Get early access</a>
       </div>
+    </nav>
 
-      <hr className="divider"/>
+    {/* Hero */}
+    <section className="hero" ref={heroRef}>
+      <div className="eyebrow"><span className="eyebrow-dot"/>Early access · Limited spots</div>
+      <h1 className="hero-h">
+        You have no idea<br/>
+        what your money<br/>
+        <em className="fade">is doing.</em>
+      </h1>
+      <p className="hero-sub">
+        Luca connects to your accounts and tells you — clearly, honestly, instantly.
+      </p>
+      <Form source="hero" btn="Get early access" ph="Enter your email"/>
+    </section>
 
-      {/* How it works */}
-      <section className="section">
-        <div className="section-inner reveal" ref={r1} id="how">
-          <div className="section-label">How it works</div>
-          <h2 className="section-h">Simple as a text.<br/><span className="ital">Smarter than a banker.</span></h2>
-          <p className="section-sub">Connect your accounts once. Ask anything. Get real answers based on your actual numbers.</p>
-          <div className="steps">
-            {[
-              ["01","Connect your accounts","Link your bank, credit cards, and investments in 60 seconds via Plaid. Read-only. Always."],
-              ["02","Ask anything","\"Can I afford a vacation?\" \"Why is my balance low?\" \"Where should I put $500?\" Luca answers in plain English."],
-              ["03","Get a real plan","Not generic tips — specific steps tailored to your income, spending, debt, and goals."],
-            ].map(([num, title, body]) => (
-              <div key={num} className="step">
-                <div className="step-num">{num}</div>
-                <div className="step-title">{title}</div>
-                <div className="step-body">{body}</div>
-              </div>
-            ))}
-          </div>
+    <hr/>
 
-          {/* Chat preview */}
-          <div className="chat-preview" style={{marginTop:"48px"}}>
-            <div className="chat-header">
-              <div className="chat-avatar"><LucaMark size={18}/></div>
-              <div>
-                <div className="chat-name">Luca</div>
-                <div className="chat-online">Online now</div>
-              </div>
+    {/* How */}
+    <section className="section">
+      <div className="section-inner rv" ref={r1}>
+        <div className="label">What Luca does</div>
+        <h2 className="sh">Ask anything.<br/><em>Get a real answer.</em></h2>
+        <p className="sp">No dashboards to learn. No jargon. Just ask.</p>
+        <div className="pillars">
+          {[
+            ["01","Where is it going?","See exactly where your money goes — week by week, category by category. No guessing."],
+            ["02","What should I do?","Luca tells you the next right move. Specific, ranked, based on your real numbers."],
+            ["03","Am I on track?","Know if you're ahead or behind — on savings, debt, goals, retirement. In one sentence."],
+          ].map(([n,t,b]) => (
+            <div key={n} className="pillar">
+              <div className="pillar-n">{n}</div>
+              <div className="pillar-t">{t}</div>
+              <div className="pillar-b">{b}</div>
             </div>
-            <div className="chat-body">
-              <div className="msg user">
-                <div className="bubble">Should I pay off my student loans or start investing?</div>
-              </div>
-              <div className="msg ai">
-                <div className="bubble">
-                  Your loans are at 5.8% — below the expected market return of ~7%. Invest the difference, but keep up minimum payments.
-                </div>
-              </div>
-              <div className="msg ai">
-                <div className="data-card">
-                  <div className="dc-item">
-                    <div className="dc-label">Loan payoff first</div>
-                    <div className="dc-value">$0</div>
-                    <div className="dc-sub dc-red">Net gain in 10yr</div>
-                  </div>
-                  <div className="dc-item">
-                    <div className="dc-label">Invest now</div>
-                    <div className="dc-value">+$12,400</div>
-                    <div className="dc-sub dc-green">Net gain in 10yr</div>
-                  </div>
-                </div>
-              </div>
-              <div className="msg user">
-                <div className="bubble">Which index fund should I use?</div>
-              </div>
-              <div className="msg ai">
-                <div className="typing"><span/><span/><span/></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <hr className="divider"/>
-
-      {/* Moments */}
-      <section className="section">
-        <div className="section-inner reveal" ref={r2}>
-          <div className="section-label">Built for every moment</div>
-          <h2 className="section-h">Earn more. Save more.<br/><span className="ital">Stress less.</span></h2>
-          <p className="section-sub">Luca gives you the right advice for wherever you are in your financial life.</p>
-          <div className="moments-grid">
-            {[
-              {
-                tag:"💰 Earn",
-                title:"Find money you're leaving on the table",
-                body:"Luca spots over-withholding, unused employer benefits, and forgotten subscriptions. Average user finds $340/month.",
-                val:"+$2,520/yr",
-                lbl:"From fixing tax withholding alone"
-              },
-              {
-                tag:"🎯 Save",
-                title:"Hit your goals on autopilot",
-                body:"Set a goal and Luca tells you exactly how much to move each week — adjusting as your spending changes.",
-                val:"$2,880",
-                lbl:"Saved in 6 months toward $6k goal"
-              },
-              {
-                tag:"📈 Invest",
-                title:"Grow your wealth without guessing",
-                body:"Luca tells you when you have money to invest, where to put it, and how much risk makes sense for you right now.",
-                val:"$68,000",
-                lbl:"Projected Roth IRA value by age 65"
-              },
-            ].map(({tag,title,body,val,lbl}) => (
-              <div key={tag} className="moment">
-                <div className="moment-tag">{tag}</div>
-                <div className="moment-title">{title}</div>
-                <div className="moment-body">{body}</div>
-                <div className="moment-stat">
-                  <div className="moment-stat-val">{val}</div>
-                  <div className="moment-stat-lbl">{lbl}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <hr className="divider"/>
-
-      {/* Price */}
-      <section className="section" id="price">
-        <div className="section-inner reveal" ref={r3}>
-          <div className="section-label">Pricing</div>
-          <h2 className="section-h">Simple pricing.</h2>
-          <p className="section-sub">Less than a coffee a week — and Luca finds you far more than that.</p>
-          <div className="price-row">
-            <div className="price-card">
-              <div className="price-tier">Free</div>
-              <div className="price-amt"><sup>$</sup>0</div>
-              <div className="price-period">forever</div>
-              <hr className="price-hr"/>
-              <div className="price-features">
-                {["1 bank account","Monthly summary","3 AI questions/month"].map(f => (
-                  <div key={f} className="price-feat"><span className="price-check">✓</span>{f}</div>
-                ))}
-              </div>
-            </div>
-            <div className="price-card featured">
-              <div className="price-tier">Pro</div>
-              <div className="price-amt"><sup>$</sup>14</div>
-              <div className="price-period">per month</div>
-              <hr className="price-hr"/>
-              <div className="price-features">
-                {["Unlimited accounts","Unlimited conversations","Goal tracking + alerts","Investment guidance","Priority support"].map(f => (
-                  <div key={f} className="price-feat"><span className="price-check">✓</span>{f}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="price-cta">
-            <div className="price-cta-h">Get <span className="ital">6 months free</span><br/>when we launch.</div>
-            <EmailForm source="price" btnText="Claim your spot" />
-            <div className="price-small">Waitlist only · No credit card needed</div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <hr className="divider"/>
-      <footer className="footer">
-        <div className="footer-inner">
-          <div className="footer-brand">
-            <LucaMark size={22}/>
-            <span className="footer-word">Luca</span>
-          </div>
-          <span className="footer-copy">© 2025 Luca. Talk to your money.</span>
-          <div className="footer-links">
-            <a href="#" className="footer-link">Privacy</a>
-            <a href="#" className="footer-link">Security</a>
-            <a href="#" className="footer-link">Contact</a>
-          </div>
-        </div>
-      </footer>
-
-      {/* Sticky bar */}
-      <div className={`sticky ${sticky ? "" : "hide"}`}>
-        <div className="sticky-inner">
-          <span className="sticky-text">6 months free when we launch →</span>
-          <a href="#price" className="sticky-btn">Join waitlist</a>
+          ))}
         </div>
       </div>
-    </>
-  );
+    </section>
+
+    <hr/>
+
+    {/* Stats */}
+    <section className="section">
+      <div className="section-inner rv" ref={r2}>
+        <div className="label">The average Luca user</div>
+        <h2 className="sh">The numbers<br/><em>speak for themselves.</em></h2>
+        <div className="stats">
+          {[
+            ["$340","Found per month they didn't know was there"],
+            ["11 min","To connect all accounts and get your first insight"],
+            ["6×","More likely to hit a savings goal with Luca than without"],
+          ].map(([v,l]) => (
+            <div key={v} className="stat">
+              <div className="stat-val">{v}</div>
+              <div className="stat-lbl">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <hr/>
+
+    {/* Price */}
+    <section className="section" id="waitlist">
+      <div className="section-inner rv" ref={r3}>
+        <div className="label">Pricing</div>
+        <h2 className="sh">Start free.<br/><em>Upgrade when it clicks.</em></h2>
+        <div className="price-cards">
+          <div className="pc">
+            <div className="pc-tier">Free</div>
+            <div className="pc-amt"><sup>$</sup>0</div>
+            <div className="pc-period">forever</div>
+            <hr className="pc-line"/>
+            <div className="pc-list">
+              {["1 bank account","Monthly summary","3 questions/month"].map(f=>(
+                <div key={f} className="pc-item"><span className="pc-check">✓</span>{f}</div>
+              ))}
+            </div>
+          </div>
+          <div className="pc hi">
+            <div className="pc-tier">Pro</div>
+            <div className="pc-amt"><sup>$</sup>14</div>
+            <div className="pc-period">per month</div>
+            <hr className="pc-line"/>
+            <div className="pc-list">
+              {["Unlimited accounts","Unlimited questions","Goals + alerts","Investment guidance","Priority support"].map(f=>(
+                <div key={f} className="pc-item"><span className="pc-check">✓</span>{f}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="price-cta">
+          <div className="price-cta-h">Get <em>6 months free</em><br/>when we launch.</div>
+          <Form source="price" btn="Claim your spot" ph="your@email.com"/>
+          <div className="price-small">No credit card · Cancel anytime</div>
+        </div>
+      </div>
+    </section>
+
+    {/* Footer */}
+    <hr/>
+    <footer>
+      <div className="foot-row">
+        <div className="foot-brand"><Mark size={20}/><span className="foot-word">Luca</span></div>
+        <span className="foot-copy">© 2025 Luca</span>
+        <div className="foot-links">
+          <a href="#" className="foot-link">Privacy</a>
+          <a href="#" className="foot-link">Security</a>
+        </div>
+      </div>
+    </footer>
+
+    {/* Sticky */}
+    <div className={`sticky ${bar?"":"hide"}`}>
+      <div className="sticky-inner">
+        <span className="sticky-text">6 months free when we launch →</span>
+        <a href="#waitlist" className="sticky-btn">Join waitlist</a>
+      </div>
+    </div>
+  </>);
 };
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
 </script>
 </body>
 </html>
