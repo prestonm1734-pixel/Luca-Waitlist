@@ -5,394 +5,473 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luca — talk to your money.</title>
   <meta name="description" content="Luca connects to your real accounts and tells you exactly what to do with your money.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23505A98'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230A0A0F'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230A0A0F'/></g></svg>">
-
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%235563A8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%2308080D'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%2308080D'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
   <style>
+/* ── Design tokens ── */
 :root {
-  --bg:       #0A0A0F;
-  --bg-2:     #111118;
-  --bg-3:     #18181F;
-  --purple:   #505A98;
-  --purple-2: #B4BEE7;
-  --white:    #FFFFFF;
-  --muted:    rgba(255,255,255,0.5);
-  --muted-2:  rgba(255,255,255,0.25);
-  --line:     rgba(255,255,255,0.08);
-  --line-2:   rgba(255,255,255,0.14);
+  --bg:          #08080D;
+  --bg-2:        #0D0D18;
+  --bg-card:     #101020;
+  --purple:      #5563A8;
+  --purple-dim:  rgba(85,99,168,0.12);
+  --purple-text: #A0AEDF;
+  --white:       #FFFFFF;
+  --off:         #F0F0FA;
+  --muted:       rgba(255,255,255,0.42);
+  --muted-2:     rgba(255,255,255,0.18);
+  --border:      rgba(255,255,255,0.065);
+  --border-2:    rgba(255,255,255,0.11);
+  --green:       #3A9E68;
+  --red:         #D97070;
 
-  --sans:    "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --mono:    "Geist Mono", ui-monospace, "SF Mono", monospace;
-  --serif:   "Instrument Serif", "Times New Roman", serif;
-  --maxw:    1160px;
-  --pad:     clamp(20px, 4vw, 56px);
+  --sans:  "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:  "Geist Mono",ui-monospace,"SF Mono",monospace;
+  --serif: "Instrument Serif","Times New Roman",serif;
+  --maxw:  1120px;
+  --pad:   clamp(20px, 5vw, 64px);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--bg); color: var(--white); font-family: var(--sans); font-size: 17px; line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 a { color: inherit; text-decoration: none; }
-button { font-family: inherit; cursor: pointer; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
 input { font-family: inherit; }
 ::selection { background: var(--purple); color: white; }
 
+/* ── Layout ── */
 .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--pad); }
 
 /* ── Nav ── */
 .nav {
-  position: sticky; top: 0; z-index: 50;
-  background: rgba(10,10,15,0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--line);
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(8,8,13,0.75);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
 }
 .nav-inner {
   display: flex; align-items: center; justify-content: space-between;
-  height: 62px;
+  height: 60px;
 }
 .nav-brand { display: flex; align-items: center; gap: 10px; }
-.nav-brand-word { font-weight: 600; font-size: 18px; letter-spacing: -0.025em; }
+.nav-word { font-weight: 600; font-size: 17px; letter-spacing: -0.03em; color: var(--white); }
 .nav-cta {
-  background: var(--purple); color: white; border: none;
-  padding: 9px 18px; border-radius: 999px;
-  font-size: 13px; font-weight: 500; letter-spacing: -0.005em;
-  transition: opacity .15s;
+  background: var(--purple); color: white;
+  padding: 8px 18px; border-radius: 999px;
+  font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
+  transition: opacity .15s ease, transform .1s ease;
 }
-.nav-cta:hover { opacity: 0.85; }
+.nav-cta:hover { opacity: 0.82; transform: translateY(-1px); }
+.nav-cta:active { transform: scale(0.97); }
 
 /* ── Hero ── */
 .hero {
   min-height: 100svh;
   display: flex; flex-direction: column; justify-content: center;
-  padding: clamp(80px, 12vw, 140px) 0 clamp(64px, 8vw, 100px);
-  border-bottom: 1px solid var(--line);
+  padding: 120px 0 80px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+/* Ambient glow */
+.hero::before {
+  content: "";
+  position: absolute; pointer-events: none;
+  top: -10%; left: -5%;
+  width: 70vw; height: 70vw;
+  max-width: 900px; max-height: 900px;
+  background: radial-gradient(circle, rgba(85,99,168,0.09) 0%, transparent 65%);
+}
+.hero::after {
+  content: "";
+  position: absolute; pointer-events: none;
+  bottom: -20%; right: -10%;
+  width: 50vw; height: 50vw;
+  max-width: 600px; max-height: 600px;
+  background: radial-gradient(circle, rgba(85,99,168,0.05) 0%, transparent 70%);
+}
+
+.hero-label {
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--purple-text);
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 44px;
   position: relative;
 }
-.hero-eyebrow {
-  font-family: var(--mono); font-size: 11px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--purple-2);
-  display: inline-flex; align-items: center; gap: 10px;
-  margin-bottom: 40px;
+.hero-label::before {
+  content: ""; width: 5px; height: 5px; border-radius: 50%;
+  background: var(--purple-text);
+  animation: blink 2.2s ease-in-out infinite;
+  flex-shrink: 0;
 }
-.hero-eyebrow::before {
-  content: ""; width: 6px; height: 6px; border-radius: 50%;
-  background: var(--purple-2);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.6)} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
 .hero h1 {
-  font-size: clamp(36px, 5.8vw, 88px);
+  font-size: clamp(44px, 6.5vw, 100px);
   font-weight: 500;
-  line-height: 1.02;
+  line-height: 1.01;
   letter-spacing: -0.04em;
+  max-width: 16ch;
   margin-bottom: 28px;
-  max-width: 18ch;
+  position: relative;
 }
-.hero h1 .num { color: var(--purple-2); }
-.hero h1 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.hero h1 .ital {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+}
+.hero h1 .num {
+  color: var(--purple-text);
+  text-shadow: 0 0 80px rgba(160,174,223,0.25);
+}
 
 .hero-sub {
-  font-size: clamp(16px, 1.4vw, 20px);
+  font-size: clamp(16px, 1.4vw, 19px);
   color: var(--muted);
-  max-width: 46ch;
-  line-height: 1.5;
+  max-width: 42ch;
+  line-height: 1.55;
   margin-bottom: 48px;
   letter-spacing: -0.005em;
+  position: relative;
 }
 
-/* ── Email form (shared) ── */
-.email-form { max-width: 440px; }
-.email-wrap {
-  display: flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--line-2);
+/* Scroll hint */
+.scroll-hint {
+  position: absolute; bottom: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  font-family: var(--mono); font-size: 10px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--muted-2);
+  animation: float 2.4s ease-in-out infinite;
+}
+.scroll-hint svg { opacity: 0.4; }
+@keyframes float { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(5px)} }
+
+/* ── Email form ── */
+.form-wrap { position: relative; max-width: 420px; }
+.form-row {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-2);
   border-radius: 14px;
-  padding: 6px 6px 6px 20px;
-  transition: border-color .15s;
+  padding: 5px 5px 5px 20px;
+  transition: border-color .2s ease, background .2s ease;
 }
-.email-wrap:focus-within { border-color: var(--purple); }
-.email-wrap input {
+.form-row:focus-within {
+  border-color: rgba(85,99,168,0.6);
+  background: rgba(255,255,255,0.07);
+}
+.form-row input {
   flex: 1; background: none; border: none; outline: none;
-  font-size: 16px; color: var(--white);
+  font-size: 15.5px; color: var(--white);
   padding: 13px 0;
+  min-width: 0;
 }
-.email-wrap input::placeholder { color: var(--muted-2); }
-.email-submit {
-  background: var(--purple); color: white; border: none;
-  padding: 13px 20px; border-radius: 10px;
-  font-size: 14px; font-weight: 500;
-  letter-spacing: -0.01em;
-  transition: opacity .15s, transform .1s;
+.form-row input::placeholder { color: var(--muted-2); }
+.form-btn {
+  background: var(--purple); color: white;
+  padding: 12px 20px; border-radius: 10px;
+  font-size: 13.5px; font-weight: 500; letter-spacing: -0.01em;
   white-space: nowrap;
+  transition: opacity .15s ease, transform .1s ease;
+  flex-shrink: 0;
 }
-.email-submit:hover:not(:disabled) { opacity: 0.85; }
-.email-submit:active { transform: scale(0.97); }
-.email-submit:disabled { opacity: 0.5; cursor: default; }
-.email-foot {
+.form-btn:hover:not(:disabled) { opacity: 0.82; }
+.form-btn:active { transform: scale(0.97); }
+.form-btn:disabled { opacity: 0.45; cursor: default; }
+.form-note {
   font-family: var(--mono); font-size: 11px;
-  color: var(--muted-2); margin-top: 16px;
+  color: var(--muted-2); margin-top: 14px;
   letter-spacing: 0.04em; text-transform: uppercase;
 }
-.email-error { font-family: var(--mono); font-size: 12px; color: #E88; margin-top: 10px; }
-.email-thanks {
-  font-size: 20px; font-weight: 500;
-  letter-spacing: -0.02em; color: var(--purple-2);
+.form-error { font-family: var(--mono); font-size: 12px; color: var(--red); margin-top: 10px; letter-spacing: 0.02em; }
+.form-thanks {
+  font-size: 19px; font-weight: 500;
+  letter-spacing: -0.025em; color: var(--purple-text);
+  line-height: 1.3;
 }
 
+/* Claude pill */
 .claude-pill {
   display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 40px;
-  padding: 6px 14px 6px 8px;
+  margin-top: 44px;
+  padding: 6px 14px 6px 7px;
   border-radius: 999px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid var(--line);
-  font-family: var(--mono); font-size: 11px;
-  text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--muted-2);
+  position: relative;
 }
-.claude-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #D97757; }
+.claude-pill .dot { width: 18px; height: 18px; border-radius: 50%; background: #D97757; flex-shrink: 0; }
+
+/* ── Section shared ── */
+.section { padding: clamp(88px, 11vw, 140px) 0; }
+.section + .section { border-top: 1px solid var(--border); }
+.s-label {
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--purple-text);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 56px;
+}
+.s-label::before { content: ""; width: 28px; height: 1px; background: var(--purple); flex-shrink: 0; }
 
 /* ── Chat section ── */
-.chat-section {
-  padding: clamp(80px, 10vw, 130px) 0;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-2);
-}
-.chat-section .section-label {
-  font-family: var(--mono); font-size: 11px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--purple-2);
-  margin-bottom: 48px;
-  display: flex; align-items: center; gap: 12px;
-}
-.chat-section .section-label::before { content: ""; width: 24px; height: 1px; background: var(--purple); }
+.chat-section { background: var(--bg-2); border-top: 1px solid var(--border); }
 
-/* Dark demo overrides */
-.chat-section .demo {
-  background: var(--bg-3);
-  border: 1px solid var(--line-2);
+/* Chat component styles */
+.demo {
+  border: 1px solid var(--border-2);
   border-radius: 20px;
-  box-shadow: 0 40px 80px -20px rgba(0,0,0,0.7);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 290px;
+  background: var(--bg-card);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 40px 100px -20px rgba(0,0,0,0.8);
 }
-.chat-section .demo-chat { background: transparent; }
-.chat-section .demo-profile {
-  background: var(--bg-2);
-  border-left: 1px solid var(--line);
+@media (max-width: 820px) {
+  .demo { grid-template-columns: 1fr; }
+  .demo-profile { order: -1; border-left: none !important; border-bottom: 1px solid var(--border); }
 }
-.chat-section .demo-head { border-bottom-color: var(--line); }
-.chat-section .demo-head-title { color: var(--muted-2); }
-.chat-section .demo-reset { color: var(--muted-2); }
-.chat-section .demo-reset:hover { background: rgba(255,255,255,0.05); color: var(--white); }
-.chat-section .msg-bubble { color: rgba(255,255,255,0.88); }
-.chat-section .msg-bubble strong { color: var(--purple-2); }
-.chat-section .msg.user .msg-bubble { background: rgba(255,255,255,0.06); border-color: var(--line); color: var(--white); }
-.chat-section .msg.luca .msg-avatar { background: rgba(80,90,152,0.25); color: var(--purple-2); }
-.chat-section .msg.user .msg-avatar { background: var(--purple); color: white; }
-.chat-section .demo-input { background: rgba(255,255,255,0.05); border-color: var(--line-2); }
-.chat-section .demo-input:focus-within { border-color: var(--purple); }
-.chat-section .demo-input input { color: var(--white); }
-.chat-section .demo-input input::placeholder { color: var(--muted-2); }
-.chat-section .suggest-chip { background: rgba(255,255,255,0.05); border-color: var(--line); color: rgba(255,255,255,0.65); }
-.chat-section .suggest-chip:hover { border-color: var(--purple); color: var(--purple-2); background: rgba(80,90,152,0.15); }
-.chat-section .demo-profile h4 { color: var(--muted-2); }
-.chat-section .demo-profile .name { color: var(--white); }
-.chat-section .profile-note { color: var(--muted-2); }
-.chat-section .profile-row { border-color: var(--line); color: var(--muted); }
-.chat-section .profile-row b { color: var(--white); }
+.demo-chat { display: flex; flex-direction: column; padding: 24px 24px 18px; min-height: 380px; min-width: 0; }
+.demo-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  margin-bottom: 16px; gap: 12px; min-width: 0;
+}
+.demo-head-title {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted-2); min-width: 0;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.demo-head-title > span:last-child { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.demo-head-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px rgba(58,158,104,0.15); flex-shrink: 0; }
+.demo-head-short { display: none; }
+@media (max-width: 560px) { .demo-head-full { display: none; } .demo-head-short { display: inline; } }
+.demo-reset { font-family: var(--mono); font-size: 11px; color: var(--muted-2); padding: 4px 8px; border-radius: 6px; transition: background .15s, color .15s; flex-shrink: 0; }
+.demo-reset:hover { background: rgba(255,255,255,0.06); color: var(--white); }
+
+.demo-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; padding-right: 4px; min-height: 200px; scroll-behavior: smooth; }
+.demo-scroll::-webkit-scrollbar { width: 3px; }
+.demo-scroll::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+
+.msg { display: flex; gap: 12px; max-width: 94%; }
+.msg.user { align-self: flex-end; flex-direction: row-reverse; max-width: 82%; }
+.msg-av {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+}
+.msg.luca .msg-av { background: rgba(85,99,168,0.2); color: var(--purple-text); }
+.msg.user .msg-av { background: var(--purple); color: white; }
+.msg-b { font-size: 15px; line-height: 1.58; letter-spacing: -0.005em; color: rgba(255,255,255,0.85); white-space: pre-wrap; }
+.msg.luca .msg-b { padding-top: 2px; }
+.msg.user .msg-b { background: rgba(255,255,255,0.07); border: 1px solid var(--border); padding: 10px 14px; border-radius: 14px 14px 4px 14px; color: var(--white); }
+.msg-b strong { color: var(--purple-text); font-weight: 600; }
+
+.typing { display: inline-flex; gap: 4px; align-items: center; padding: 4px 0; }
+.typing span { width: 5px; height: 5px; border-radius: 50%; background: var(--purple-text); opacity: 0.4; animation: tb 1.2s ease-in-out infinite; }
+.typing span:nth-child(2) { animation-delay: .2s; }
+.typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes tb { 0%,80%,100%{opacity:.25;transform:translateY(0)} 40%{opacity:1;transform:translateY(-3px)} }
+
+.demo-input-wrap { margin-top: 14px; min-width: 0; }
+.suggest-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 12px; }
+.suggest-chip {
+  font-family: var(--sans); font-size: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  color: rgba(255,255,255,0.6);
+  padding: 6px 12px; border-radius: 999px;
+  transition: border-color .15s, color .15s, background .15s;
+  letter-spacing: -0.005em;
+}
+.suggest-chip:hover { border-color: var(--purple); color: var(--purple-text); background: var(--purple-dim); }
+.suggest-chip:disabled { opacity: 0.35; cursor: default; }
+
+.demo-input {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  border-radius: 12px; padding: 4px 4px 4px 14px;
+  transition: border-color .15s, background .15s;
+}
+.demo-input:focus-within { border-color: rgba(85,99,168,0.5); background: rgba(255,255,255,0.07); }
+.demo-input input { flex: 1; background: none; border: none; outline: none; font-size: 15px; color: var(--white); padding: 11px 6px; }
+.demo-input input::placeholder { color: var(--muted-2); }
+.demo-send {
+  background: var(--purple); color: white; width: 36px; height: 36px;
+  border-radius: 9px; display: grid; place-items: center;
+  transition: opacity .15s;
+}
+.demo-send:hover:not(:disabled) { opacity: 0.78; }
+.demo-send:disabled { opacity: 0.25; cursor: default; }
+
+.demo-profile {
+  border-left: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+  padding: 22px 20px; font-family: var(--mono); font-size: 12px;
+  color: var(--muted); display: flex; flex-direction: column; gap: 16px; min-width: 0;
+}
+.demo-profile h4 { font-family: var(--sans); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted-2); margin-bottom: 4px; font-weight: 500; }
+.demo-profile .p-name { font-family: var(--sans); font-size: 16px; font-weight: 500; color: var(--white); letter-spacing: -0.02em; }
+.p-note { font-family: var(--sans); font-size: 11px; color: var(--muted-2); line-height: 1.5; margin-top: 4px; }
+.p-grid { display: flex; flex-direction: column; }
+.p-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.p-row:last-child { border-bottom: none; }
+.p-row b { color: var(--white); font-weight: 500; font-variant-numeric: tabular-nums; }
 
 /* ── Money moments ── */
-.moments-section {
-  padding: clamp(80px, 10vw, 130px) 0;
-  border-bottom: 1px solid var(--line);
-}
-.moments-section .section-label {
-  font-family: var(--mono); font-size: 11px;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--purple-2);
-  margin-bottom: 56px;
-  display: flex; align-items: center; gap: 12px;
-}
-.moments-section .section-label::before { content: ""; width: 24px; height: 1px; background: var(--purple); }
+.moments-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+@media (max-width: 820px) { .moments-grid { grid-template-columns: 1fr; gap: 12px; } }
 
-.moments-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 860px) { .moments-grid { grid-template-columns: 1fr; } }
-
-.moment-card {
+.m-card {
   background: var(--bg-2);
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  padding: 36px 32px;
-  display: flex; flex-direction: column; gap: 20px;
-  transition: border-color .2s, transform .2s;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: clamp(28px, 3vw, 36px);
+  display: flex; flex-direction: column;
+  gap: 0;
+  transition: border-color .25s ease, transform .25s ease;
+  position: relative;
+  overflow: hidden;
 }
-.moment-card:hover { border-color: var(--purple); transform: translateY(-3px); }
+.m-card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(85,99,168,0.4), transparent);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.m-card:hover { border-color: rgba(85,99,168,0.3); transform: translateY(-3px); }
+.m-card:hover::before { opacity: 1; }
 
-.moment-tag {
+.m-tag {
   font-family: var(--mono); font-size: 10.5px;
   text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--purple-2);
-  background: rgba(80,90,152,0.15);
-  display: inline-flex; align-items: center;
-  padding: 5px 10px; border-radius: 6px;
-  align-self: flex-start;
+  color: var(--purple-text);
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 8px;
 }
-.moment-card p {
-  font-size: clamp(20px, 2vw, 26px);
-  font-weight: 500;
-  line-height: 1.25;
-  letter-spacing: -0.025em;
-  color: var(--white);
-}
-.moment-card p .num { color: var(--purple-2); }
-.moment-card p .bad { color: #E88080; }
+.m-tag::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--purple-text); }
 
-.moment-luca {
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.5;
-  font-family: var(--mono);
+.m-stat {
+  font-size: clamp(26px, 2.8vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  margin-bottom: 28px;
+  flex: 1;
+}
+.m-stat .num { color: var(--purple-text); text-shadow: 0 0 40px rgba(160,174,223,0.2); }
+.m-stat .bad { color: var(--red); }
+
+.m-insight {
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted-2); line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
 /* ── Price section ── */
-.price-section {
-  padding: clamp(80px, 10vw, 130px) 0;
-  border-bottom: 1px solid var(--line);
-  background: var(--bg-2);
-}
-.price-line {
-  font-size: clamp(28px, 4vw, 56px);
+.price-section { background: var(--bg-2); }
+
+.price-headline {
+  font-size: clamp(30px, 4.5vw, 68px);
   font-weight: 500;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
-  margin-bottom: 16px;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  margin-bottom: 14px;
+  max-width: 20ch;
 }
-.price-line .num { color: var(--purple-2); }
-.price-line .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.price-headline .num { color: var(--purple-text); }
+.price-headline .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
 .price-sub {
-  font-size: 16px; color: var(--muted);
-  margin-bottom: 48px;
-  font-family: var(--mono);
-  letter-spacing: 0.02em;
+  font-family: var(--mono); font-size: 13px;
+  color: var(--muted-2); margin-bottom: 48px;
+  letter-spacing: 0.04em; text-transform: uppercase;
 }
 
 /* ── Footer ── */
 .footer {
-  padding: 36px 0;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--border);
+  padding: 32px 0;
 }
 .footer-inner {
   display: flex; justify-content: space-between; align-items: center;
   gap: 24px; flex-wrap: wrap;
 }
-.footer-left { display: flex; align-items: center; gap: 10px; }
+.footer-left { display: flex; align-items: center; gap: 12px; }
 .footer-fine { font-family: var(--mono); font-size: 11px; color: var(--muted-2); letter-spacing: 0.02em; }
 .footer-links { display: flex; gap: 24px; font-family: var(--mono); font-size: 11px; color: var(--muted-2); letter-spacing: 0.04em; text-transform: uppercase; }
+.footer-links a { transition: color .15s; }
 .footer-links a:hover { color: var(--white); }
 
-/* ── Sticky bar ── */
-.sticky-bar {
+/* ── Sticky bar (mobile only) ── */
+.sticky {
   display: none;
   position: fixed; left: 12px; right: 12px; bottom: 12px;
   background: var(--purple);
-  color: white;
-  border-radius: 16px;
-  padding: 15px 20px;
+  color: white; border-radius: 16px;
+  padding: 15px 18px 15px 22px;
   font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
   align-items: center; justify-content: space-between;
-  gap: 12px; z-index: 40;
-  box-shadow: 0 14px 40px -8px rgba(80,90,152,0.5);
+  gap: 12px; z-index: 80;
+  box-shadow: 0 16px 48px -8px rgba(85,99,168,0.55);
   text-decoration: none;
-  transition: transform .25s ease, opacity .25s ease;
+  transition: transform .3s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
   transform: translateY(120%); opacity: 0;
 }
-.sticky-bar.in { transform: translateY(0); opacity: 1; }
-.sticky-bar .arrow {
-  width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(255,255,255,0.2);
-  display: grid; place-items: center;
-  flex-shrink: 0;
-}
+.sticky.in { transform: translateY(0); opacity: 1; }
+.sticky-arrow { width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.18); display: grid; place-items: center; flex-shrink: 0; }
 
 /* ── Reveal ── */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .85s ease, transform .85s cubic-bezier(.2,.7,.2,1); }
 .reveal.in { opacity: 1; transform: translateY(0); }
 
-/* ── Shared chat CSS (from original) ── */
-.demo { border: 1px solid rgba(0,0,0,0.1); border-radius: 22px; background: white; overflow: hidden; display: grid; grid-template-columns: 1fr 300px; min-height: 400px; }
-@media (max-width: 860px) { .demo { grid-template-columns: 1fr; } .demo-profile { border-left: none !important; border-bottom: 1px solid var(--line); order: -1; } }
-.demo-chat { display: flex; flex-direction: column; padding: 26px 26px 18px; min-height: 400px; min-width: 0; }
-.demo-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid rgba(0,0,0,0.08); margin-bottom: 16px; gap: 12px; min-width: 0; }
-.demo-head-title { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #888; font-family: var(--mono); letter-spacing: 0.02em; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.demo-head-title > span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.demo-head-text-short { display: none; }
-@media (max-width: 640px) { .demo-head-text-full { display: none; } .demo-head-text-short { display: inline; } }
-.demo-head-dot { width: 8px; height: 8px; border-radius: 50%; background: #2F7A4F; box-shadow: 0 0 0 4px rgba(47,122,79,0.12); flex-shrink: 0; }
-.demo-reset { font-family: var(--mono); font-size: 12px; color: #aaa; background: none; border: none; padding: 4px 8px; border-radius: 6px; }
-.demo-reset:hover { background: rgba(0,0,0,0.05); color: #333; }
-.demo-scroll { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; padding-right: 4px; min-height: 220px; }
-.msg { display: flex; gap: 12px; max-width: 92%; }
-.msg.user { align-self: flex-end; flex-direction: row-reverse; max-width: 80%; }
-.msg-avatar { width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-family: var(--mono); font-size: 11px; font-weight: 500; }
-.msg.luca .msg-avatar { background: #ECEFF7; color: #505A98; }
-.msg.user .msg-avatar { background: #111; color: white; }
-.msg-bubble { font-size: 15px; line-height: 1.55; letter-spacing: -0.005em; white-space: pre-wrap; color: #0A0A0A; }
-.msg.user .msg-bubble { background: #F5F5F3; padding: 10px 14px; border-radius: 14px 14px 4px 14px; border: 1px solid #ECECEA; }
-.msg.luca .msg-bubble { padding-top: 2px; }
-.msg-bubble strong { color: #505A98; font-weight: 600; }
-.typing { display: inline-flex; gap: 4px; align-items: center; padding: 4px 0; }
-.typing span { width: 6px; height: 6px; border-radius: 50%; background: #505A98; opacity: 0.4; animation: tbounce 1.2s ease-in-out infinite; }
-.typing span:nth-child(2) { animation-delay: .2s; }
-.typing span:nth-child(3) { animation-delay: .4s; }
-@keyframes tbounce { 0%,80%,100%{opacity:.3;transform:translateY(0)} 40%{opacity:1;transform:translateY(-3px)} }
-.demo-input-wrap { margin-top: 14px; min-width: 0; }
-.suggest-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-.suggest-chip { font-family: var(--sans); font-size: 12.5px; background: #F5F5F3; border: 1px solid #ECECEA; color: #333; padding: 7px 12px; border-radius: 999px; transition: all .15s; letter-spacing: -0.005em; }
-.suggest-chip:hover { border-color: #505A98; color: #505A98; background: #ECEFF7; }
-.suggest-chip:disabled { opacity: 0.4; cursor: default; }
-.demo-input { display: flex; align-items: center; background: #F5F5F3; border: 1px solid #ECECEA; border-radius: 12px; padding: 4px 4px 4px 14px; transition: border-color .15s; }
-.demo-input:focus-within { border-color: #505A98; background: white; }
-.demo-input input { flex: 1; background: none; border: none; outline: none; font-size: 15px; color: #0A0A0A; padding: 11px 6px; }
-.demo-input input::placeholder { color: #bbb; }
-.demo-send { background: #0A0A0A; color: white; border: none; width: 36px; height: 36px; border-radius: 9px; display: grid; place-items: center; transition: background .15s; }
-.demo-send:hover:not(:disabled) { background: #505A98; }
-.demo-send:disabled { opacity: 0.3; cursor: default; }
-.demo-profile { border-left: 1px solid rgba(0,0,0,0.08); background: #FAFAF8; padding: 24px 22px; font-family: var(--mono); font-size: 12px; color: #888; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
-.demo-profile h4 { font-family: var(--sans); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: #aaa; margin: 0 0 4px; font-weight: 500; }
-.demo-profile .name { font-family: var(--sans); font-size: 16px; color: #0A0A0A; font-weight: 500; letter-spacing: -0.01em; }
-.profile-grid { display: grid; gap: 0; }
-.profile-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed rgba(0,0,0,0.08); font-size: 12px; }
-.profile-row:last-child { border-bottom: none; }
-.profile-row b { color: #0A0A0A; font-weight: 500; font-variant-numeric: tabular-nums; }
-.profile-note { font-size: 11px; line-height: 1.5; color: #aaa; font-family: var(--sans); letter-spacing: -0.005em; margin-top: 4px; }
-
-/* Mobile */
+/* ── Mobile ── */
 @media (max-width: 640px) {
-  .nav-cta { padding: 8px 14px; font-size: 12px; }
-  .hero h1 { max-width: none; }
-  .moments-section .section-label { margin-bottom: 36px; }
-  .moment-card { padding: 28px 24px; }
-  .moment-card p { font-size: 22px; }
-  .price-line { font-size: 28px; }
-  .footer-inner { flex-direction: column; align-items: flex-start; gap: 20px; }
-  .sticky-bar { display: flex; }
-  .suggest-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -18px 12px; padding: 4px 18px; scrollbar-width: none; }
+  .sticky { display: flex; }
+  .hero { padding: 100px 0 100px; }
+  .hero h1 { letter-spacing: -0.03em; max-width: none; }
+  .hero-sub { max-width: none; }
+  .s-label { margin-bottom: 36px; }
+  .suggest-row { flex-wrap: nowrap; overflow-x: auto; padding: 2px 0 8px; scrollbar-width: none; }
   .suggest-row::-webkit-scrollbar { display: none; }
   .suggest-chip { flex-shrink: 0; }
   .demo-chat { padding: 20px 16px 16px; }
-  .demo-profile { padding: 22px 18px; }
+  .demo-profile { padding: 20px 18px; }
+  .scroll-hint { display: none; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; }
+  .footer-links { flex-wrap: wrap; gap: 18px; }
 }
-@media (min-width: 641px) {
-  .sticky-bar { display: none !important; }
+
+/* Mobile form stacking */
+@media (max-width: 480px) {
+  .form-row { flex-direction: column; align-items: stretch; padding: 8px; gap: 8px; border-radius: 16px; }
+  .form-row input { padding: 14px 12px; background: rgba(255,255,255,0.05); border-radius: 10px; }
+  .form-btn { padding: 15px; border-radius: 10px; text-align: center; }
 }
   </style>
 </head>
@@ -411,9 +490,10 @@ input { font-family: inherit; }
 
   <!-- LucaMark -->
   <script type="text/babel">
-    const LucaMark = ({ size = 28 }) => (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width={size} height={size} style={{ display: "block", width: size, height: size }}>
-        <g fill="#505A98">
+    const LucaMark = ({ size = 26 }) => (
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+        width={size} height={size} style={{ display:"block", width:size, height:size, flexShrink:0 }}>
+        <g fill="#5563A8">
           <rect x="46" y="14" width="8" height="8" rx="1.5"/>
           <rect x="78" y="46" width="8" height="8" rx="1.5"/>
           <rect x="46" y="78" width="8" height="8" rx="1.5"/>
@@ -423,9 +503,9 @@ input { font-family: inherit; }
           <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
           <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
           <circle cx="50" cy="50" r="17"/>
-          <circle cx="50" cy="50" r="11" fill="#0A0A0F"/>
+          <circle cx="50" cy="50" r="11" fill="#08080D"/>
           <circle cx="50" cy="50" r="6"/>
-          <circle cx="50" cy="50" r="2.2" fill="#0A0A0F"/>
+          <circle cx="50" cy="50" r="2.2" fill="#08080D"/>
         </g>
       </svg>
     );
@@ -434,40 +514,43 @@ input { font-family: inherit; }
 
   <!-- EmailForm -->
   <script type="text/babel">
-    const EmailForm = ({ id }) => {
-      const [email, setEmail] = React.useState("");
-      const [submitted, setSubmitted] = React.useState(false);
-      const [loading, setLoading] = React.useState(false);
-      const [error, setError] = React.useState("");
+    const EmailForm = ({ source }) => {
+      const [email, setEmail]       = React.useState("");
+      const [done, setDone]         = React.useState(false);
+      const [loading, setLoading]   = React.useState(false);
+      const [error, setError]       = React.useState("");
 
       const submit = async (e) => {
         e.preventDefault();
         if (!email.includes("@")) return;
         setLoading(true); setError("");
         try {
-          const client = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-          const { error: sbErr } = await client.from("waitlist").insert([{ email, source: id || "landing" }]);
-          if (sbErr && sbErr.code !== "23505") setError("Something went wrong. Try again.");
-          else setSubmitted(true);
+          const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+          const { error: err } = await sb.from("waitlist").insert([{ email, source: source || "landing" }]);
+          if (err && err.code !== "23505") setError("Something went wrong. Try again.");
+          else setDone(true);
         } catch (_) { setError("Something went wrong. Try again."); }
         finally { setLoading(false); }
       };
 
-      if (submitted) return (
-        <div className="email-form">
-          <div className="email-thanks">You're on the list.</div>
-          <div className="email-foot" style={{ marginTop: 14 }}>Check {email} — first wave opens soon.</div>
+      if (done) return (
+        <div>
+          <div className="form-thanks">You're on the list.</div>
+          <div className="form-note" style={{marginTop:12}}>Check {email} — first wave opens soon.</div>
         </div>
       );
 
       return (
-        <form className="email-form" onSubmit={submit}>
-          <div className="email-wrap">
-            <input type="email" placeholder="you@email.com" value={email} onChange={e => setEmail(e.target.value)} required disabled={loading} />
-            <button type="submit" className="email-submit" disabled={loading}>{loading ? "Joining…" : "Join waitlist"}</button>
+        <form onSubmit={submit}>
+          <div className="form-row">
+            <input type="email" placeholder="you@email.com" value={email}
+              onChange={e => setEmail(e.target.value)} required disabled={loading}/>
+            <button type="submit" className="form-btn" disabled={loading}>
+              {loading ? "Joining…" : "Join waitlist"}
+            </button>
           </div>
-          {error && <div className="email-error">{error}</div>}
-          <div className="email-foot">Free · no credit card · cancel anytime</div>
+          {error && <div className="form-error">{error}</div>}
+          <div className="form-note">Free · no credit card · cancel anytime</div>
         </form>
       );
     };
@@ -476,44 +559,46 @@ input { font-family: inherit; }
 
   <!-- ChatDemo -->
   <script type="text/babel">
-    const SUGGESTED = [
+    const SG = [
       "Can I afford a house in 3 years?",
       "Am I saving enough for retirement?",
       "Where should I move the $32k in my checking?",
       "Should I pay off my student loans faster?",
     ];
     const CANNED = {
-      [SUGGESTED[0]]: "On a $650k place with 20% down, you need **$160k** for the down payment plus closing. At your current $1,170/mo savings rate you'll get there with about $4k to spare — but the $32k sitting in your Chase checking is dragging on returns. Move $24k of it into your Ally HYSA earning 4.2% and you'll add **$1,008/yr** without changing your spending. You're closer than you think, Maya.",
-      [SUGGESTED[1]]: "At 29 with **$84,200** in your 401k and **$19,400** in the Roth, you're ahead of ~78% of your peers. But your 8% contribution is leaving free money on the table — Fidelity's full match runs to 12%. Bump to 10% and you'll add roughly **$280/mo** in matched dollars. Separately, your Roth is **$3,200** short of the 2026 limit. Auto-deposit $78/wk for 41 weeks and we close it before December.",
-      [SUGGESTED[2]]: "Most of it shouldn't be there. Keep **$8,400** in Chase (one month's spend × 2 — your real emergency buffer). The other **$24,000** belongs in your Ally HYSA at 4.2% — that's **$1,008/yr** in interest you're not getting right now. Do it before Friday's paycheck hits and you'll have one clean month of cash flow to read.",
-      [SUGGESTED[3]]: "Probably not. Your loans are at **4.5%** — your Ally HYSA pays **4.2%**. The math is almost identical. Meanwhile your Roth IRA averages **8–9%** long-term, and it's tax-free. Keep the $312/mo minimum, max the Roth first ($3,200 to go this year), and only attack the loans if rates change. The exception: if the 4.5% feels heavy emotionally, paying ahead has real value. Money isn't only math.",
+      [SG[0]]: "On a $650k place with 20% down, you need **$160k** for the down payment plus closing. At your current $1,170/mo savings rate you'll get there with about $4k to spare — but the $32k sitting in your Chase checking is dragging on returns. Move $24k of it into your Ally HYSA earning 4.2% and you'll add **$1,008/yr** without changing your spending. You're closer than you think, Maya.",
+      [SG[1]]:  "At 29 with **$84,200** in your 401k and **$19,400** in the Roth, you're ahead of ~78% of your peers. But your 8% contribution is leaving free money on the table — Fidelity's full match runs to 12%. Bump to 10% and you'll add roughly **$280/mo** in matched dollars. Separately, your Roth is **$3,200** short of the 2026 limit. Auto-deposit $78/wk for 41 weeks and we close it before December.",
+      [SG[2]]:  "Most of it shouldn't be there. Keep **$8,400** in Chase (one month's spend × 2 — your real emergency buffer). The other **$24,000** belongs in your Ally HYSA at 4.2% — that's **$1,008/yr** in interest you're not getting right now. Do it before Friday's paycheck hits and you'll have one clean month of cash flow to read.",
+      [SG[3]]:  "Probably not. Your loans are at **4.5%** — your Ally HYSA pays **4.2%**. The math is almost identical. Meanwhile your Roth IRA averages **8–9%** long-term, and it's tax-free. Keep the $312/mo minimum, max the Roth first ($3,200 to go this year), and only attack the loans if rates change. Money isn't only math.",
     };
-    const FALLBACK = "In this preview I can answer the four sample questions above using **Maya's** real profile. To see Luca reason about *your* numbers — your income, your accounts, your goals — join the waitlist below.";
-    const INITIAL = { role: "luca", text: "Morning, Maya. I just looked at your accounts — your **net worth is $126,260**, up $1,840 this month. Your checking balance is high again. What's on your mind?" };
+    const FALLBACK = "In this preview I can answer the four sample questions using **Maya's** real profile. To see Luca reason about *your* numbers, join the waitlist.";
+    const INIT = { role:"luca", text:"Morning, Maya. I just looked at your accounts — your **net worth is $126,260**, up $1,840 this month. Your checking balance is high again. What's on your mind?" };
 
-    const renderBold = (text) => text.split(/(\*\*[^*]+\*\*)/g).map((p, i) =>
+    const bold = (text) => text.split(/(\*\*[^*]+\*\*)/g).map((p,i) =>
       p.startsWith("**") && p.endsWith("**")
-        ? <strong key={i}>{p.slice(2, -2)}</strong>
+        ? <strong key={i}>{p.slice(2,-2)}</strong>
         : <React.Fragment key={i}>{p}</React.Fragment>
     );
 
     const ChatDemo = () => {
-      const [messages, setMessages] = React.useState([INITIAL]);
+      const [msgs, setMsgs]   = React.useState([INIT]);
       const [input, setInput] = React.useState("");
-      const [busy, setBusy] = React.useState(false);
-      const [used, setUsed] = React.useState([]);
-      const scrollRef = React.useRef(null);
+      const [busy, setBusy]   = React.useState(false);
+      const [used, setUsed]   = React.useState([]);
+      const ref = React.useRef(null);
 
-      React.useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight; }, [messages, busy]);
+      React.useEffect(() => { if (ref.current) ref.current.scrollTop = ref.current.scrollHeight; }, [msgs, busy]);
 
       const ask = async (q) => {
         if (!q.trim() || busy) return;
-        setMessages(p => [...p, { role: "user", text: q }]);
+        setMsgs(p => [...p, { role:"user", text:q }]);
         setInput(""); setBusy(true);
-        await new Promise(r => setTimeout(r, 700 + Math.random() * 600));
-        setMessages(p => [...p, { role: "luca", text: CANNED[q] || FALLBACK }]);
+        await new Promise(r => setTimeout(r, 650 + Math.random() * 650));
+        setMsgs(p => [...p, { role:"luca", text: CANNED[q] || FALLBACK }]);
         setBusy(false);
       };
+
+      const reset = () => { setMsgs([INIT]); setUsed([]); setInput(""); };
 
       return (
         <div className="demo">
@@ -521,28 +606,40 @@ input { font-family: inherit; }
             <div className="demo-head">
               <div className="demo-head-title">
                 <span className="demo-head-dot"/>
-                <span className="demo-head-text-full">luca.live — connected to Maya's accounts</span>
-                <span className="demo-head-text-short">luca.live · Maya</span>
+                <span className="demo-head-full">luca.live — connected to Maya's accounts</span>
+                <span className="demo-head-short">luca.live · Maya</span>
               </div>
-              <button className="demo-reset" onClick={() => { setMessages([INITIAL]); setUsed([]); setInput(""); }}>↺ reset</button>
+              <button className="demo-reset" onClick={reset}>↺ reset</button>
             </div>
-            <div className="demo-scroll" ref={scrollRef}>
-              {messages.map((m, i) => (
+            <div className="demo-scroll" ref={ref}>
+              {msgs.map((m,i) => (
                 <div key={i} className={`msg ${m.role}`}>
-                  <div className="msg-avatar">{m.role === "luca" ? "L" : "M"}</div>
-                  <div className="msg-bubble">{renderBold(m.text)}</div>
+                  <div className="msg-av">{m.role==="luca"?"L":"M"}</div>
+                  <div className="msg-b">{bold(m.text)}</div>
                 </div>
               ))}
-              {busy && <div className="msg luca"><div className="msg-avatar">L</div><div className="msg-bubble"><div className="typing"><span/><span/><span/></div></div></div>}
+              {busy && (
+                <div className="msg luca">
+                  <div className="msg-av">L</div>
+                  <div className="msg-b"><div className="typing"><span/><span/><span/></div></div>
+                </div>
+              )}
             </div>
             <div className="demo-input-wrap">
               <div className="suggest-row">
-                {SUGGESTED.map(s => <button key={s} className="suggest-chip" disabled={busy || used.includes(s)} onClick={() => { setUsed(p => [...p, s]); ask(s); }}>{s}</button>)}
+                {SG.map(s => (
+                  <button key={s} className="suggest-chip"
+                    disabled={busy || used.includes(s)}
+                    onClick={() => { setUsed(p=>[...p,s]); ask(s); }}>{s}</button>
+                ))}
               </div>
-              <form className="demo-input" onSubmit={e => { e.preventDefault(); ask(input); }}>
-                <input type="text" placeholder="Try one of the questions above…" value={input} onChange={e => setInput(e.target.value)} disabled={busy}/>
-                <button type="submit" className="demo-send" disabled={busy || !input.trim()} aria-label="Send">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <form className="demo-input" onSubmit={e=>{e.preventDefault();ask(input);}}>
+                <input type="text" placeholder="Try one of the questions above…"
+                  value={input} onChange={e=>setInput(e.target.value)} disabled={busy}/>
+                <button type="submit" className="demo-send" disabled={busy||!input.trim()} aria-label="Send">
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
                 </button>
               </form>
             </div>
@@ -550,17 +647,13 @@ input { font-family: inherit; }
           <aside className="demo-profile">
             <div>
               <h4>Sample profile</h4>
-              <div className="name">Maya, 29 · NYC</div>
-              <div className="profile-note">Real numbers, connected via Plaid. Read-only.</div>
+              <div className="p-name">Maya, 29 · NYC</div>
+              <div className="p-note">Real numbers via Plaid. Read-only.</div>
             </div>
-            <div className="profile-grid">
-              <div className="profile-row"><span>Net worth</span><b>$126,260</b></div>
-              <div className="profile-row"><span>Checking</span><b>$32,400</b></div>
-              <div className="profile-row"><span>HYSA · 4.2%</span><b>$8,100</b></div>
-              <div className="profile-row"><span>401k</span><b>$84,200</b></div>
-              <div className="profile-row"><span>Roth IRA</span><b>$19,400</b></div>
-              <div className="profile-row"><span>Student loans</span><b>−$18,000</b></div>
-              <div className="profile-row"><span>Saves / mo</span><b>$1,170</b></div>
+            <div className="p-grid">
+              {[["Net worth","$126,260"],["Checking","$32,400"],["HYSA · 4.2%","$8,100"],["401k","$84,200"],["Roth IRA","$19,400"],["Student loans","−$18,000"],["Saves / mo","$1,170"]].map(([k,v])=>(
+                <div key={k} className="p-row"><span>{k}</span><b>{v}</b></div>
+              ))}
             </div>
           </aside>
         </div>
@@ -573,7 +666,10 @@ input { font-family: inherit; }
   <script type="text/babel">
     const useReveal = () => {
       React.useEffect(() => {
-        const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); }), { threshold: 0.1 });
+        const io = new IntersectionObserver(
+          entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("in"); }),
+          { threshold: 0.08 }
+        );
         document.querySelectorAll("[data-reveal]").forEach(el => io.observe(el));
         return () => io.disconnect();
       }, []);
@@ -582,9 +678,9 @@ input { font-family: inherit; }
     const Nav = () => (
       <header className="nav">
         <div className="wrap nav-inner">
-          <a href="#" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <LucaMark size={26}/>
-            <span style={{ fontWeight: 600, fontSize: 18, letterSpacing: "-0.025em" }}>Luca</span>
+          <a href="#top" className="nav-brand">
+            <LucaMark size={24}/>
+            <span className="nav-word">Luca</span>
           </a>
           <a href="#waitlist" className="nav-cta">Join waitlist</a>
         </div>
@@ -593,27 +689,34 @@ input { font-family: inherit; }
 
     const Hero = () => (
       <section className="hero" id="top">
-        <div className="wrap">
-          <div className="hero-eyebrow">Coming summer 2026</div>
-          <h1>
-            Your <span className="num">$32,400</span> sitting in checking is losing you <span className="num">$1,400</span> a <span className="ital">year.</span>
+        <div className="wrap" style={{position:"relative"}}>
+          <div className="hero-label">Coming summer 2026</div>
+          <h1 className="hero h1">
+            Your <span className="num">$32,400</span> in checking<br/>
+            is costing you <span className="num">$1,400</span> a <span className="ital">year.</span>
           </h1>
           <p className="hero-sub">
-            Luca connects to your real accounts and tells you exactly what to do with your money.
+            Luca connects to your real accounts and tells you exactly what to do with your money — every morning, in plain English.
           </p>
-          <EmailForm id="hero"/>
+          <EmailForm source="hero"/>
           <div className="claude-pill">
             <span className="dot"/>
             Powered by Claude · the most advanced reasoning AI
           </div>
         </div>
+        <div className="scroll-hint">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Scroll
+        </div>
       </section>
     );
 
     const ChatSection = () => (
-      <section className="chat-section">
+      <section className="section chat-section">
         <div className="wrap">
-          <div className="section-label">Luca in action</div>
+          <div className="s-label">Talk to your money</div>
           <ChatDemo/>
         </div>
       </section>
@@ -622,31 +725,31 @@ input { font-family: inherit; }
     const MOMENTS = [
       {
         tag: "Spending",
-        text: <>You spent <span className="num">$1,240</span> on dining last month. That's <span className="bad">34%</span> of your take-home.</>,
-        luca: "Luca flagged it on the 9th. You still had 3 weeks left in the month."
+        stat: <>You spent <span className="num">$1,240</span> on dining last month. That's <span className="bad">34%</span> of your take-home.</>,
+        insight: "Luca flagged it on the 9th. You still had 3 weeks left in the month.",
       },
       {
         tag: "Debt",
-        text: <>Your student loan at <span className="bad">6.8%</span> is costing you <span className="num">$94</span>/month in interest alone.</>,
-        luca: "At your current pace you pay it off in 2031. Luca has a faster path."
+        stat: <>Your student loan at <span className="bad">6.8%</span> is costing you <span className="num">$94</span> a month in interest alone.</>,
+        insight: "At your current pace you pay it off in 2031. Luca has a faster path.",
       },
       {
         tag: "Goals",
-        text: <>At your current savings rate you hit your house goal in <span className="bad">2031.</span> Not <span className="num">2028.</span></>,
-        luca: "One move — $24k from checking to HYSA — closes 14 months of the gap."
+        stat: <>At your savings rate you hit your house goal in <span className="bad">2031.</span> Not <span className="num">2028.</span></>,
+        insight: "One move — $24k from checking to HYSA — closes 14 months of that gap.",
       },
     ];
 
-    const MoneyMoments = () => (
-      <section className="moments-section">
+    const MomentsSection = () => (
+      <section className="section">
         <div className="wrap">
-          <div className="section-label">What Luca sees</div>
+          <div className="s-label">What Luca sees</div>
           <div className="moments-grid">
-            {MOMENTS.map((m, i) => (
-              <div key={i} className="moment-card reveal" data-reveal>
-                <div className="moment-tag">{m.tag}</div>
-                <p>{m.text}</p>
-                <div className="moment-luca">{m.luca}</div>
+            {MOMENTS.map((m,i) => (
+              <div key={i} className="m-card reveal" data-reveal style={{transitionDelay:`${i*80}ms`}}>
+                <div className="m-tag">{m.tag}</div>
+                <p className="m-stat">{m.stat}</p>
+                <div className="m-insight">{m.insight}</div>
               </div>
             ))}
           </div>
@@ -655,11 +758,15 @@ input { font-family: inherit; }
     );
 
     const PriceSection = () => (
-      <section className="price-section" id="waitlist">
+      <section className="section price-section" id="waitlist">
         <div className="wrap">
-          <p className="price-line"><span className="num">$14.99</span>/month. Less than one hour with a <span className="ital">financial advisor.</span></p>
-          <p className="price-sub">Cancel anytime. No AUM fees. No surprises.</p>
-          <EmailForm id="pricing"/>
+          <div className="s-label">Pricing</div>
+          <h2 className="price-headline">
+            <span className="num">$14.99</span> a month.<br/>
+            Less than one hour with a <span className="ital">financial advisor.</span>
+          </h2>
+          <p className="price-sub">Cancel anytime · no AUM fees · no surprises</p>
+          <EmailForm source="pricing"/>
         </div>
       </section>
     );
@@ -668,8 +775,8 @@ input { font-family: inherit; }
       <footer className="footer">
         <div className="wrap footer-inner">
           <div className="footer-left">
-            <LucaMark size={18}/>
-            <span className="footer-fine">© 2026 Luca · Not a registered investment advisor. For educational purposes.</span>
+            <LucaMark size={17}/>
+            <span className="footer-fine">© 2026 Luca · Not a registered investment advisor.</span>
           </div>
           <div className="footer-links">
             <a href="#">Privacy</a>
@@ -684,19 +791,21 @@ input { font-family: inherit; }
       const [show, setShow] = React.useState(false);
       React.useEffect(() => {
         const fn = () => {
-          const past = window.scrollY > window.innerHeight * 0.5;
+          const past       = window.scrollY > window.innerHeight * 0.5;
           const nearBottom = window.innerHeight + window.scrollY > document.body.offsetHeight - 500;
           setShow(past && !nearBottom);
         };
-        window.addEventListener("scroll", fn, { passive: true });
+        window.addEventListener("scroll", fn, { passive:true });
         fn();
         return () => window.removeEventListener("scroll", fn);
       }, []);
       return (
-        <a href="#waitlist" className={`sticky-bar ${show ? "in" : ""}`}>
+        <a href="#waitlist" className={`sticky ${show ? "in" : ""}`}>
           <span>Join the waitlist — free</span>
-          <span className="arrow">
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <span className="sticky-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </span>
         </a>
       );
@@ -710,7 +819,7 @@ input { font-family: inherit; }
           <main>
             <Hero/>
             <ChatSection/>
-            <MoneyMoments/>
+            <MomentsSection/>
             <PriceSection/>
           </main>
           <Footer/>
