@@ -107,6 +107,14 @@ h1.hero-h{
 .form-thanks{font-size:20px;font-weight:500;letter-spacing:-.03em;color:#A8B4E8;line-height:1.45}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
 .shake{animation:shake .4s ease}
+.scroll-hint{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:.28;animation:bob 2.6s ease-in-out infinite;cursor:pointer;
+  transition:opacity .2s;
+}
+.scroll-hint:hover{opacity:.55}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
 /* ── Section common ── */
 .s{padding:120px var(--pad)}
@@ -397,8 +405,10 @@ function useWordStream() {
     const words = fullText.split(' ');
     let i = 0;
     timer.current = setInterval(() => {
-      if (i < words.length) { setText(p => p ? p + ' ' + words[i] : words[i]); i++; }
-      else { clearInterval(timer.current); setDone(true); }
+      if (i < words.length) {
+        const word = words[i]; i++;
+        setText(p => p ? p + ' ' + word : word);
+      } else { clearInterval(timer.current); setDone(true); }
     }, delay);
   }, []);
 
@@ -467,6 +477,11 @@ const Hero = ({ heroRef }) => (
       <p className="hero-sub">One conversation. Every account. Every decision. Finally clear.</p>
       <EmailForm source="hero" micro="Powered by Claude · Bank-level encryption · Read-only access"/>
     </div>
+    <a href="#accounts" className="scroll-hint" aria-label="Scroll down">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </a>
   </div>
 );
 
@@ -507,7 +522,7 @@ const AccountsSection = () => {
   }, [nwTrigger, stream]);
 
   return (
-    <div className="s accounts-section" ref={sectionRef}>
+    <div className="s accounts-section" id="accounts" ref={sectionRef}>
       <div className="s-inner">
         <div className="rv s-center" ref={r}>
           <div className="kicker">Your complete financial picture</div>
