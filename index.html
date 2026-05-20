@@ -10,18 +10,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
-:root {
-  --bg:     #000000;
-  --ink:    #F5F5F7;
-  --muted:  rgba(245,245,247,0.44);
-  --dim:    rgba(245,245,247,0.2);
-  --line:   rgba(255,255,255,0.07);
-  --accent: #A8B4E8;
-  --purple: #4F5A97;
-  --sans:   "Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --serif:  "Instrument Serif","Times New Roman",serif;
-  --pad:    clamp(24px,6vw,80px);
-  --max:    1080px;
+:root{
+  --bg:#000;--ink:#F5F5F7;--muted:rgba(245,245,247,.44);--dim:rgba(245,245,247,.2);
+  --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.11);
+  --accent:#A8B4E8;--purple:#4F5A97;
+  --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Instrument Serif","Times New Roman",serif;
+  --pad:clamp(24px,6vw,80px);--max:1080px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -31,216 +26,202 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 input{font-family:inherit}
 ::selection{background:var(--purple);color:#fff}
 
-/* ── Nav ── */
+/* Nav */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   height:48px;display:flex;align-items:center;justify-content:space-between;
   padding:0 var(--pad);
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,.8);
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
   border-bottom:1px solid var(--line);
 }
 .brand{display:flex;align-items:center;gap:10px}
-.brand-word{font-size:15px;font-weight:600;letter-spacing:-0.02em}
-.nav-cta{
-  font-size:13px;font-weight:500;color:var(--accent);
-  transition:opacity .15s;letter-spacing:-0.01em;
-}
+.brand-word{font-size:15px;font-weight:600;letter-spacing:-.02em}
+.nav-cta{font-size:13px;font-weight:500;color:var(--accent);transition:opacity .15s}
 .nav-cta:hover{opacity:.65}
 
-/* ── Hero ── */
+/* Hero */
 .hero{
-  min-height:100svh;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
   text-align:center;padding:120px var(--pad) 100px;
   position:relative;overflow:hidden;
 }
 .hero::before{
-  content:"";position:absolute;top:-30%;left:50%;transform:translateX(-50%);
-  width:900px;height:900px;
-  background:radial-gradient(circle,rgba(79,90,151,0.14) 0%,transparent 65%);
+  content:"";position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  width:1000px;height:1000px;
+  background:radial-gradient(circle,rgba(79,90,151,.12) 0%,transparent 65%);
   pointer-events:none;
 }
-
 .eyebrow{
-  font-size:13px;color:var(--accent);letter-spacing:0.01em;
-  margin-bottom:36px;display:inline-flex;align-items:center;gap:8px;
-  position:relative;z-index:1;
+  font-size:13px;color:var(--accent);margin-bottom:32px;
+  display:inline-flex;align-items:center;gap:8px;position:relative;z-index:1;
 }
-.eyebrow-dot{
-  width:5px;height:5px;border-radius:50%;background:var(--accent);
-  animation:blink 2.5s ease-in-out infinite;
-}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
-
+.blink{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:bl 2.5s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.1}}
 h1{
-  font-size:clamp(60px,9.5vw,140px);
-  font-weight:600;line-height:.98;letter-spacing:-0.055em;
-  margin-bottom:32px;position:relative;z-index:1;
+  font-size:clamp(64px,10vw,148px);font-weight:600;line-height:.96;letter-spacing:-.055em;
+  margin-bottom:28px;position:relative;z-index:1;
 }
-h1 em{
-  font-family:var(--serif);font-style:italic;font-weight:400;
-  letter-spacing:-0.03em;color:var(--accent);
-}
-
+h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.03em;color:var(--accent)}
 .hero-sub{
   font-size:clamp(17px,1.8vw,22px);color:var(--muted);
-  line-height:1.6;max-width:30ch;margin-bottom:56px;
-  letter-spacing:-0.01em;position:relative;z-index:1;
+  line-height:1.6;max-width:28ch;margin-bottom:52px;
+  letter-spacing:-.01em;position:relative;z-index:1;
 }
 
-/* ── Form ── */
-.form-wrap{max-width:360px;width:100%;position:relative;z-index:1}
-.form-row{
+/* Form */
+.fw{max-width:360px;width:100%;position:relative;z-index:1}
+.fr{
   display:flex;align-items:center;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.11);
+  background:rgba(255,255,255,.07);border:1px solid var(--line2);
   border-radius:999px;padding:5px 5px 5px 22px;
   transition:border-color .2s,background .2s;
 }
-.form-row:focus-within{border-color:rgba(168,180,232,0.5);background:rgba(255,255,255,0.09)}
-.form-row input{
-  flex:1;background:none;border:none;outline:none;
-  font-size:15px;color:#fff;padding:11px 0;min-width:0;
-}
-.form-row input::placeholder{color:rgba(255,255,255,0.2)}
-.form-btn{
-  background:var(--accent);color:#000;
-  padding:11px 22px;border-radius:999px;
+.fr:focus-within{border-color:rgba(168,180,232,.5);background:rgba(255,255,255,.09)}
+.fr input{flex:1;background:none;border:none;outline:none;font-size:15px;color:#fff;padding:11px 0;min-width:0}
+.fr input::placeholder{color:rgba(255,255,255,.2)}
+.fb{
+  background:var(--accent);color:#000;padding:11px 22px;border-radius:999px;
   font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;
   transition:opacity .15s,transform .1s;
 }
-.form-btn:hover:not(:disabled){opacity:.82}
-.form-btn:active{transform:scale(.98)}
-.form-btn:disabled{opacity:.3;cursor:default}
-.form-note{font-size:12px;color:var(--dim);margin-top:14px}
-.form-error{font-size:12px;color:#F87171;margin-top:10px}
-.form-thanks{font-size:22px;font-weight:500;letter-spacing:-0.03em;color:var(--accent);line-height:1.4}
+.fb:hover:not(:disabled){opacity:.82}
+.fb:active{transform:scale(.98)}
+.fb:disabled{opacity:.3;cursor:default}
+.fn{font-size:12px;color:var(--dim);margin-top:14px}
+.fe{font-size:12px;color:#F87171;margin-top:10px}
+.ft{font-size:22px;font-weight:500;letter-spacing:-.03em;color:var(--accent);line-height:1.4}
 
-/* ── Dividers ── */
+/* Section shell */
+.s{padding:140px var(--pad);display:flex;flex-direction:column;align-items:center;text-align:center}
+.s.tight{padding:100px var(--pad)}
+.si{max-width:var(--max);width:100%}
 hr{border:none;border-top:1px solid var(--line)}
 
-/* ── Common section ── */
-.s{
-  padding:140px var(--pad);
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;
-}
-.s-inner{max-width:var(--max);width:100%}
+/* Kicker + Headlines */
+.kicker{font-size:13px;color:var(--accent);letter-spacing:.01em;margin-bottom:28px}
+h2{font-size:clamp(44px,7.5vw,108px);font-weight:600;line-height:.97;letter-spacing:-.054em}
+h2 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.03em;color:var(--accent)}
+h2 .soft{color:var(--muted)}
+.ssub{font-size:clamp(16px,1.5vw,20px);color:var(--muted);max-width:36ch;line-height:1.65;margin-top:22px;letter-spacing:-.008em}
 
-.kicker{
-  font-size:13px;color:var(--accent);letter-spacing:0.01em;
-  margin-bottom:28px;
+/* ── Prompts grid ── */
+.prompts-grid{
+  margin-top:72px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  max-width:var(--max);width:100%;text-align:left;
 }
-h2{
-  font-size:clamp(44px,7vw,100px);
-  font-weight:600;line-height:.98;letter-spacing:-0.053em;
+@media(max-width:700px){.prompts-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:440px){.prompts-grid{grid-template-columns:1fr}}
+.prompt-card{
+  background:#080808;border:1px solid var(--line2);border-radius:16px;
+  padding:22px 24px;cursor:default;
+  transition:border-color .2s,background .2s;
 }
-h2 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-0.03em;color:var(--accent)}
-h2 .fade{color:var(--muted)}
-.s-sub{
-  font-size:clamp(16px,1.5vw,20px);color:var(--muted);
-  max-width:36ch;line-height:1.65;margin-top:24px;letter-spacing:-0.008em;
-}
+.prompt-card:hover{border-color:rgba(168,180,232,.25);background:#0D0D0D}
+.prompt-icon{font-size:20px;margin-bottom:12px}
+.prompt-q{font-size:15px;font-weight:500;letter-spacing:-.025em;color:var(--ink);line-height:1.35}
+.prompt-tag{display:inline-block;margin-top:10px;font-size:11px;color:var(--accent);letter-spacing:.04em;text-transform:uppercase}
 
-/* ── Chat preview ── */
-.chat-wrap{
-  margin-top:72px;width:100%;max-width:680px;
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px;overflow:hidden;
-  background:#0A0A0E;
-  box-shadow:0 32px 80px rgba(0,0,0,0.5),0 0 0 1px rgba(168,180,232,0.06);
+/* ── Chat UI ── */
+.chat-frame{
+  margin-top:72px;width:100%;max-width:700px;
+  border:1px solid var(--line2);border-radius:24px;overflow:hidden;
+  background:#060609;
+  box-shadow:0 40px 100px rgba(0,0,0,.55),0 0 0 1px rgba(168,180,232,.05);
 }
-.chat-topbar{
+.chat-bar{
   display:flex;align-items:center;gap:12px;
-  padding:16px 22px;
-  border-bottom:1px solid rgba(255,255,255,0.07);
+  padding:16px 24px;border-bottom:1px solid var(--line);
 }
-.chat-avatar{
-  width:32px;height:32px;border-radius:9px;
-  background:var(--purple);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.chat-name{font-size:14px;font-weight:600;letter-spacing:-0.02em}
-.chat-status{font-size:11px;color:rgba(255,255,255,0.35);display:flex;align-items:center;gap:5px;margin-top:1px}
-.chat-online{width:5px;height:5px;border-radius:50%;background:#4ADE80}
-
-.chat-body{padding:24px;display:flex;flex-direction:column;gap:12px}
-.msg{display:flex;flex-direction:column}
-.msg.user{align-items:flex-end}
-.msg.ai{align-items:flex-start}
-.bubble{
-  padding:12px 16px;border-radius:18px;
-  font-size:14px;line-height:1.55;max-width:80%;
-}
-.msg.ai .bubble{background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.82);border-bottom-left-radius:4px}
-.msg.user .bubble{background:var(--purple);color:white;border-bottom-right-radius:4px}
-
-.data-row{
-  display:flex;gap:12px;margin-top:4px;flex-wrap:wrap;
-}
-.data-pill{
-  background:rgba(168,180,232,0.1);border:1px solid rgba(168,180,232,0.18);
-  border-radius:12px;padding:10px 16px;
-}
-.dp-label{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px}
-.dp-val{font-size:18px;font-weight:600;letter-spacing:-0.04em}
-.dp-change{font-size:11px;color:rgba(255,255,255,0.38);margin-top:1px}
-
-.typing{display:flex;gap:4px;align-items:center;padding:12px 16px;background:rgba(255,255,255,0.07);border-radius:18px;border-bottom-left-radius:4px;align-self:flex-start}
-.typing span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,0.35);animation:tdot 1.4s ease-in-out infinite}
-.typing span:nth-child(2){animation-delay:.18s}
-.typing span:nth-child(3){animation-delay:.36s}
-@keyframes tdot{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.2)}}
-
-.chat-input{
-  display:flex;align-items:center;gap:10px;
-  padding:14px 22px;border-top:1px solid rgba(255,255,255,0.07);
-}
-.chat-input-field{
-  flex:1;font-size:13px;color:rgba(255,255,255,0.25);
-  background:rgba(255,255,255,0.05);border-radius:10px;padding:10px 14px;
-}
-.chat-send{
-  width:32px;height:32px;border-radius:9px;background:var(--purple);
+.chat-ava{
+  width:34px;height:34px;border-radius:10px;background:var(--purple);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
+.chat-name{font-size:14px;font-weight:600;letter-spacing:-.02em}
+.chat-online{font-size:11px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:5px;margin-top:1px}
+.online-dot{width:5px;height:5px;border-radius:50%;background:#4ADE80}
+.chat-msgs{padding:28px 24px;display:flex;flex-direction:column;gap:14px}
+.cm{display:flex;flex-direction:column}
+.cm.u{align-items:flex-end}
+.cm.a{align-items:flex-start}
+.bbl{
+  padding:12px 18px;border-radius:20px;
+  font-size:14px;line-height:1.55;max-width:78%;
+}
+.cm.a .bbl{background:rgba(255,255,255,.07);color:rgba(255,255,255,.82);border-bottom-left-radius:4px}
+.cm.u .bbl{background:var(--purple);color:#fff;border-bottom-right-radius:4px}
+.data-chips{display:flex;gap:10px;margin-top:6px;flex-wrap:wrap}
+.chip{
+  background:rgba(168,180,232,.1);border:1px solid rgba(168,180,232,.18);
+  border-radius:14px;padding:12px 18px;min-width:140px;
+}
+.chip-lbl{font-size:10px;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+.chip-val{font-size:19px;font-weight:600;letter-spacing:-.04em}
+.chip-note{font-size:11px;color:var(--muted);margin-top:2px}
+.typing{
+  display:flex;gap:4px;align-items:center;
+  padding:12px 18px;background:rgba(255,255,255,.07);
+  border-radius:20px;border-bottom-left-radius:4px;align-self:flex-start;
+}
+.typing span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);animation:td 1.4s ease-in-out infinite}
+.typing span:nth-child(2){animation-delay:.18s}
+.typing span:nth-child(3){animation-delay:.36s}
+@keyframes td{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.2)}}
+.chat-inp{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 24px;border-top:1px solid var(--line);
+}
+.chat-inp-field{flex:1;font-size:13px;color:rgba(255,255,255,.22);background:rgba(255,255,255,.05);border-radius:10px;padding:10px 14px}
+.chat-inp-send{width:32px;height:32px;border-radius:9px;background:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 
 /* ── Moments ── */
-.moments-grid{
-  margin-top:72px;
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:24px;overflow:hidden;
-  width:100%;max-width:var(--max);text-align:left;
+.moments{
+  margin-top:72px;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:24px;overflow:hidden;width:100%;max-width:var(--max);text-align:left;
 }
-@media(max-width:680px){.moments-grid{grid-template-columns:1fr}}
-.moment{background:#000;padding:44px 40px}
-.moment-tag{
-  font-size:11px;color:var(--accent);text-transform:uppercase;
-  letter-spacing:0.1em;margin-bottom:24px;
+@media(max-width:680px){.moments{grid-template-columns:1fr}}
+.moment{background:#000;padding:48px 40px}
+.m-tag{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.1em;margin-bottom:24px}
+.m-h{font-size:clamp(22px,2.4vw,32px);font-weight:600;letter-spacing:-.04em;line-height:1.1;margin-bottom:14px}
+.m-b{font-size:14px;color:var(--muted);line-height:1.7}
+.m-stat{margin-top:28px;padding-top:28px;border-top:1px solid var(--line)}
+.m-stat-val{font-size:28px;font-weight:600;letter-spacing:-.05em;color:var(--accent)}
+.m-stat-lbl{font-size:12px;color:var(--dim);margin-top:4px;text-transform:uppercase;letter-spacing:.05em}
+
+/* ── How ── */
+.how{
+  margin-top:72px;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border-top:1px solid var(--line);
+  max-width:var(--max);width:100%;text-align:left;
 }
-.moment-h{
-  font-size:clamp(22px,2.2vw,30px);font-weight:600;
-  letter-spacing:-0.04em;line-height:1.15;margin-bottom:12px;
+@media(max-width:680px){.how{grid-template-columns:1fr}}
+.how-col{padding:44px 40px 44px 0;border-right:1px solid var(--line)}
+.how-col:last-child{border-right:none;padding-right:0;padding-left:40px}
+.how-col:nth-child(2){padding-left:40px}
+@media(max-width:680px){
+  .how-col{border-right:none;border-bottom:1px solid var(--line);padding:40px 0}
+  .how-col:last-child{border-bottom:none;padding-left:0}
+  .how-col:nth-child(2){padding-left:0}
 }
-.moment-b{font-size:14px;color:var(--muted);line-height:1.65}
+.how-n{font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px}
+.how-t{font-size:18px;font-weight:600;letter-spacing:-.03em;margin-bottom:10px}
+.how-b{font-size:14px;color:var(--muted);line-height:1.65}
 
 /* ── Price ── */
-.price-cards{
-  margin-top:72px;
-  display:grid;grid-template-columns:1fr 1fr;
-  gap:1px;background:var(--line);
-  border:1px solid var(--line);border-radius:24px;overflow:hidden;
-  max-width:560px;width:100%;text-align:left;
+.price-pair{
+  margin-top:72px;display:grid;grid-template-columns:1fr 1fr;
+  gap:1px;background:var(--line);border:1px solid var(--line);
+  border-radius:24px;overflow:hidden;max-width:560px;width:100%;text-align:left;
 }
-@media(max-width:480px){.price-cards{grid-template-columns:1fr}}
+@media(max-width:480px){.price-pair{grid-template-columns:1fr}}
 .pc{background:#000;padding:36px}
-.pc.hi{background:#080808}
-.pc-tier{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;color:var(--dim);margin-bottom:20px}
-.pc-amt{font-size:52px;font-weight:600;letter-spacing:-0.055em}
+.pc.hi{background:#060606}
+.pc-tier{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:20px}
+.pc-amt{font-size:52px;font-weight:600;letter-spacing:-.055em}
 .pc-amt sup{font-size:22px;font-weight:500;vertical-align:top;margin-top:10px;display:inline-block}
 .pc-per{font-size:13px;color:var(--muted);margin-top:4px}
 .pc-hr{border:none;border-top:1px solid var(--line);margin:24px 0}
@@ -249,46 +230,36 @@ h2 .fade{color:var(--muted)}
 .pc-check{color:var(--accent);flex-shrink:0;font-size:12px}
 
 .price-cta{margin-top:72px;display:flex;flex-direction:column;align-items:center}
-.price-cta-h{font-size:clamp(28px,3.5vw,48px);font-weight:600;letter-spacing:-0.048em;line-height:1.08;margin-bottom:40px}
+.price-cta-h{font-size:clamp(30px,3.8vw,52px);font-weight:600;letter-spacing:-.05em;line-height:1.06;margin-bottom:40px}
 .price-cta-h em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
 .price-small{font-size:12px;color:var(--dim);margin-top:14px}
 
-/* ── Sticky ── */
-.sticky{
-  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
-  z-index:200;transition:opacity .3s,transform .3s;
-}
+/* Sticky */
+.sticky{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:200;transition:opacity .3s,transform .3s}
 .sticky.hide{opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none}
 .sticky-inner{
   display:flex;align-items:center;gap:14px;
-  background:rgba(6,6,6,0.92);
+  background:rgba(6,6,6,.92);
   backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:999px;padding:8px 8px 8px 24px;
-  box-shadow:0 8px 40px rgba(0,0,0,0.7);
+  border:1px solid var(--line2);border-radius:999px;
+  padding:8px 8px 8px 24px;
+  box-shadow:0 8px 40px rgba(0,0,0,.7);
 }
-.sticky-text{font-size:13px;color:rgba(255,255,255,0.58);white-space:nowrap;letter-spacing:-0.01em}
-.sticky-btn{
-  background:var(--accent);color:#000;
-  padding:10px 22px;border-radius:999px;
-  font-size:13px;font-weight:600;white-space:nowrap;transition:opacity .15s;
-}
+.sticky-text{font-size:13px;color:rgba(255,255,255,.58);white-space:nowrap}
+.sticky-btn{background:var(--accent);color:#000;padding:10px 22px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;transition:opacity .15s}
 .sticky-btn:hover{opacity:.82}
 
-/* ── Footer ── */
-footer{
-  padding:48px var(--pad);border-top:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
-}
+/* Footer */
+footer{padding:48px var(--pad);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .foot-brand{display:flex;align-items:center;gap:9px}
-.foot-word{font-size:14px;font-weight:600;letter-spacing:-0.02em}
+.foot-word{font-size:14px;font-weight:600;letter-spacing:-.02em}
 .foot-copy{font-size:13px;color:var(--dim)}
 .foot-links{display:flex;gap:22px}
 .foot-link{font-size:13px;color:var(--muted);transition:color .15s}
 .foot-link:hover{color:var(--ink)}
 
-/* reveal */
-.rv{opacity:0;transform:translateY(20px);transition:opacity .75s ease,transform .75s ease}
+/* Reveal */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .75s ease,transform .75s ease}
 .rv.in{opacity:1;transform:none}
   </style>
 
@@ -340,26 +311,26 @@ const Form = ({ source, btn="Join waitlist", ph="your@email.com" }) => {
     } catch { setEr("Something went wrong. Try again."); }
     finally { setLd(false); }
   };
-  if (ok) return <div className="form-thanks">You're on the list.<br/>We'll be in touch.</div>;
+  if (ok) return <div className="ft">You're on the list.<br/>We'll be in touch.</div>;
   return (
-    <div className="form-wrap">
-      <form className="form-row" onSubmit={go}>
+    <div className="fw">
+      <form className="fr" onSubmit={go}>
         <input type="email" value={v} onChange={e=>{setV(e.target.value);setEr("")}} placeholder={ph} autoComplete="email"/>
-        <button className="form-btn" type="submit" disabled={ld}>{ld?"…":btn}</button>
+        <button className="fb" type="submit" disabled={ld}>{ld?"…":btn}</button>
       </form>
-      {er && <div className="form-error">{er}</div>}
-      <div className="form-note">Free to join. No credit card.</div>
+      {er && <div className="fe">{er}</div>}
+      <div className="fn">Free to join. No credit card.</div>
     </div>
   );
 };
 
 const useReveal = () => {
   const r = useRef(null);
-  useEffect(() => {
+  useEffect(()=>{
     const el=r.current; if(!el) return;
     const o=new IntersectionObserver(es=>{
       es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add("in");o.unobserve(e.target);} });
-    },{threshold:0.08});
+    },{threshold:0.07});
     o.observe(el); return ()=>o.disconnect();
   },[]);
   return r;
@@ -371,10 +342,19 @@ const SendIcon = () => (
   </svg>
 );
 
+const PROMPTS = [
+  { icon:"💸", q:"Where did all my money go this month?", tag:"Spending" },
+  { icon:"🏠", q:"Can I actually afford a house right now?", tag:"Goals" },
+  { icon:"📈", q:"Should I invest or pay off debt first?", tag:"Investing" },
+  { icon:"🛡️", q:"Is my emergency fund big enough?", tag:"Savings" },
+  { icon:"✈️", q:"Can I afford a trip to Europe in June?", tag:"Planning" },
+  { icon:"💼", q:"Am I saving enough for retirement?", tag:"Retirement" },
+];
+
 const App = () => {
   const [bar,setBar]=useState(false);
   const heroRef=useRef(null);
-  const r1=useReveal(), r2=useReveal(), r3=useReveal(), r4=useReveal();
+  const r1=useReveal(), r2=useReveal(), r3=useReveal(), r4=useReveal(), r5=useReveal();
 
   useEffect(()=>{
     const o=new IntersectionObserver(([e])=>setBar(!e.isIntersecting),{threshold:0.15});
@@ -391,62 +371,74 @@ const App = () => {
 
     {/* ── Hero ── */}
     <div className="hero" ref={heroRef}>
-      <div className="eyebrow"><span className="eyebrow-dot"/>Early access open</div>
+      <div className="eyebrow"><span className="blink"/>Early access · Limited spots</div>
       <h1>Talk to your<br/><em>money.</em></h1>
-      <p className="hero-sub">
-        Ask anything. Get a real answer.<br/>Based on your actual accounts.
-      </p>
-      <Form source="hero" btn="Get early access" ph="your@email.com"/>
+      <p className="hero-sub">Ask anything. Get a real answer.<br/>Based on your actual accounts.</p>
+      <Form source="hero" btn="Get early access"/>
     </div>
 
     <hr/>
 
-    {/* ── Chat ── */}
+    {/* ── What you can ask ── */}
     <div className="s">
-      <div className="s-inner rv" ref={r1}>
+      <div className="si rv" ref={r1}>
+        <div className="kicker">What people ask Luca</div>
+        <h2>Any question.<br/><em>Real answers.</em></h2>
+        <p className="ssub">Type exactly what you'd ask a financial advisor. Luca knows your full picture.</p>
+        <div className="prompts-grid">
+          {PROMPTS.map(({icon,q,tag})=>(
+            <div key={q} className="prompt-card">
+              <div className="prompt-icon">{icon}</div>
+              <div className="prompt-q">{q}</div>
+              <div className="prompt-tag">{tag}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    {/* ── Live chat preview ── */}
+    <div className="s">
+      <div className="si rv" ref={r2}>
         <div className="kicker">See it in action</div>
         <h2>Ask.<br/><em>Understand.</em><br/>Act.</h2>
-        <p className="s-sub">Type like you'd text a friend. Luca knows your full financial picture.</p>
+        <p className="ssub">Luca reads your accounts and gives you a straight answer — with the numbers to back it up.</p>
 
-        <div className="chat-wrap" style={{margin:"72px auto 0"}}>
-          <div className="chat-topbar">
-            <div className="chat-avatar"><Mark size={16}/></div>
+        <div className="chat-frame" style={{margin:"72px auto 0"}}>
+          <div className="chat-bar">
+            <div className="chat-ava"><Mark size={17}/></div>
             <div>
               <div className="chat-name">Luca</div>
-              <div className="chat-status"><div className="chat-online"/>Online now</div>
+              <div className="chat-online"><div className="online-dot"/>Online now</div>
             </div>
           </div>
-          <div className="chat-body">
-            <div className="msg user">
-              <div className="bubble">Should I pay off debt or start investing?</div>
+          <div className="chat-msgs">
+            <div className="cm u"><div className="bbl">Should I pay off my student loans or start investing?</div></div>
+            <div className="cm a">
+              <div className="bbl">Your loans are at 5.8% — below your expected market return of ~7%. You should invest the difference.</div>
             </div>
-            <div className="msg ai">
-              <div className="bubble">Your loans are at 5.8% — below your expected market return. Invest the difference.</div>
-            </div>
-            <div className="msg ai">
-              <div className="data-row">
-                <div className="data-pill">
-                  <div className="dp-label">Extra loan payment</div>
-                  <div className="dp-val">$300 / mo</div>
-                  <div className="dp-change">Minimum + extra</div>
+            <div className="cm a">
+              <div className="data-chips">
+                <div className="chip">
+                  <div className="chip-lbl">Extra loan payment</div>
+                  <div className="chip-val">$300/mo</div>
+                  <div className="chip-note">Minimum + extra</div>
                 </div>
-                <div className="data-pill">
-                  <div className="dp-label">Index fund</div>
-                  <div className="dp-val">$500 / mo</div>
-                  <div className="dp-change">+$12,400 over 10yr</div>
+                <div className="chip">
+                  <div className="chip-lbl">Index fund</div>
+                  <div className="chip-val">$500/mo</div>
+                  <div className="chip-note">+$12,400 over 10 yr</div>
                 </div>
               </div>
             </div>
-            <div className="msg user">
-              <div className="bubble">Which index fund?</div>
-            </div>
-            <div className="msg ai">
-              <div className="typing"><span/><span/><span/></div>
-            </div>
+            <div className="cm u"><div className="bbl">Which index fund should I use?</div></div>
+            <div className="cm a"><div className="typing"><span/><span/><span/></div></div>
           </div>
-          <div className="chat-input">
-            <div className="chat-input-field">Ask anything about your money…</div>
-            <div className="chat-send"><SendIcon/></div>
+          <div className="chat-inp">
+            <div className="chat-inp-field">Ask anything about your money…</div>
+            <div className="chat-inp-send"><SendIcon/></div>
           </div>
         </div>
       </div>
@@ -456,20 +448,47 @@ const App = () => {
 
     {/* ── Moments ── */}
     <div className="s">
-      <div className="s-inner rv" ref={r2}>
-        <div className="kicker">Built for your life</div>
+      <div className="si rv" ref={r3}>
+        <div className="kicker">Built for every moment</div>
         <h2>Earn. Save.<br/><em>Grow.</em></h2>
-        <p className="s-sub">The right advice for wherever you are right now.</p>
-        <div className="moments-grid">
+        <p className="ssub">The right advice for wherever you are right now.</p>
+        <div className="moments">
           {[
-            ["Earn","Find money you didn't know you had.","Luca spots over-withholding, forgotten subscriptions, and unused benefits. Average user finds $340 / month."],
-            ["Save","Hit your goals without thinking about it.","Set a target. Luca tells you exactly how much to move each week — and adjusts as your spending changes."],
-            ["Grow","Invest with confidence, not guesswork.","Luca tells you when you have money to invest, where to put it, and how much risk makes sense right now."],
-          ].map(([tag,h,b])=>(
+            { tag:"Earn", h:"Find money hiding in your paycheck.", b:"Luca spots over-withholding, unused benefits, and forgotten subscriptions.", val:"$340/mo", lbl:"Average found per user" },
+            { tag:"Save", h:"Hit your goals without thinking.", b:"Set a target. Luca tells you exactly how much to move and when — and adjusts as life changes.", val:"6×", lbl:"More likely to hit goals" },
+            { tag:"Grow", h:"Invest with confidence.", b:"Luca tells you when to invest, where to put it, and how much risk makes sense right now.", val:"$68k", lbl:"Projected Roth IRA at 65" },
+          ].map(({tag,h,b,val,lbl})=>(
             <div key={tag} className="moment">
-              <div className="moment-tag">{tag}</div>
-              <div className="moment-h">{h}</div>
-              <div className="moment-b">{b}</div>
+              <div className="m-tag">{tag}</div>
+              <div className="m-h">{h}</div>
+              <div className="m-b">{b}</div>
+              <div className="m-stat">
+                <div className="m-stat-val">{val}</div>
+                <div className="m-stat-lbl">{lbl}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <hr/>
+
+    {/* ── How it works ── */}
+    <div className="s tight">
+      <div className="si rv" ref={r4}>
+        <div className="kicker">How it works</div>
+        <h2>Up in<br/><em>60 seconds.</em></h2>
+        <div className="how">
+          {[
+            ["01","Connect","Link your bank, credit cards, and investments via Plaid. Read-only. Always."],
+            ["02","Ask","Type exactly what's on your mind. Luca knows your full picture."],
+            ["03","Act","Get specific steps — not generic tips — based on your real numbers."],
+          ].map(([n,t,b])=>(
+            <div key={n} className="how-col">
+              <div className="how-n">{n}</div>
+              <div className="how-t">{t}</div>
+              <div className="how-b">{b}</div>
             </div>
           ))}
         </div>
@@ -480,11 +499,11 @@ const App = () => {
 
     {/* ── Price ── */}
     <div className="s" id="waitlist">
-      <div className="s-inner rv" ref={r3}>
+      <div className="si rv" ref={r5}>
         <div className="kicker">Pricing</div>
         <h2>Start free.<br/><em>Always.</em></h2>
-        <p className="s-sub">Upgrade only when it clicks.</p>
-        <div className="price-cards">
+        <p className="ssub">Upgrade only when it clicks.</p>
+        <div className="price-pair">
           <div className="pc">
             <div className="pc-tier">Free</div>
             <div className="pc-amt"><sup>$</sup>0</div>
@@ -516,7 +535,6 @@ const App = () => {
       </div>
     </div>
 
-    {/* Footer */}
     <footer>
       <div className="foot-brand"><Mark size={20}/><span className="foot-word">Luca</span></div>
       <span className="foot-copy">© 2025 Luca</span>
@@ -526,7 +544,6 @@ const App = () => {
       </div>
     </footer>
 
-    {/* Sticky */}
     <div className={`sticky ${bar?"":"hide"}`}>
       <div className="sticky-inner">
         <span className="sticky-text">6 months free when we launch →</span>
