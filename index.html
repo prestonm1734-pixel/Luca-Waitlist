@@ -213,11 +213,10 @@ h2 .soft{color:var(--muted)}
 
 /* ── Price ── */
 .price-pair{
-  margin-top:72px;display:grid;grid-template-columns:1fr 1fr;
-  gap:1px;background:var(--line);border:1px solid var(--line);
-  border-radius:24px;overflow:hidden;max-width:560px;width:100%;text-align:left;
+  margin-top:72px;
+  border:1px solid var(--line);
+  border-radius:24px;overflow:hidden;max-width:380px;width:100%;text-align:left;
 }
-@media(max-width:480px){.price-pair{grid-template-columns:1fr}}
 .pc{background:#000;padding:36px}
 .pc.hi{background:#060606}
 .pc-tier{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:20px}
@@ -537,17 +536,6 @@ const App = () => {
         <h2>Start free.<br/><em>Always.</em></h2>
         <p className="ssub">Upgrade only when it clicks.</p>
         <div className="price-pair">
-          <div className="pc">
-            <div className="pc-tier">Free</div>
-            <div className="pc-amt"><sup>$</sup>0</div>
-            <div className="pc-per">forever</div>
-            <hr className="pc-hr"/>
-            <div className="pc-list">
-              {["1 bank account","Monthly snapshot","3 questions/month"].map(f=>(
-                <div key={f} className="pc-row"><span className="pc-check">✓</span>{f}</div>
-              ))}
-            </div>
-          </div>
           <div className="pc hi">
             <div className="pc-tier">Pro</div>
             <div className="pc-amt"><sup>$</sup>14</div>
@@ -561,9 +549,9 @@ const App = () => {
           </div>
         </div>
         <div className="price-cta">
-          <div className="price-cta-h">Get <em>6 months free</em><br/>when we launch.</div>
-          <Form source="price" btn="Claim your spot"/>
-          <div className="price-small">No credit card. No spam.</div>
+          <div className="price-cta-h">Join the waitlist.<br/><em>It's free.</em></div>
+          <Form source="price" btn="Join waitlist"/>
+          <div className="price-small">No credit card. No commitment.</div>
         </div>
       </div>
     </div>
