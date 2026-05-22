@@ -3,27 +3,39 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Luca — The Financial Operating System</title>
-  <meta name="description" content="The financial operating system built for everyone. One conversation. Every account. Every decision. Finally clear.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23A8B4E8'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230A0A14'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230A0A14'/></g></svg>">
+  <title>Luca — The autonomous financial agent.</title>
+  <meta name="description" content="Luca watches every dollar 24/7. Finds problems before you know they exist. Delivers ready-to-execute solutions. You just tap approve.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23505A98'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='white'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='white'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
 :root{
-  --bg:#0A0A14;--bg2:#0D0D1A;--bg3:#111120;
-  --card:#13131F;--card2:#181828;
-  --purple:#505A98;--purple-hi:#6872B8;--purple-dim:rgba(80,90,152,.15);--purple-glow:rgba(80,90,152,.18);
-  --ink:#FFFFFF;--muted:rgba(255,255,255,.52);--dim:rgba(255,255,255,.24);--dimmer:rgba(255,255,255,.12);
-  --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.11);
-  --green:#34D399;--red:#F87171;--amber:#FBBF24;
+  --bg:#FBFAF7;
+  --bg-2:#F4F2EC;
+  --paper:#FFFFFF;
+  --ink:#0B0B0B;
+  --ink-2:#1A1A1A;
+  --muted:#5C5C57;
+  --dim:#8A8A82;
+  --line:#E5E3DC;
+  --line-2:#D5D3CC;
+  --purple:#505A98;
+  --purple-hi:#6B75AD;
+  --purple-soft:#EDEEF6;
+  --red:#A8332E;
   --sans:"Geist","Helvetica Neue",Helvetica,Arial,sans-serif;
   --serif:"Instrument Serif","Times New Roman",serif;
-  --pad:clamp(20px,5.5vw,80px);--max:1100px;
+  --pad:clamp(24px,5.5vw,80px);
+  --max:1120px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:17px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
 input{font-family:inherit}
@@ -31,299 +43,275 @@ input{font-family:inherit}
 
 /* ── Nav ── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:52px;display:flex;align-items:center;justify-content:space-between;
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  height:60px;display:flex;align-items:center;justify-content:space-between;
   padding:0 var(--pad);
-  background:rgba(10,10,20,.82);
+  background:rgba(251,250,247,.86);
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
   border-bottom:1px solid var(--line);
 }
 .brand{display:flex;align-items:center;gap:10px}
-.brand-word{font-size:16px;font-weight:600;letter-spacing:-.025em}
-.nav-btn{
-  background:var(--purple);color:#fff;
-  padding:8px 20px;border-radius:999px;
-  font-size:13px;font-weight:500;
-  transition:background .15s,transform .1s;
-}
-.nav-btn:hover{background:var(--purple-hi)}
-.nav-btn:active{transform:scale(.97)}
+.brand-word{font-size:17px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+.nav-link{font-size:13px;color:var(--muted);transition:color .15s}
+.nav-link:hover{color:var(--ink)}
 
 /* ── Hero ── */
 .hero{
   min-height:100svh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  text-align:center;padding:100px var(--pad) 80px;
-  position:relative;overflow:hidden;
+  align-items:center;justify-content:center;text-align:center;
+  padding:140px var(--pad) 80px;position:relative;
 }
-.hero-glow{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);
-  width:min(800px,120vw);height:min(800px,120vw);
-  background:radial-gradient(circle,rgba(80,90,152,.22) 0%,transparent 65%);
-  pointer-events:none;
+.eyebrow{
+  font-size:12px;color:var(--purple);
+  letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;margin-bottom:44px;
 }
-.hero-content{position:relative;z-index:1;animation:heroIn .9s ease both}
-@keyframes heroIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-.hero-eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:12px;color:var(--accent,#A8B4E8);letter-spacing:.06em;text-transform:uppercase;
-  border:1px solid rgba(168,180,232,.2);background:rgba(80,90,152,.1);
-  border-radius:999px;padding:5px 14px 5px 10px;margin-bottom:36px;color:#A8B4E8;
-}
-.hero-dot{width:5px;height:5px;border-radius:50%;background:#A8B4E8;animation:blink 2.5s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
+.eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--purple);animation:bl 2.5s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.15}}
+
 h1.hero-h{
-  font-size:clamp(38px,6.5vw,92px);
-  font-weight:700;line-height:1.0;letter-spacing:-.05em;
-  max-width:16ch;margin:0 auto 24px;
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(48px,7.5vw,108px);
+  line-height:1.0;letter-spacing:-.025em;
+  max-width:14ch;margin:0 auto 32px;color:var(--ink);
 }
 .hero-sub{
-  font-size:clamp(15px,1.6vw,20px);color:var(--muted);
-  line-height:1.65;max-width:38ch;margin:0 auto 48px;letter-spacing:-.008em;
+  font-size:clamp(16px,1.5vw,21px);color:var(--muted);
+  line-height:1.6;max-width:46ch;margin:0 auto 48px;
+  letter-spacing:-.005em;
 }
 
-/* ── Forms ── */
-.form-wrap{width:100%;max-width:420px;margin:0 auto}
+/* ── Form ── */
+.form-wrap{width:100%;max-width:440px;margin:0 auto}
 .form-row{
   display:flex;align-items:center;
-  background:rgba(255,255,255,.06);border:1px solid var(--line2);
-  border-radius:14px;padding:5px 5px 5px 20px;
+  background:var(--paper);border:1px solid var(--line-2);
+  border-radius:8px;padding:5px 5px 5px 18px;
   transition:border-color .2s,box-shadow .2s;
 }
-.form-row:focus-within{border-color:rgba(80,90,152,.6);box-shadow:0 0 0 3px rgba(80,90,152,.12)}
-.form-row input{flex:1;background:none;border:none;outline:none;font-size:15px;color:#fff;padding:12px 0;min-width:0}
-.form-row input::placeholder{color:rgba(255,255,255,.22)}
-.form-btn{
-  background:var(--purple);color:#fff;padding:12px 22px;border-radius:10px;
-  font-size:13.5px;font-weight:600;white-space:nowrap;flex-shrink:0;
-  transition:background .15s,transform .1s;
+.form-row:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(80,90,152,.1)}
+.form-row input{
+  flex:1;background:none;border:none;outline:none;
+  font-size:15px;color:var(--ink);padding:12px 0;min-width:0;
 }
-.form-btn:hover:not(:disabled){background:var(--purple-hi)}
+.form-row input::placeholder{color:var(--dim)}
+.form-btn{
+  background:var(--ink);color:#fff;padding:11px 20px;border-radius:5px;
+  font-size:13.5px;font-weight:500;white-space:nowrap;flex-shrink:0;
+  transition:background .15s,transform .1s;
+  letter-spacing:-.005em;
+}
+.form-btn:hover:not(:disabled){background:var(--purple)}
 .form-btn:active{transform:scale(.97)}
 .form-btn:disabled{opacity:.35;cursor:default}
-.form-micro{font-size:11.5px;color:var(--dim);margin-top:14px;letter-spacing:.01em}
+.form-micro{font-size:11.5px;color:var(--dim);margin-top:16px;letter-spacing:.01em}
 .form-error{font-size:12px;color:var(--red);margin-top:10px}
-.form-thanks{font-size:20px;font-weight:500;letter-spacing:-.03em;color:#A8B4E8;line-height:1.45}
-@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.form-thanks{font-size:20px;font-weight:500;letter-spacing:-.025em;color:var(--purple);line-height:1.45}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(7px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .shake{animation:shake .4s ease}
-.scroll-hint{
-  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  opacity:.28;animation:bob 2.6s ease-in-out infinite;cursor:pointer;
-  transition:opacity .2s;
-}
-.scroll-hint:hover{opacity:.55}
-@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
 
-/* ── Section common ── */
-.s{padding:120px var(--pad)}
-.s-inner{max-width:var(--max);margin:0 auto}
-.s-center{text-align:center;display:flex;flex-direction:column;align-items:center}
-.kicker{font-size:12px;color:#A8B4E8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
-h2.sh{font-size:clamp(32px,5vw,64px);font-weight:700;letter-spacing:-.048em;line-height:1.04;margin-bottom:16px}
-h2.sh em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.025em}
-.sdesc{font-size:clamp(15px,1.4vw,18px);color:var(--muted);max-width:44ch;line-height:1.7;letter-spacing:-.005em}
+/* ── Section commons ── */
+section{padding:140px var(--pad)}
+section.tight{padding:100px var(--pad)}
+.inner{max-width:var(--max);margin:0 auto}
+hr.div{border:none;border-top:1px solid var(--line);max-width:var(--max);margin:0 auto}
 
-/* ── Accounts section ── */
-.accounts-section{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.networth-block{margin-bottom:56px;text-align:center}
-.networth-label{font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
-.networth-val{font-size:clamp(52px,7vw,96px);font-weight:700;letter-spacing:-.06em;color:var(--green);line-height:1}
+.kicker{
+  font-size:12px;color:var(--purple);text-transform:uppercase;
+  letter-spacing:.12em;margin-bottom:24px;
+}
+h2{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(36px,5.5vw,76px);line-height:1.02;letter-spacing:-.022em;
+  color:var(--ink);
+}
+.sub{
+  font-size:clamp(16px,1.4vw,19px);color:var(--muted);
+  line-height:1.65;max-width:48ch;margin-top:24px;
+}
 
-.accounts-grid{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:56px;
-}
-@media(max-width:900px){.accounts-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:580px){.accounts-grid{grid-template-columns:repeat(2,1fr)}}
-
-.acc-card{
-  background:var(--card);border:1px solid var(--line2);
-  border-radius:16px;padding:20px 18px;
-  opacity:0;transform:translateY(16px);
-  transition:opacity .5s ease,transform .5s ease,border-color .2s;
-}
-.acc-card.loaded{opacity:1;transform:none}
-.acc-card:hover{border-color:rgba(80,90,152,.35)}
-.acc-bank{font-size:11px;color:var(--dim);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
-.acc-name{font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.3}
-.acc-bal{font-size:22px;font-weight:600;letter-spacing:-.04em}
-.acc-bal.pos{color:var(--ink)}
-.acc-bal.neg{color:var(--red)}
-.acc-rate{font-size:11px;color:var(--green);margin-top:4px}
-
-/* Morning brief */
-.brief-wrap{
-  background:var(--card);border:1px solid var(--line2);
-  border-radius:20px;padding:32px 36px;
-  position:relative;
-}
-@media(max-width:600px){.brief-wrap{padding:24px 20px}}
-.brief-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
-.brief-avatar{
-  width:36px;height:36px;border-radius:11px;background:var(--purple);
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.brief-name{font-size:14px;font-weight:600;letter-spacing:-.02em}
-.brief-status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;margin-top:2px}
-.brief-status::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
-.brief-text{font-size:clamp(15px,1.4vw,17px);line-height:1.75;color:rgba(255,255,255,.88);min-height:4em}
-.brief-cursor{display:inline-block;width:2px;height:1.1em;background:var(--purple);margin-left:2px;animation:cur .9s ease-in-out infinite;vertical-align:text-bottom}
-@keyframes cur{0%,100%{opacity:1}50%{opacity:0}}
-
-/* ── Pillars ── */
-.pillars-grid{
-  margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);
-  gap:1px;background:var(--line);border:1px solid var(--line);
-  border-radius:24px;overflow:hidden;
-}
-@media(max-width:680px){.pillars-grid{grid-template-columns:1fr}}
-.pillar{background:var(--bg);padding:48px 40px;transition:background .2s}
-.pillar:hover{background:var(--card)}
-.pillar-icon{
-  width:48px;height:48px;border-radius:14px;
-  border:1px solid var(--line2);background:var(--card);
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:28px;
-}
-.pillar-title{font-size:20px;font-weight:600;letter-spacing:-.035em;margin-bottom:12px}
-.pillar-body{font-size:14px;color:var(--muted);line-height:1.7}
-
-/* ── Chat demo ── */
-.chat-section{background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.chips{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:32px;justify-content:center}
-.chip{
-  padding:10px 20px;border-radius:999px;
-  border:1px solid var(--line2);background:var(--card);
-  font-size:13.5px;color:var(--muted);cursor:pointer;
-  transition:border-color .2s,background .2s,color .2s;
-}
-.chip:hover,.chip.active{border-color:rgba(80,90,152,.5);background:rgba(80,90,152,.1);color:var(--ink)}
-
-.chat-window{
-  background:var(--card);border:1px solid var(--line2);
-  border-radius:20px;overflow:hidden;max-width:740px;margin:0 auto;
-  box-shadow:0 32px 80px rgba(0,0,0,.4);
-}
-.chat-topbar{
-  display:flex;align-items:center;gap:12px;
-  padding:16px 24px;border-bottom:1px solid var(--line);
-}
-.chat-ava{width:34px;height:34px;border-radius:10px;background:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.chat-name{font-size:14px;font-weight:600;letter-spacing:-.02em}
-.chat-online{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;margin-top:2px}
-.chat-online::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
-.chat-msgs{padding:24px;display:flex;flex-direction:column;gap:14px;min-height:200px}
-.cm{display:flex;flex-direction:column}
-.cm.u{align-items:flex-end}
-.cm.a{align-items:flex-start}
-.bbl{
-  padding:12px 18px;border-radius:20px;
-  font-size:14px;line-height:1.6;max-width:82%;
-}
-.cm.a .bbl{background:rgba(255,255,255,.07);color:rgba(255,255,255,.88);border-bottom-left-radius:4px}
-.cm.u .bbl{background:var(--purple);color:#fff;border-bottom-right-radius:4px}
-.hi{color:#8899DD;font-weight:600}
-.typing-row{display:flex;gap:4px;align-items:center;padding:12px 18px;background:rgba(255,255,255,.07);border-radius:20px;border-bottom-left-radius:4px;align-self:flex-start}
-.typing-row span{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.35);animation:td 1.4s ease-in-out infinite}
-.typing-row span:nth-child(2){animation-delay:.18s}
-.typing-row span:nth-child(3){animation-delay:.36s}
-@keyframes td{0%,60%,100%{opacity:.3;transform:scale(1)}30%{opacity:1;transform:scale(1.2)}}
-.chat-footer{padding:14px 24px;border-top:1px solid var(--line);display:flex;align-items:center;gap:10px}
-.chat-field{flex:1;font-size:13px;color:rgba(255,255,255,.2);background:rgba(255,255,255,.05);border-radius:10px;padding:10px 14px}
-.chat-send{width:32px;height:32px;border-radius:9px;background:var(--purple);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-
-/* ── Health ── */
-.health-layout{
-  margin-top:64px;
+/* ── Shift section (split comparison) ── */
+.shift-grid{
+  margin-top:80px;
   display:grid;grid-template-columns:1fr 1fr;
-  gap:80px;align-items:center;
+  gap:0;border-top:1px solid var(--line);
 }
-@media(max-width:720px){.health-layout{grid-template-columns:1fr;gap:48px}}
-.score-ring-wrap{display:flex;flex-direction:column;align-items:center}
-.score-number{font-size:clamp(80px,12vw,140px);font-weight:700;letter-spacing:-.07em;color:var(--green);line-height:1}
-.score-label{font-size:13px;color:var(--muted);margin-top:8px;text-transform:uppercase;letter-spacing:.08em}
-.score-tip{
-  margin-top:24px;font-size:14px;color:var(--muted);
-  line-height:1.6;max-width:28ch;text-align:center;
-  background:var(--card);border:1px solid var(--line2);
-  border-radius:14px;padding:16px 20px;
+@media(max-width:680px){.shift-grid{grid-template-columns:1fr}}
+.shift-col{padding:44px 48px 44px 0;border-right:1px solid var(--line)}
+.shift-col:last-child{border-right:none;padding:44px 0 44px 48px}
+@media(max-width:680px){
+  .shift-col{border-right:none;border-bottom:1px solid var(--line);padding:36px 0}
+  .shift-col:last-child{border-bottom:none;padding:36px 0 0 0}
 }
-.score-tip strong{color:#A8B4E8;font-weight:500}
+.shift-label{
+  font-size:11px;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--dim);margin-bottom:18px;
+}
+.shift-h{
+  font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);
+  line-height:1.2;letter-spacing:-.02em;margin-bottom:14px;
+}
+.shift-p{font-size:14.5px;color:var(--muted);line-height:1.7;max-width:32ch}
+.shift-col.luca .shift-label{color:var(--purple)}
 
-.health-bars{display:flex;flex-direction:column;gap:20px}
-.hb{display:flex;flex-direction:column;gap:8px}
-.hb-top{display:flex;justify-content:space-between;align-items:baseline}
-.hb-name{font-size:14px;font-weight:500;letter-spacing:-.015em}
-.hb-score{font-size:13px;color:var(--muted)}
-.hb-track{background:rgba(255,255,255,.06);border-radius:999px;height:6px;overflow:hidden}
-.hb-fill{height:100%;border-radius:999px;width:0;transition:width 1.2s cubic-bezier(.25,.1,.25,1)}
-.hb-fill.green{background:var(--green)}
-.hb-fill.purple{background:var(--purple)}
-.hb-fill.red{background:var(--red)}
-.hb-fill.amber{background:var(--amber)}
+/* ── Activity Feed ── */
+.feed-wrap{
+  margin-top:64px;
+  background:var(--paper);
+  border:1px solid var(--line);border-radius:12px;
+  overflow:hidden;
+}
+.feed-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 28px;border-bottom:1px solid var(--line);
+  background:var(--bg-2);
+}
+.feed-title{font-size:13px;font-weight:600;letter-spacing:-.015em;display:flex;align-items:center;gap:10px}
+.feed-title::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--purple);animation:bl 2s ease-in-out infinite}
+.feed-meta{font-size:12px;color:var(--dim);font-family:var(--sans)}
+.feed-item{
+  display:grid;grid-template-columns:90px 1fr auto;
+  gap:24px;align-items:center;
+  padding:24px 28px;border-bottom:1px solid var(--line);
+  transition:background .15s;
+}
+.feed-item:last-child{border-bottom:none}
+.feed-item:hover{background:#FCFBF8}
+@media(max-width:680px){
+  .feed-item{grid-template-columns:1fr;gap:14px;padding:20px 22px}
+}
+.feed-time{
+  font-size:11px;color:var(--dim);font-family:var(--sans);
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.feed-text{font-size:15px;color:var(--ink);line-height:1.5;letter-spacing:-.005em}
+.feed-text strong{color:var(--purple);font-weight:500}
+.feed-action{
+  background:var(--ink);color:#fff;
+  padding:8px 18px;border-radius:6px;
+  font-size:12.5px;font-weight:500;
+  white-space:nowrap;transition:background .15s,transform .1s;
+}
+.feed-action:hover{background:var(--purple)}
+.feed-action:active{transform:scale(.97)}
+.feed-action.done{background:transparent;color:var(--dim);border:1px solid var(--line-2);cursor:default}
+.feed-action.done:hover{background:transparent}
+@media(max-width:680px){.feed-action{align-self:flex-start}}
 
-/* ── Access ── */
-.access-section{
-  background:var(--purple);padding:120px var(--pad);
-  text-align:center;position:relative;overflow:hidden;
+/* ── Three pillars ── */
+.pillars{
+  margin-top:80px;
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border-top:1px solid var(--line);
 }
-.access-section::before{
-  content:"";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:min(700px,100vw);height:min(700px,100vw);
-  background:radial-gradient(circle,rgba(255,255,255,.06) 0%,transparent 65%);
-  pointer-events:none;
+@media(max-width:680px){.pillars{grid-template-columns:1fr}}
+.pillar{padding:48px 40px 0 0;border-right:1px solid var(--line)}
+.pillar:last-child{border-right:none;padding-left:40px;padding-right:0}
+.pillar:nth-child(2){padding-left:40px}
+@media(max-width:680px){
+  .pillar,.pillar:nth-child(2),.pillar:last-child{
+    padding:40px 0;border-right:none;border-bottom:1px solid var(--line);
+  }
+  .pillar:last-child{border-bottom:none}
 }
-.access-big{
-  font-size:clamp(28px,4.5vw,62px);font-weight:700;
-  letter-spacing:-.045em;line-height:1.1;max-width:18ch;margin:0 auto 20px;
-  position:relative;z-index:1;
+.pillar-num{
+  font-family:var(--serif);font-size:22px;
+  color:var(--purple);margin-bottom:24px;
 }
-.access-italic{
-  font-family:var(--serif);font-style:italic;font-weight:400;
-  font-size:clamp(22px,3.5vw,48px);letter-spacing:-.025em;
-  color:rgba(255,255,255,.88);margin-bottom:20px;
-  position:relative;z-index:1;
+.pillar-h{
+  font-family:var(--serif);font-size:clamp(22px,2.6vw,30px);
+  line-height:1.2;letter-spacing:-.02em;margin-bottom:14px;
 }
-.access-price{font-size:15px;color:rgba(255,255,255,.6);position:relative;z-index:1}
+.pillar-b{font-size:14.5px;color:var(--muted);line-height:1.7;max-width:34ch}
 
-/* ── Waitlist section ── */
-.waitlist-section{background:var(--bg2);border-top:1px solid var(--line)}
+/* ── Statement section ── */
+.statement{
+  text-align:center;padding:160px var(--pad);
+  background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+}
+.statement-h{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(36px,5.5vw,80px);
+  line-height:1.05;letter-spacing:-.025em;
+  max-width:18ch;margin:0 auto;
+}
+.statement-h em{color:var(--purple);font-style:italic}
+.statement-sub{
+  font-size:clamp(15px,1.4vw,18px);color:var(--muted);
+  max-width:42ch;margin:32px auto 0;line-height:1.7;
+}
+
+/* ── Pricing ── */
+.price-row{
+  margin-top:64px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:48px;padding-bottom:32px;border-bottom:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.price-left{flex:1;min-width:260px}
+.price-name{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--purple);margin-bottom:14px}
+.price-amount{font-family:var(--serif);font-size:clamp(48px,6vw,80px);line-height:1;letter-spacing:-.025em}
+.price-amount sup{font-size:.4em;vertical-align:top;margin-top:.2em;display:inline-block;font-weight:400}
+.price-period{font-size:14px;color:var(--muted);margin-top:8px}
+.price-right{font-size:14.5px;color:var(--muted);line-height:1.7;max-width:30ch}
+.price-features{margin-top:32px;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(max-width:600px){.price-features{grid-template-columns:1fr}}
+.pf{font-size:14px;color:var(--ink-2);display:flex;gap:10px;align-items:baseline}
+.pf-check{color:var(--purple);font-size:12px;flex-shrink:0}
+
+/* ── Final CTA ── */
+.cta-section{text-align:center;padding:140px var(--pad)}
+.cta-h{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(34px,5vw,68px);line-height:1.06;letter-spacing:-.025em;
+  max-width:18ch;margin:0 auto 40px;
+}
+.cta-h em{color:var(--purple);font-style:italic}
 
 /* ── Footer ── */
-footer{
-  background:var(--bg);border-top:1px solid var(--line);
-  padding:40px var(--pad);
-}
-.foot-main{
+footer{padding:48px var(--pad);border-top:1px solid var(--line);background:var(--bg)}
+.foot-row{
   max-width:var(--max);margin:0 auto;
   display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:20px;margin-bottom:24px;
+  flex-wrap:wrap;gap:16px;
 }
-.foot-brand{display:flex;align-items:center;gap:10px}
-.foot-word{font-size:15px;font-weight:600;letter-spacing:-.025em}
+.foot-brand{display:flex;align-items:center;gap:9px}
+.foot-word{font-size:15px;font-weight:600;letter-spacing:-.02em}
+.foot-copy{font-size:13px;color:var(--dim)}
 .foot-links{display:flex;gap:24px}
 .foot-link{font-size:13px;color:var(--muted);transition:color .15s}
 .foot-link:hover{color:var(--ink)}
-.foot-copy{font-size:13px;color:var(--dim)}
-.foot-bottom{max-width:var(--max);margin:0 auto;border-top:1px solid var(--line);padding-top:20px;text-align:center;font-size:11px;color:var(--dimmer);letter-spacing:.02em}
+.foot-bottom{
+  max-width:var(--max);margin:20px auto 0;
+  padding-top:18px;border-top:1px solid var(--line);
+  text-align:center;font-size:11px;color:var(--dim);letter-spacing:.02em;
+}
 
 /* Sticky */
 .sticky{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:300;transition:opacity .3s,transform .3s}
 .sticky.hide{opacity:0;transform:translateX(-50%) translateY(12px);pointer-events:none}
 .sticky-inner{
   display:flex;align-items:center;gap:14px;
-  background:rgba(10,10,20,.94);
-  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
-  border:1px solid var(--line2);border-radius:999px;
-  padding:8px 8px 8px 22px;
-  box-shadow:0 8px 40px rgba(0,0,0,.6);
+  background:var(--ink);
+  border-radius:999px;
+  padding:7px 7px 7px 22px;
+  box-shadow:0 8px 32px rgba(0,0,0,.15);
 }
-.sticky-text{font-size:13px;color:rgba(255,255,255,.6);white-space:nowrap}
-.sticky-btn{background:var(--purple);color:#fff;padding:9px 20px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;transition:background .15s}
+.sticky-text{font-size:13px;color:rgba(255,255,255,.7);white-space:nowrap;letter-spacing:-.005em}
+.sticky-btn{background:var(--purple);color:#fff;padding:9px 20px;border-radius:999px;font-size:13px;font-weight:500;white-space:nowrap;transition:background .15s}
 .sticky-btn:hover{background:var(--purple-hi)}
 
-/* reveal */
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  opacity:.28;animation:bob 2.6s ease-in-out infinite;cursor:pointer;
+  transition:opacity .2s;
+}
+.scroll-hint:hover{opacity:.5}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+
+/* Reveal */
 .rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .rv.in{opacity:1;transform:none}
   </style>
@@ -340,10 +328,9 @@ footer{
 <body>
 <div id="root"></div>
 <script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+const { useState, useEffect, useRef } = React;
 
-/* ── Logo ── */
-const Mark = ({ size=24, fill="#A8B4E8", bg="#0A0A14" }) => (
+const Mark = ({ size=24, fill="#505A98", bg="#FBFAF7" }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
     width={size} height={size} style={{display:"block",width:size,height:size,flexShrink:0}}>
     <g fill={fill}>
@@ -363,7 +350,6 @@ const Mark = ({ size=24, fill="#A8B4E8", bg="#0A0A14" }) => (
   </svg>
 );
 
-/* ── Hooks ── */
 const useReveal = () => {
   const r = useRef(null);
   useEffect(() => {
@@ -376,59 +362,7 @@ const useReveal = () => {
   return r;
 };
 
-function useCounter(target, duration=2000) {
-  const [val, setVal] = useState(0);
-  const triggered = useRef(false);
-  const trigger = useCallback(() => {
-    if (triggered.current) return;
-    triggered.current = true;
-    const t0 = performance.now();
-    const tick = now => {
-      const p = Math.min((now - t0) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(e * target));
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [target, duration]);
-  return [val, trigger];
-}
-
-function useWordStream() {
-  const [text, setText] = useState('');
-  const [done, setDone] = useState(false);
-  const timer = useRef(null);
-
-  const stream = useCallback((fullText, delay=30) => {
-    clearInterval(timer.current);
-    setText(''); setDone(false);
-    const words = fullText.split(' ');
-    let i = 0;
-    timer.current = setInterval(() => {
-      if (i < words.length) {
-        const word = words[i]; i++;
-        setText(p => p ? p + ' ' + word : word);
-      } else { clearInterval(timer.current); setDone(true); }
-    }, delay);
-  }, []);
-
-  const reset = useCallback(() => {
-    clearInterval(timer.current);
-    setText(''); setDone(false);
-  }, []);
-
-  useEffect(() => () => clearInterval(timer.current), []);
-  return { text, done, stream, reset };
-}
-
-/* ── Highlight money amounts ── */
-function HiText({ text }) {
-  const parts = text.split(/(\$[\d,]+(?:\/month)?|[\d.]+%\s*APY|\d+,\d+)/g);
-  return <>{parts.map((p, i) => /^\$|APY$|,\d{3}$/.test(p) ? <span key={i} className="hi">{p}</span> : p)}</>;
-}
-
-/* ── Email Form ── */
-const EmailForm = ({ source, btn="Join the waitlist", ph="Enter your email", micro }) => {
+const EmailForm = ({ source, btn="Get early access", ph="Enter your email", micro }) => {
   const [v, setV] = useState('');
   const [ok, setOk] = useState(false);
   const [ld, setLd] = useState(false);
@@ -453,7 +387,7 @@ const EmailForm = ({ source, btn="Join the waitlist", ph="Enter your email", mic
     finally { setLd(false); }
   };
 
-  if (ok) return <div className="form-thanks">You are on the list. We will be in touch.</div>;
+  if (ok) return <div className="form-thanks">You're on the list. We'll be in touch.</div>;
   return (
     <div className="form-wrap">
       <form className="form-row" ref={rowRef} onSubmit={go}>
@@ -467,344 +401,37 @@ const EmailForm = ({ source, btn="Join the waitlist", ph="Enter your email", mic
   );
 };
 
-/* ── Section 1: Hero ── */
-const Hero = ({ heroRef }) => (
-  <div className="hero" ref={heroRef}>
-    <div className="hero-glow"/>
-    <div className="hero-content">
-      <div className="hero-eyebrow"><span className="hero-dot"/>Now accepting early access</div>
-      <h1 className="hero-h">The financial operating system built for everyone.</h1>
-      <p className="hero-sub">One conversation. Every account. Every decision. Finally clear.</p>
-      <EmailForm source="hero" micro="Powered by Claude · Bank-level encryption · Read-only access"/>
+/* ── Activity Feed (the wow moment) ── */
+const FEED = [
+  { time:"2:34 AM", text:<>Caught a <strong>$35 overdraft fee</strong> from Chase. Dispute letter drafted and ready to send.</>, action:"Approve" },
+  { time:"3:11 AM", text:<>Found <strong>$9.99/mo</strong> for an iCloud plan you haven't used in 92 days. Cancellation script prepared.</>, action:"Approve" },
+  { time:"4:48 AM", text:<>Flagged <strong>$340 in deductible</strong> business expenses this month. Added to your 2026 tax folder.</>, action:"Done" },
+  { time:"5:22 AM", text:<>Your savings account earns <strong>0.01%</strong>. Moving to Ally at <strong>4.2%</strong> would earn you <strong>$1,240/yr</strong>.</>, action:"Approve" },
+  { time:"6:09 AM", text:<>Safe to spend today: <strong>$184</strong>. Accounts for rent, groceries, and your Tuesday card payment.</>, action:"Done" },
+];
+
+const ActivityFeed = () => (
+  <div className="feed-wrap">
+    <div className="feed-header">
+      <div className="feed-title">Luca · Activity feed</div>
+      <div className="feed-meta">Last night · 5 actions</div>
     </div>
-    <a href="#accounts" className="scroll-hint" aria-label="Scroll down">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="6 9 12 15 18 9"/>
-      </svg>
-    </a>
+    {FEED.map((item, i) => (
+      <div key={i} className="feed-item">
+        <div className="feed-time">{item.time}</div>
+        <div className="feed-text">{item.text}</div>
+        <button className={`feed-action ${item.action === 'Done' ? 'done' : ''}`}>
+          {item.action === 'Done' ? '✓ Done' : item.action}
+        </button>
+      </div>
+    ))}
   </div>
 );
 
-/* ── Section 2: Accounts ── */
-const ACCOUNTS = [
-  { bank:"Chase", name:"Checking", bal:32400, pos:true },
-  { bank:"Ally", name:"HYSA · 4.2% APY", bal:8100, pos:true, rate:"4.2% APY" },
-  { bank:"Fidelity", name:"401(k)", bal:84200, pos:true },
-  { bank:"Fidelity", name:"Roth IRA", bal:19400, pos:true },
-  { bank:"Navient", name:"Student Loans", bal:-18000, pos:false },
-];
-const NET_WORTH = 126100;
-
-const BRIEF = "Morning Alex. Your net worth is up $1,840 this month. Your checking balance is high — you have $12,000 sitting idle earning nothing. And your student loan at 6.8% is costing you $94 this month in interest alone. Want to fix both?";
-
-const AccountsSection = () => {
-  const [loaded, setLoaded] = useState([]);
-  const [briefActive, setBriefActive] = useState(false);
-  const { text: briefText, done: briefDone, stream } = useWordStream();
-  const [nwVal, nwTrigger] = useCounter(NET_WORTH);
-  const sectionRef = useRef(null);
-  const triggered = useRef(false);
-  const r = useReveal();
-
-  useEffect(() => {
-    const el = sectionRef.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting || triggered.current) return;
-      triggered.current = true;
-      nwTrigger();
-      ACCOUNTS.forEach((_, i) => {
-        setTimeout(() => setLoaded(p => [...p, i]), 200 + i * 200);
-      });
-      setTimeout(() => { setBriefActive(true); stream(BRIEF); }, 200 + ACCOUNTS.length * 200 + 400);
-    }, { threshold: 0.2 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [nwTrigger, stream]);
-
-  return (
-    <div className="s accounts-section" id="accounts" ref={sectionRef}>
-      <div className="s-inner">
-        <div className="rv s-center" ref={r}>
-          <div className="kicker">Your complete financial picture</div>
-          <h2 className="sh">Every account.<br/><em>One intelligence.</em></h2>
-        </div>
-
-        <div style={{marginTop:"56px"}}>
-          <div className="networth-block">
-            <div className="networth-label">Total net worth</div>
-            <div className="networth-val">${nwVal.toLocaleString()}</div>
-          </div>
-
-          <div className="accounts-grid">
-            {ACCOUNTS.map((acc, i) => (
-              <div key={i} className={`acc-card ${loaded.includes(i) ? 'loaded' : ''}`}
-                style={{ transitionDelay: `0ms` }}>
-                <div className="acc-bank">{acc.bank}</div>
-                <div className="acc-name">{acc.name}</div>
-                <div className={`acc-bal ${acc.pos ? 'pos' : 'neg'}`}>
-                  {acc.pos ? '' : '−'}${Math.abs(acc.bal).toLocaleString()}
-                </div>
-                {acc.rate && <div className="acc-rate">{acc.rate}</div>}
-              </div>
-            ))}
-          </div>
-
-          <div className="brief-wrap">
-            <div className="brief-header">
-              <div className="brief-avatar"><Mark size={18} bg="#505A98"/></div>
-              <div>
-                <div className="brief-name">Luca</div>
-                <div className="brief-status">Morning brief</div>
-              </div>
-            </div>
-            <div className="brief-text">
-              {briefActive && <HiText text={briefText}/>}
-              {briefActive && !briefDone && <span className="brief-cursor"/>}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Section 3: Pillars ── */
-const EyeIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-  </svg>
-);
-const BrainIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2a4 4 0 0 1 4 4v1a4 4 0 0 1 0 8v1a4 4 0 0 1-8 0v-1a4 4 0 0 1 0-8V6a4 4 0 0 1 4-4z"/>
-    <path d="M8 10H6a2 2 0 0 0 0 4h2M16 10h2a2 2 0 0 1 0 4h-2"/>
-    <line x1="12" y1="6" x2="12" y2="18"/>
-  </svg>
-);
-const MsgIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A8B4E8" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
-);
-
-const Pillars = () => {
-  const r = useReveal();
-  return (
-    <div className="s">
-      <div className="s-inner">
-        <div className="rv s-center" ref={r}>
-          <div className="kicker">What Luca does</div>
-          <h2 className="sh">Built different.<br/><em>By design.</em></h2>
-        </div>
-        <div className="pillars-grid" style={{marginTop:"64px"}}>
-          {[
-            { Icon:EyeIcon, title:"It reads everything.", body:"Every transaction. Every balance. Every recurring charge. Across every account you have." },
-            { Icon:BrainIcon, title:"It thinks ahead.", body:"Luca surfaces what matters before you have to ask. Tax moves. Rate arbitrage. Cash flow warnings." },
-            { Icon:MsgIcon, title:"It talks to you.", body:"Not charts. Not dashboards. A genuine conversation about your actual money." },
-          ].map(({ Icon, title, body }) => (
-            <div key={title} className="pillar">
-              <div className="pillar-icon"><Icon/></div>
-              <div className="pillar-title">{title}</div>
-              <div className="pillar-body">{body}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Section 4: Chat Demo ── */
-const QUESTIONS = [
-  "Can I afford a house in 3 years?",
-  "Should I pay off debt or invest?",
-  "Where did my money go last month?",
-];
-
-const RESPONSES = {
-  "Can I afford a house in 3 years?": "Based on your current savings rate of $1,170/month and your HYSA at 4.2% APY — yes. By October 2028 you will have $47,200 saved. For a 20% down payment on a $380,000 home you need $76,000. To hit that you need to increase your monthly savings by $340. The fastest way to find that $340 is your $94 in loan interest — refinancing at 4.2% frees up $52/month immediately. Move $20,000 from your $32,400 checking to your HYSA today and it earns an extra $840 this year alone. You are closer than you think.",
-  "Should I pay off debt or invest?": "Your student loan is at 6.8% and your 401k returned 11.2% last year. Mathematically, you invest. But here is the smarter move: put $400 extra toward the loan each month — you will be debt-free in 28 months — and put $700 into a low-cost index fund now. When the loan is gone, that $1,100/month becomes pure wealth-building. The $94 in monthly interest disappears. Your net worth trajectory from that point is steep.",
-  "Where did my money go last month?": "Last month you spent $4,840. Top three: $1,240 on dining, $890 on subscriptions — $340 of which you have not touched in 60 days — and $780 on transportation. Canceling the unused subscriptions frees $4,080 per year. Your discretionary spend is 38% of take-home. The national average at your income level is 22%. That $960/month gap is the number to work on. I can show you exactly where to start.",
-};
-
-const ChatDemo = () => {
-  const [active, setActive] = useState(null);
-  const [phase, setPhase] = useState('idle'); // idle | typing | streaming
-  const { text: resp, done, stream, reset } = useWordStream();
-  const r = useReveal();
-
-  const pick = q => {
-    if (phase === 'streaming' && !done) return;
-    setActive(q); reset(); setPhase('typing');
-    setTimeout(() => { setPhase('streaming'); stream(RESPONSES[q]); }, 1200);
-  };
-
-  return (
-    <div className="s chat-section">
-      <div className="s-inner">
-        <div className="rv s-center" ref={r}>
-          <div className="kicker">Interactive demo</div>
-          <h2 className="sh">Ask anything<br/><em>about your money.</em></h2>
-          <p className="sdesc" style={{marginTop:"16px"}}>Pick a question and watch Luca work in real time.</p>
-        </div>
-
-        <div style={{marginTop:"48px"}}>
-          <div className="chips">
-            {QUESTIONS.map(q => (
-              <button key={q} className={`chip ${active===q?'active':''}`} onClick={() => pick(q)}>{q}</button>
-            ))}
-          </div>
-
-          <div className="chat-window">
-            <div className="chat-topbar">
-              <div className="chat-ava"><Mark size={18} bg="#505A98"/></div>
-              <div>
-                <div className="chat-name">Luca</div>
-                <div className="chat-online">Online now</div>
-              </div>
-            </div>
-            <div className="chat-msgs">
-              {!active && (
-                <div style={{textAlign:'center',color:'var(--dim)',fontSize:'14px',margin:'auto',padding:'24px 0'}}>
-                  Select a question above to see Luca respond.
-                </div>
-              )}
-              {active && <>
-                <div className="cm u"><div className="bbl">{active}</div></div>
-                {phase === 'typing' && (
-                  <div className="typing-row"><span/><span/><span/></div>
-                )}
-                {phase === 'streaming' && resp && (
-                  <div className="cm a">
-                    <div className="bbl"><HiText text={resp}/>{!done && <span className="brief-cursor"/>}</div>
-                  </div>
-                )}
-              </>}
-            </div>
-            <div className="chat-footer">
-              <div className="chat-field">Ask anything about your money…</div>
-              <div className="chat-send">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Section 5: Health Score ── */
-const HEALTH = [
-  { name:"Emergency fund",        score:22, max:25, color:"green" },
-  { name:"Debt ratio",            score:14, max:20, color:"purple" },
-  { name:"Savings rate",          score:16, max:20, color:"green" },
-  { name:"Net worth trend",       score:12, max:15, color:"purple" },
-  { name:"Spending consistency",  score:7,  max:20, color:"red", weak:true },
-];
-const TOTAL = 71;
-
-const HealthScore = () => {
-  const [animated, setAnimated] = useState(false);
-  const [scoreVal, scoreTrigger] = useCounter(TOTAL, 1600);
-  const sectionRef = useRef(null);
-  const triggered = useRef(false);
-  const r = useReveal();
-
-  useEffect(() => {
-    const el = sectionRef.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (!e.isIntersecting || triggered.current) return;
-      triggered.current = true;
-      scoreTrigger();
-      setTimeout(() => setAnimated(true), 100);
-    }, { threshold: 0.2 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [scoreTrigger]);
-
-  return (
-    <div className="s" ref={sectionRef}>
-      <div className="s-inner">
-        <div className="rv s-center" ref={r}>
-          <div className="kicker">Financial health</div>
-          <h2 className="sh">How healthy is<br/><em>your financial life?</em></h2>
-        </div>
-
-        <div className="health-layout" style={{marginTop:"64px"}}>
-          <div className="score-ring-wrap">
-            <div className="score-number">{scoreVal}</div>
-            <div className="score-label">Financial health score</div>
-            <div className="score-tip">
-              Improving your spending consistency would take your score from <strong>71</strong> to <strong>88</strong>.
-            </div>
-          </div>
-          <div className="health-bars">
-            {HEALTH.map(({ name, score, max, color, weak }) => (
-              <div key={name} className="hb">
-                <div className="hb-top">
-                  <div className="hb-name" style={weak?{color:'var(--red)'}:{}}>{name} {weak && '⚠'}</div>
-                  <div className="hb-score">{score}/{max}</div>
-                </div>
-                <div className="hb-track">
-                  <div className={`hb-fill ${color}`}
-                    style={{ width: animated ? `${(score/max)*100}%` : '0%' }}/>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-/* ── Section 6: Access ── */
-const Access = () => (
-  <div className="access-section">
-    <div className="access-big">Real financial intelligence has always belonged to the wealthy.</div>
-    <div className="access-italic">Luca changes that.</div>
-    <div className="access-price">$14.99/month. Less than one coffee a week.</div>
-  </div>
-);
-
-/* ── Section 7: Waitlist ── */
-const WaitlistSection = () => {
-  const r = useReveal();
-  return (
-    <div className="s waitlist-section">
-      <div className="s-inner s-center rv" ref={r} id="waitlist">
-        <div className="kicker">Almost ready</div>
-        <h2 className="sh" style={{marginBottom:"16px"}}>The financial operating system<br/><em>built for everyone</em> is almost ready.</h2>
-        <p className="sdesc" style={{marginBottom:"48px"}}>Be first. No credit card. No commitment.</p>
-        <EmailForm source="waitlist" micro="Powered by Claude AI · Built for everyone · Launching June 2026"/>
-      </div>
-    </div>
-  );
-};
-
-/* ── Footer ── */
-const Footer = () => (
-  <footer>
-    <div className="foot-main">
-      <div className="foot-brand"><Mark size={22}/><span className="foot-word">Luca</span></div>
-      <div className="foot-links">
-        <a href="#" className="foot-link">Privacy</a>
-        <a href="#" className="foot-link">Terms</a>
-        <a href="#" className="foot-link">Disclaimer</a>
-      </div>
-      <div className="foot-copy">© 2026 Luca · meetluca.ai</div>
-    </div>
-    <div className="foot-bottom">Powered by Claude AI by Anthropic</div>
-  </footer>
-);
-
-/* ── App ── */
 const App = () => {
   const [bar, setBar] = useState(false);
   const heroRef = useRef(null);
+  const r1 = useReveal(), r2 = useReveal(), r3 = useReveal(), r4 = useReveal(), r5 = useReveal();
 
   useEffect(() => {
     const obs = new IntersectionObserver(([e]) => setBar(!e.isIntersecting), { threshold: 0.15 });
@@ -815,22 +442,147 @@ const App = () => {
   return (<>
     <nav>
       <div className="brand"><Mark size={26}/><span className="brand-word">Luca</span></div>
-      <a href="#waitlist" className="nav-btn">Join the waitlist</a>
+      <a href="#waitlist" className="nav-link">Get early access →</a>
     </nav>
 
-    <Hero heroRef={heroRef}/>
-    <AccountsSection/>
-    <Pillars/>
-    <ChatDemo/>
-    <HealthScore/>
-    <Access/>
-    <WaitlistSection/>
-    <Footer/>
+    {/* ── Hero ── */}
+    <div className="hero" ref={heroRef}>
+      <div className="eyebrow"><span className="eyebrow-dot"/>Now in private beta</div>
+      <h1 className="hero-h">Your money has an agent now.</h1>
+      <p className="hero-sub">
+        Luca watches every dollar 24/7. Finds problems before you know they exist. Delivers ready-to-execute solutions. You just tap approve.
+      </p>
+      <EmailForm source="hero" micro="Bank-level encryption · Read-only · Powered by Claude"/>
+      <a href="#shift" className="scroll-hint" aria-label="Scroll">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </a>
+    </div>
+
+    <hr className="div"/>
+
+    {/* ── Shift section ── */}
+    <section id="shift">
+      <div className="inner rv" ref={r1}>
+        <div className="kicker">The shift</div>
+        <h2>An app shows you data.<br/>An agent does the work.</h2>
+        <p className="sub">For thirty years, finance apps have been tools. You open them. You look at charts. You close them. Nothing changes. Luca is something else entirely.</p>
+        <div className="shift-grid">
+          <div className="shift-col">
+            <div className="shift-label">Every other finance app</div>
+            <div className="shift-h">A tool you have to use.</div>
+            <p className="shift-p">You open it. You scroll. You categorize. You set up rules. You forget. You stop opening it. Nothing actually changes about your money.</p>
+          </div>
+          <div className="shift-col luca">
+            <div className="shift-label">Luca</div>
+            <div className="shift-h">An agent that works for you.</div>
+            <p className="shift-p">Runs 24/7 whether you open it or not. Never misses anything. Catches fees, fixes accounts, finds money — and delivers ready-to-execute solutions to you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr className="div"/>
+
+    {/* ── Activity feed (the demo) ── */}
+    <section>
+      <div className="inner rv" ref={r2}>
+        <div className="kicker">While you slept last night</div>
+        <h2>This is what an<br/>agent actually does.</h2>
+        <p className="sub">Real actions from a real night. You wake up, scan the feed, tap approve. The work is already done.</p>
+        <ActivityFeed/>
+      </div>
+    </section>
+
+    <hr className="div"/>
+
+    {/* ── How it works ── */}
+    <section className="tight">
+      <div className="inner rv" ref={r3}>
+        <div className="kicker">How Luca works</div>
+        <h2>Three things, on repeat,<br/>forever.</h2>
+        <div className="pillars">
+          {[
+            ["01","It watches everything.","Every transaction. Every fee. Every recurring charge. Every rate. Every balance. Across every account you have. Updated minute by minute."],
+            ["02","It finds problems.","Fees you shouldn't be paying. Subscriptions you've forgotten. Money sitting idle. Tax deductions you're missing. Rates you could be earning."],
+            ["03","It delivers solutions.","Not advice. Not charts. Actual ready-to-send scripts, transfers, and cancellations. You read it, you approve it, it's done."],
+          ].map(([num, h, b]) => (
+            <div key={num} className="pillar">
+              <div className="pillar-num">{num}</div>
+              <div className="pillar-h">{h}</div>
+              <div className="pillar-b">{b}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ── Statement ── */}
+    <div className="statement">
+      <div className="rv" ref={r4}>
+        <div className="statement-h">Not an app. <em>A team member</em> who never sleeps.</div>
+        <p className="statement-sub">The wealthy have full-time financial professionals working for them. Now everyone does.</p>
+      </div>
+    </div>
+
+    {/* ── Pricing ── */}
+    <section className="tight">
+      <div className="inner rv" ref={r5}>
+        <div className="kicker">Pricing</div>
+        <h2>One price.<br/>Pays for itself the first week.</h2>
+        <div className="price-row">
+          <div className="price-left">
+            <div className="price-name">Luca · Pro</div>
+            <div className="price-amount"><sup>$</sup>14.99</div>
+            <div className="price-period">per month · less than one coffee a week</div>
+          </div>
+          <div className="price-right">
+            Average user recovers <strong style={{color:'var(--ink)',fontWeight:500}}>$340 in the first month</strong> from fees, subscriptions, and rate optimizations alone.
+          </div>
+        </div>
+        <div className="price-features">
+          {[
+            "24/7 autonomous monitoring",
+            "Unlimited connected accounts",
+            "Fee disputes drafted for you",
+            "Subscription audit + cancellations",
+            "Rate arbitrage + tax flagging",
+            "Bank-level encryption · read-only",
+          ].map(f => (
+            <div key={f} className="pf"><span className="pf-check">✓</span>{f}</div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <hr className="div"/>
+
+    {/* ── Final CTA ── */}
+    <div className="cta-section" id="waitlist">
+      <div className="rv" ref={useReveal()}>
+        <div className="cta-h">Stop reading charts.<br/><em>Start approving moves.</em></div>
+        <EmailForm source="cta" btn="Join the waitlist" micro="Launching June 2026 · No credit card · Cancel anytime"/>
+      </div>
+    </div>
+
+    <footer>
+      <div className="foot-row">
+        <div className="foot-brand"><Mark size={22}/><span className="foot-word">Luca</span></div>
+        <div className="foot-links">
+          <a href="#" className="foot-link">Privacy</a>
+          <a href="#" className="foot-link">Security</a>
+          <a href="#" className="foot-link">Terms</a>
+        </div>
+        <div className="foot-copy">© 2026 Luca · meet-luca.com</div>
+      </div>
+      <div className="foot-bottom">Powered by Claude AI by Anthropic · Bank-level encryption</div>
+    </footer>
 
     <div className={`sticky ${bar ? '' : 'hide'}`}>
       <div className="sticky-inner">
-        <span className="sticky-text">The financial OS for everyone →</span>
-        <a href="#waitlist" className="sticky-btn">Join waitlist</a>
+        <span className="sticky-text">An agent for your money →</span>
+        <a href="#waitlist" className="sticky-btn">Get early access</a>
       </div>
     </div>
   </>);
