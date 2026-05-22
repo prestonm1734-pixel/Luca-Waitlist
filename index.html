@@ -224,11 +224,11 @@ section {
   max-width: 700px;
   margin: 0 auto;
   position: relative;
-  height: 500px;
+  min-height: 200px;
 }
 
+/* One card visible at a time, slides in from right */
 .agent-card {
-  position: absolute;
   width: 100%;
   padding: 24px;
   background: rgba(255,255,255,0.03);
@@ -236,14 +236,14 @@ section {
   border-radius: 12px;
   border-left: 4px solid;
   opacity: 0;
-  transform: translateX(100px);
-  animation: slideIn 0.6s ease-out forwards;
+  transform: translateX(60px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  display: none;
 }
-@keyframes slideIn {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.agent-card.active {
+  display: block;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .agent-card.orange { border-left-color: #FF9500; }
@@ -924,28 +924,37 @@ footer {
       'Reminds you of quarterly tax deadlines'
     ];
 
-    // Populate agent feed
+    // Build agent feed cards (all in DOM, show one at a time)
     const agentFeed = document.getElementById('agentFeed');
     agentCards.forEach((card, i) => {
       const el = document.createElement('div');
       el.className = `agent-card ${card.color}`;
-      el.style.animation = `slideIn 0.6s ease-out ${i * 2}s both`;
       el.innerHTML = `<div class="card-header">${card.icon} ${card.title}</div><div class="card-text">${card.text}</div><button class="card-button">${card.btn}</button>`;
       agentFeed.appendChild(el);
     });
 
-    // Loop agent feed
-    setInterval(() => {
-      const cards = document.querySelectorAll('.agent-card');
-      cards.forEach(c => c.remove());
-      agentCards.forEach((card, i) => {
-        const el = document.createElement('div');
-        el.className = `agent-card ${card.color}`;
-        el.style.animation = `slideIn 0.6s ease-out ${i * 2}s both`;
-        el.innerHTML = `<div class="card-header">${card.icon} ${card.title}</div><div class="card-text">${card.text}</div><button class="card-button">${card.btn}</button>`;
-        agentFeed.appendChild(el);
+    let feedIndex = 0;
+    const feedEls = agentFeed.querySelectorAll('.agent-card');
+
+    function showFeedCard(i) {
+      feedEls.forEach(c => {
+        c.classList.remove('active');
+        c.style.opacity = 0;
+        c.style.transform = 'translateX(60px)';
       });
-    }, 13000);
+      const card = feedEls[i];
+      card.classList.add('active');
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        card.style.opacity = 1;
+        card.style.transform = 'translateX(0)';
+      }));
+    }
+
+    showFeedCard(0);
+    setInterval(() => {
+      feedIndex = (feedIndex + 1) % feedEls.length;
+      showFeedCard(feedIndex);
+    }, 2800);
 
     // Populate powers
     const powersGrid = document.getElementById('powersGrid');
@@ -1034,7 +1043,10 @@ footer {
       const el = document.createElement('div');
       el.className = 'stat';
       el.style.animationDelay = `${i * 0.1}s`;
-      el.innerHTML = `<div class="stat-number" data-target="${s.num.replace(/[^\d]/g, '')}">0</div><div class="stat-label">${s.label}</div>`;
+      const numericVal = parseInt(s.num.replace(/[^\d]/g, '')) || 0;
+      const prefix = s.num.match(/^[^\d]*/)?.[0] || '';
+      const suffix = s.num.match(/[^\d]*$/)?.[0] || '';
+      el.innerHTML = `<div class="stat-number" data-target="${numericVal}" data-prefix="${prefix}" data-suffix="${suffix}" data-display="${s.num}">${s.num}</div><div class="stat-label">${s.label}</div>`;
       statsGrid.appendChild(el);
     });
 
@@ -1048,35 +1060,51 @@ footer {
       capGrid.appendChild(el);
     });
 
-    // Scroll animations
-    const observer = new IntersectionObserver(entries => {
+    // Scroll animations — fire immediately if already in viewport
+    const revealObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting) {
           e.target.classList.add('visible');
-          if (e.target.classList.contains('stat-number')) {
-            countUp(e.target);
-          }
+          revealObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section-header, .power-card').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // Stats counter observer
+    const statsObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.querySelectorAll('.stat-number').forEach(n => countUp(n));
+          statsObserver.unobserve(e.target);
         }
       });
     }, { threshold: 0.2 });
 
-    document.querySelectorAll('.section-header, .power-card').forEach(el => {
-      observer.observe(el);
-    });
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) statsObserver.observe(statsSection);
 
     function countUp(el) {
-      const target = parseInt(el.dataset.target);
+      const target = parseInt(el.dataset.target) || 0;
+      const prefix = el.dataset.prefix || '';
+      const suffix = el.dataset.suffix || '';
+      const display = el.dataset.display || '';
+      if (!target) { el.textContent = display; return; }
       let current = 0;
-      const increment = target / 60;
-      const interval = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          el.textContent = el.parentElement.parentElement.querySelector('.stat-label')?.previousElementSibling?.textContent || target;
-          clearInterval(interval);
-        } else {
-          el.textContent = Math.floor(current);
-        }
-      }, 16);
+      const duration = 1600;
+      const start = performance.now();
+      const tick = (now) => {
+        const p = Math.min((now - start) / duration, 1);
+        const e = 1 - Math.pow(1 - p, 3);
+        current = Math.round(e * target);
+        el.textContent = prefix + current.toLocaleString() + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = display;
+      };
+      requestAnimationFrame(tick);
     }
 
     // Email handling
