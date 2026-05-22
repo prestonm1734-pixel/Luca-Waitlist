@@ -42,7 +42,7 @@
   --serif:"Fraunces","Times New Roman",serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
 
-  --pad:clamp(22px,5.5vw,112px);
+  --pad:clamp(36px,7vw,112px);
   --max:1180px;
 
   --shadow-sm:0 1px 2px rgba(20,18,12,.04), 0 1px 3px rgba(20,18,12,.03);
@@ -89,7 +89,7 @@ input{font-family:inherit}
     radial-gradient(700px 500px at 10% 80%, rgba(212,182,106,.08), transparent 60%),
     linear-gradient(180deg, #0B0B0E 0%, #0E0E14 100%);
   color:var(--ink-on-dark);
-  padding:clamp(80px,12vw,160px) 0 clamp(80px,12vw,160px);
+  padding:clamp(72px,10vw,160px) 0 clamp(80px,12vw,160px);
   overflow:hidden;
   border-bottom:1px solid var(--line-dark);
 }
@@ -100,14 +100,14 @@ input{font-family:inherit}
 }
 .hero-inner{position:relative;z-index:1;max-width:920px}
 
-.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.14em;margin-bottom:56px}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.14em;margin-bottom:48px}
 .eyebrow::before{content:"";width:24px;height:1px;background:rgba(255,255,255,.18)}
 
 .hero-title{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(44px,9vw,128px);
+  font-size:clamp(40px,8.5vw,128px);
   line-height:.96;letter-spacing:-.026em;
-  color:var(--ink-on-dark);margin:0 0 40px;
+  color:var(--ink-on-dark);margin:0 0 36px;
   font-variation-settings:"opsz" 144,"SOFT" 50;
   max-width:14ch;
 }
