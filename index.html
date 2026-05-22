@@ -3,838 +3,1126 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Luca — The autonomous financial agent.</title>
-  <meta name="description" content="Luca watches every dollar 24/7. Finds problems before you know they exist. Delivers ready-to-execute solutions. You just tap approve.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%232D2A6E'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%23FFFFFF'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%23FFFFFF'/></g></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <title>Luca — Autonomous Financial Agent</title>
+  <meta name="description" content="Your autonomous financial agent working 24/7. Luca watches every dollar, finds money you're losing, fights fees, and delivers ready-to-execute solutions.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23505A98'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%230A0A14'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%230A0A14'/></g></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-:root{
-  --paper:#FFFFFF;
-  --cream:#F8F5EE;
-  --bg-dark:#0B0B0E;
-  --bg-dark-2:#15151A;
-
-  --ink:#0E0E12;
-  --ink-2:#26252A;
-  --muted:#6B6862;
-  --muted-2:#9A968D;
-  --dim:#B8B3A7;
-
-  --ink-on-dark:#F5F1E8;
-  --muted-on-dark:#A19D92;
-  --dim-on-dark:#5C594F;
-
-  --line:#E5E1D5;
-  --line-2:#D5D0C2;
-  --line-dark:#26252A;
-  --line-dark-2:#3A3833;
-
-  --accent:#2D2A6E;
-  --accent-hi:#7B86E8;
-  --accent-soft:rgba(45,42,110,.05);
-
-  --green:#3F7A52;
-  --red:#9C3A2E;
-
-  --sans:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --serif:"Fraunces","Times New Roman",serif;
-  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
-
-  --pad:clamp(52px,8vw,112px);
-  --max:1180px;
-
-  --shadow-sm:0 1px 2px rgba(20,18,12,.04), 0 1px 3px rgba(20,18,12,.03);
-  --shadow:0 1px 2px rgba(20,18,12,.04), 0 8px 24px rgba(20,18,12,.05);
-  --shadow-lg:0 1px 2px rgba(20,18,12,.04), 0 24px 60px -12px rgba(20,18,12,.10), 0 8px 24px rgba(20,18,12,.04);
+:root {
+  --bg: #0A0A14;
+  --bg-2: #1A1A24;
+  --ink: #FFFFFF;
+  --muted: #A0A0A8;
+  --purple: #505A98;
+  --purple-hi: #6B75AD;
 }
-*,*::before,*::after{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;overflow-wrap:break-word;word-wrap:break-word}
-html{scroll-behavior:smooth}
-body{min-height:100vh;overflow-x:hidden}
-h1,h2,h3,p,div,span,button,a{overflow-wrap:break-word;word-wrap:break-word}
-::selection{background:var(--accent);color:#fff}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:0;background:0;color:inherit}
-input{font-family:inherit}
-
-.shell{position:relative;max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
-
-/* ─── theme blocks ─── */
-.theme-light{background:var(--paper);color:var(--ink)}
-.theme-cream{background:var(--cream);color:var(--ink)}
-.theme-dark{background:var(--bg-dark);color:var(--ink-on-dark)}
-
-/* ─── topbar ─── */
-.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);background:rgba(11,11,14,.65);border-bottom:1px solid rgba(255,255,255,.06);color:var(--ink-on-dark);transition:background .3s,color .3s,border-color .3s}
-.topbar.is-light{background:rgba(255,255,255,.78);color:var(--ink);border-bottom:1px solid var(--line)}
-.topbar-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{display:flex;align-items:center;gap:11px;font-weight:500;font-size:16px;letter-spacing:-.012em}
-.brand-name{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-.02em;font-variation-settings:"opsz" 144}
-.nav{display:flex;align-items:center;gap:36px}
-.nav-link{font-size:13.5px;color:var(--muted-on-dark);transition:color .2s;letter-spacing:-.005em}
-.topbar.is-light .nav-link{color:var(--muted)}
-.nav-link:hover{color:var(--ink-on-dark)}
-.topbar.is-light .nav-link:hover{color:var(--ink)}
-.topbar-cta{font-size:13.5px;padding:10px 18px;border-radius:100px;background:var(--paper);color:var(--ink);font-weight:500;letter-spacing:-.005em;transition:transform .2s,background .2s}
-.topbar-cta:hover{transform:translateY(-1px);background:#fff}
-@media(max-width:760px){.nav{display:none}}
-
-/* ─── HERO (dark) ─── */
-.hero{
-  position:relative;
-  background:
-    radial-gradient(800px 600px at 80% 30%, rgba(123,134,232,.10), transparent 60%),
-    radial-gradient(700px 500px at 10% 80%, rgba(212,182,106,.08), transparent 60%),
-    linear-gradient(180deg, #0B0B0E 0%, #0E0E14 100%);
-  color:var(--ink-on-dark);
-  padding:clamp(72px,10vw,160px) 0 clamp(80px,12vw,160px);
-  overflow:hidden;
-  border-bottom:1px solid var(--line-dark);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
-.hero::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='.5'/></svg>");
-  opacity:.06;mix-blend-mode:overlay;
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Figtree', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
-.hero-inner{position:relative;z-index:1;max-width:920px}
-
-.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.14em;margin-bottom:48px}
-.eyebrow::before{content:"";width:24px;height:1px;background:rgba(255,255,255,.18)}
-
-.hero-title{
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(34px,8.5vw,128px);
-  line-height:1;letter-spacing:-.024em;
-  color:var(--ink-on-dark);margin:0 0 32px;
-  font-variation-settings:"opsz" 144,"SOFT" 50;
-  max-width:13ch;text-align:center;
-}
-.hero-title em{font-style:italic;font-weight:400;color:var(--accent-hi)}
-.hero-title .word{display:inline-block;opacity:0;transform:translateY(28px);animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards}
-.hero-title .word:nth-child(1){animation-delay:.06s}
-.hero-title .word:nth-child(2){animation-delay:.14s}
-.hero-title .word:nth-child(3){animation-delay:.22s}
-.hero-title .word:nth-child(4){animation-delay:.30s}
-.hero-title .word:nth-child(5){animation-delay:.38s}
-.hero-title .word:nth-child(6){animation-delay:.46s}
-@keyframes rise{to{opacity:1;transform:translateY(0)}}
-
-.hero-sub{
-  font-family:var(--sans);font-weight:400;
-  font-size:clamp(15px,1.6vw,20px);line-height:1.6;
-  color:var(--muted-on-dark);max-width:56ch;margin:0 auto 44px;
-  letter-spacing:-.008em;text-align:center;
-  opacity:0;animation:rise 1s .56s cubic-bezier(.2,.7,.2,1) forwards;
+html {
+  scroll-behavior: smooth;
 }
 
-.hero-form{
-  display:flex;align-items:center;margin:0 auto;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.10);border-radius:100px;
-  padding:7px;max-width:480px;
-  transition:border-color .25s,box-shadow .25s,background .25s;
-  opacity:0;animation:rise 1s .72s cubic-bezier(.2,.7,.2,1) forwards;
-  backdrop-filter:blur(8px);
+/* Canvas for particles */
+canvas#particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
 }
-.hero-form:focus-within{border-color:var(--accent-hi);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(123,134,232,.12)}
-.hero-form input{flex:1;min-width:0;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink-on-dark);padding:14px 20px;letter-spacing:-.008em}
-.hero-form input::placeholder{color:var(--dim-on-dark)}
-.hero-form button{flex-shrink:0;background:var(--paper);color:var(--ink);font-weight:500;font-size:14.5px;padding:14px 22px;border-radius:100px;letter-spacing:-.005em;transition:transform .2s,background .2s}
-.hero-form button:hover{background:#fff;transform:translateY(-1px)}
-.hero-form button:disabled{opacity:.5;cursor:wait}
-.hero-form.shake{animation:shake .4s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-.hero-micro{display:flex;flex-wrap:wrap;gap:24px;margin:24px auto 0;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em;opacity:0;animation:rise 1s .88s cubic-bezier(.2,.7,.2,1) forwards}
-.hero-micro span{display:flex;align-items:center;gap:8px}
-.hero-micro span::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--dim-on-dark)}
-
-.hero-ok{font-family:var(--serif);font-style:italic;color:var(--accent-hi);font-size:22px;padding:18px 6px;font-variation-settings:"opsz" 144}
-.hero-err{color:#E07C6E;font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;padding:12px 6px 0}
-
-/* ─── section frame ─── */
-.section{padding:clamp(96px,16vw,200px) 0}
-.section + .section{border-top:1px solid var(--line)}
-.theme-dark + .theme-dark, .theme-dark.section{border-top-color:var(--line-dark)}
-
-/* ─── Statement (sans split) ─── */
-.statement{
-  font-family:var(--sans);font-weight:500;
-  font-size:clamp(22px,5.2vw,68px);
-  line-height:1.15;letter-spacing:-.018em;
-  margin:0 auto;max-width:18ch;text-align:center;
+/* Hero */
+.hero {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  overflow: hidden;
 }
-.statement .fade{color:var(--muted-2)}
-.statement .dark-fade{color:#5A5852}
-
-/* ─── Capabilities cycle (Harvey-style list) ─── */
-.cap-eyebrow{font-family:var(--sans);font-size:clamp(15px,2.4vw,28px);font-weight:500;color:var(--ink);letter-spacing:-.012em;margin:0 auto 44px;max-width:30ch;text-align:center}
-.cap-list{display:flex;flex-direction:column;gap:clamp(8px,1.5vw,18px);margin-bottom:64px}
-.cap-item{
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(24px,6.4vw,84px);
-  line-height:1.12;letter-spacing:-.02em;
-  color:#D8D4C7;
-  transition:color .5s ease;
-  cursor:default;font-variation-settings:"opsz" 144;
-  white-space:nowrap;text-align:center;
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+  animation: fadeUp 1s ease-out;
 }
-@media(max-width:520px){.cap-item{white-space:normal}}
-.cap-item.active{color:var(--ink)}
-.cap-cta{display:inline-block;font-size:14.5px;padding:14px 24px;border:1px solid var(--line-2);border-radius:100px;color:var(--ink);background:var(--paper);box-shadow:var(--shadow-sm);transition:transform .2s,border-color .2s,box-shadow .2s;letter-spacing:-.005em;font-weight:500}
-.cap-cta:hover{transform:translateY(-1px);border-color:var(--line-3);box-shadow:var(--shadow)}
-
-/* ─── Section heads ─── */
-.section-head{margin-bottom:clamp(56px,7vw,96px);max-width:880px}
-.section-num{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.section-num::before{content:"";width:18px;height:1px;background:var(--accent);opacity:.4}
-.theme-dark .section-num{color:var(--accent-hi)}
-.theme-dark .section-num::before{background:var(--accent-hi);opacity:.4}
-.section-title{font-family:var(--sans);font-weight:500;font-size:clamp(24px,5.2vw,64px);line-height:1.12;letter-spacing:-.018em;margin:0 0 24px;color:var(--ink)}
-@media(max-width:640px){.section-title{text-align:center}}
-.section-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent);font-variation-settings:"opsz" 144}
-.theme-dark .section-title{color:var(--ink-on-dark)}
-.theme-dark .section-title em{color:var(--accent-hi)}
-.section-sub{font-size:clamp(16px,1.6vw,18px);line-height:1.55;color:var(--muted);max-width:62ch;margin:0;letter-spacing:-.008em}
-.theme-dark .section-sub{color:var(--muted-on-dark)}
-
-/* ─── Live agent panel ─── */
-.agent{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden}
-.agent-head{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#FBFAF4 0%,var(--paper) 100%)}
-.agent-head-l{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em}
-.status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(63,122,82,.45);animation:pulse 2.4s infinite}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,122,82,.45)}70%{box-shadow:0 0 0 8px rgba(63,122,82,0)}100%{box-shadow:0 0 0 0 rgba(63,122,82,0)}}
-.agent-head-r{display:flex;gap:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
-.agent-head-r b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
-@media(max-width:680px){.agent-head{flex-direction:column;align-items:flex-start;gap:14px;padding:20px 22px}.agent-head-r{gap:18px;font-size:11px}}
-
-.feed-row{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;padding:22px 28px;border-bottom:1px solid var(--line);transition:background .2s;opacity:0;transform:translateY(8px)}
-.feed-row.in{opacity:1;transform:translateY(0);transition:opacity .6s,transform .6s,background .2s}
-.feed-row:last-child{border-bottom:0}
-.feed-row:hover{background:#FBFAF4}
-@media(max-width:760px){.feed-row{grid-template-columns:1fr;gap:12px;padding:22px}}
-.feed-time{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;font-variant-numeric:tabular-nums}
-.feed-text{font-size:15.5px;line-height:1.5;color:var(--ink-2);letter-spacing:-.008em}
-.feed-text strong{color:var(--ink);font-weight:500}
-.feed-text .save{color:var(--green);font-weight:500;font-variant-numeric:tabular-nums}
-.feed-text .loss{color:var(--red);font-weight:500;font-variant-numeric:tabular-nums}
-.feed-btn{font-size:13.5px;font-weight:500;padding:10px 20px;border-radius:100px;background:var(--ink);color:var(--paper);letter-spacing:-.005em;transition:transform .2s,background .2s;white-space:nowrap;border:1px solid var(--ink)}
-.feed-btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
-.feed-btn.done{background:transparent;color:var(--green);border:1px solid var(--line-2);display:inline-flex;align-items:center;gap:8px;cursor:default;pointer-events:none}
-.feed-btn.done::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
-@media(max-width:760px){.feed-btn{justify-self:start}}
-
-/* ─── Morning brief ─── */
-.brief-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(32px,5vw,72px);align-items:start}
-@media(max-width:980px){.brief-grid{grid-template-columns:1fr;gap:40px}}
-.brief-panel{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;padding:clamp(28px,4vw,48px);box-shadow:var(--shadow-lg);min-height:300px;position:relative}
-.brief-h{display:flex;align-items:center;gap:12px;margin-bottom:32px}
-.brief-h-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center}
-.brief-h-l{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em}
-.brief-h-r{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-left:auto}
-.brief-text{font-family:var(--serif);font-weight:400;font-size:clamp(19px,2.6vw,30px);line-height:1.4;color:var(--ink);letter-spacing:-.012em;min-height:160px;font-variation-settings:"opsz" 144}
-.brief-text strong{font-style:italic;color:var(--accent);font-weight:500}
-.brief-cursor{display:inline-block;width:2px;height:.95em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;animation:blink 1s infinite}
-@keyframes blink{50%{opacity:0}}
-
-.brief-side{display:flex;flex-direction:column;gap:14px}
-.brief-side-h{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px}
-.networth-num{font-family:var(--serif);font-size:clamp(34px,5.4vw,60px);letter-spacing:-.022em;line-height:1.02;font-variant-numeric:tabular-nums;color:var(--ink);margin-bottom:8px;font-variation-settings:"opsz" 144}
-.networth-delta{font-family:var(--mono);font-size:11.5px;color:var(--green);text-transform:uppercase;letter-spacing:.12em;margin-bottom:24px}
-.acct{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s,border-color .25s}
-.acct:hover{transform:translateX(3px);box-shadow:var(--shadow);border-color:var(--line-2)}
-.acct-bank{font-size:14.5px;color:var(--ink);font-weight:500;letter-spacing:-.008em}
-.acct-name{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
-.acct-bal{font-family:var(--serif);font-size:clamp(18px,4vw,22px);letter-spacing:-.014em;font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
-.acct-bal.neg{color:var(--red)}
-
-/* ─── Ask Luca ─── */
-.ask-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(28px,4vw,56px)}
-@media(max-width:980px){.ask-grid{grid-template-columns:1fr}}
-.ask-q-h{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px}
-.qbtn{display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;width:100%;padding:20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line);color:var(--ink-2);font-size:15.5px;letter-spacing:-.008em;box-shadow:var(--shadow-sm);margin-bottom:12px;transition:transform .25s,box-shadow .25s,border-color .25s,background .25s;font-family:var(--sans);font-weight:400}
-.qbtn::after{content:"→";color:var(--dim);font-size:18px;transition:transform .25s,color .25s}
-.qbtn:hover{transform:translateX(3px);box-shadow:var(--shadow);border-color:var(--line-2)}
-.qbtn:hover::after{color:var(--accent);transform:translateX(3px)}
-.qbtn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
-.qbtn.active::after{color:var(--accent)}
-.ask-a{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;padding:clamp(28px,4vw,48px);box-shadow:var(--shadow-lg);min-height:360px;display:flex;flex-direction:column}
-.ask-a-head{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-.ask-a-l{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em}
-.ask-a-body{font-family:var(--serif);font-size:clamp(17px,2vw,25px);line-height:1.46;color:var(--ink);letter-spacing:-.012em;flex:1;font-variation-settings:"opsz" 144}
-.ask-a-empty{color:var(--dim);font-style:italic}
-
-/* ─── Stats (DARK Harvey-style) ─── */
-.stats-title{font-family:var(--sans);font-weight:500;font-size:clamp(22px,5.2vw,64px);line-height:1.15;letter-spacing:-.018em;margin:0 auto clamp(48px,8vw,96px);max-width:18ch;color:var(--ink-on-dark);text-align:center}
-.stat-list{display:flex;flex-direction:column}
-.stat{display:flex;flex-direction:column;gap:clamp(20px,3vw,36px);padding:clamp(36px,5vw,56px) 0;border-top:1px solid var(--line-dark-2)}
-.stat:last-child{border-bottom:1px solid var(--line-dark-2)}
-.stat-label{font-size:clamp(15px,1.5vw,17px);color:var(--ink-on-dark);font-weight:400;letter-spacing:-.005em}
-.stat-num{font-family:var(--serif);font-weight:400;font-size:clamp(32px,8vw,108px);line-height:1;letter-spacing:-.022em;color:var(--ink-on-dark);font-variant-numeric:tabular-nums;font-variation-settings:"opsz" 144;text-align:center}
-
-/* ─── Pricing (CREAM) ─── */
-.price-wrap{display:flex;justify-content:center}
-.price-card{width:100%;max-width:540px;background:var(--paper);border:1px solid var(--line-2);border-radius:28px;padding:clamp(36px,5vw,56px);box-shadow:var(--shadow-lg);position:relative}
-.price-tag{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;padding:5px 12px;border:1px solid var(--line-2);border-radius:100px;background:var(--accent-soft)}
-.price-num{font-family:var(--serif);font-weight:400;font-size:clamp(44px,9vw,112px);line-height:1.04;letter-spacing:-.024em;color:var(--ink);font-variant-numeric:tabular-nums;margin:28px 0 8px;display:flex;align-items:baseline;flex-wrap:wrap;justify-content:center;font-variation-settings:"opsz" 144}
-.price-num small{font-size:.2em;color:var(--muted);font-family:var(--mono);font-weight:400;margin-left:10px;letter-spacing:.04em}
-.price-sub{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:36px;line-height:1.6}
-.price-list{display:flex;flex-direction:column;gap:14px;margin-bottom:36px;border-top:1px solid var(--line);padding-top:28px}
-.price-li{display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.5;color:var(--ink-2);letter-spacing:-.008em}
-.price-li::before{content:"";flex-shrink:0;width:14px;height:14px;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);margin-top:3px}
-.price-cta{display:block;width:100%;text-align:center;background:var(--ink);color:var(--paper);padding:17px 22px;border-radius:100px;font-size:15px;font-weight:500;letter-spacing:-.005em;transition:transform .2s,background .2s}
-.price-cta:hover{background:var(--accent);transform:translateY(-1px)}
-.price-foot{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;text-align:center;margin-top:16px}
-
-/* ─── Final (DARK) ─── */
-.final{padding:clamp(100px,16vw,200px) 0;text-align:center;position:relative;overflow:hidden}
-.final::before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:
-    radial-gradient(700px 500px at 50% 50%, rgba(123,134,232,.10), transparent 70%),
-    radial-gradient(500px 400px at 80% 80%, rgba(212,182,106,.06), transparent 60%);
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.final-inner{position:relative;z-index:1;max-width:820px;margin:0 auto}
-.final-title{font-family:var(--serif);font-weight:400;font-size:clamp(32px,7.4vw,96px);line-height:1.04;letter-spacing:-.024em;margin:0 0 28px;font-variation-settings:"opsz" 144;color:var(--ink-on-dark);text-align:center}
-.final-title em{font-style:italic;color:var(--accent-hi)}
-.final-sub{font-size:clamp(15px,1.5vw,18px);line-height:1.6;color:var(--muted-on-dark);max-width:540px;margin:0 auto 44px;letter-spacing:-.008em}
-.final-form{display:flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:100px;padding:7px;max-width:480px;margin:0 auto;transition:border-color .25s,box-shadow .25s,background .25s;backdrop-filter:blur(8px)}
-.final-form:focus-within{border-color:var(--accent-hi);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(123,134,232,.12)}
-.final-form input{flex:1;min-width:0;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink-on-dark);padding:14px 20px;letter-spacing:-.008em}
-.final-form input::placeholder{color:var(--dim-on-dark)}
-.final-form button{flex-shrink:0;background:var(--paper);color:var(--ink);font-weight:500;font-size:14.5px;padding:14px 22px;border-radius:100px;transition:transform .2s,background .2s}
-.final-form button:hover{background:#fff;transform:translateY(-1px)}
-.final-form.shake{animation:shake .4s}
-.final-micro{display:flex;justify-content:center;flex-wrap:wrap;gap:28px;margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em}
 
-/* ─── Footer (DARK) ─── */
-.footer{padding:56px 0 72px;border-top:1px solid var(--line-dark-2)}
-.footer-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
-.footer-l{font-family:var(--mono);font-size:11.5px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em}
-.footer-r{display:flex;gap:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.12em}
-.footer-r a{transition:color .2s}
-.footer-r a:hover{color:var(--ink-on-dark)}
+.logo-mark {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 40px;
+  display: block;
+  animation: breathe 4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
 
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
-.reveal.in{opacity:1;transform:translateY(0)}
+.logo-wordmark {
+  font-size: 42px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  margin-bottom: 40px;
+  color: var(--ink);
+}
+
+.hero-headline {
+  font-size: clamp(32px, 5vw, 72px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+.hero-headline .purple {
+  color: var(--purple);
+  font-style: italic;
+}
+
+.hero-subtext {
+  font-size: 18px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.hero-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ink);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+}
+.hero-form input::placeholder {
+  color: var(--muted);
+}
+.hero-form button {
+  padding: 14px 28px;
+  background: var(--purple);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+.hero-form button:hover {
+  background: var(--purple-hi);
+  transform: translateY(-2px);
+}
+.hero-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.hero-micro {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  margin-bottom: 80px;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounceDown 2s ease-in-out 2s infinite;
+  opacity: 0;
+  animation: fadeInBounce 2s ease-out;
+}
+@keyframes fadeInBounce {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 1; }
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+.scroll-indicator svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--muted);
+  stroke-width: 2;
+  fill: none;
+}
+
+/* Section base */
+section {
+  position: relative;
+  z-index: 5;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.section-header.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.section-title {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* Agent Feed */
+.agent-section {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+}
+
+.agent-feed {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  height: 500px;
+}
+
+.agent-card {
+  position: absolute;
+  width: 100%;
+  padding: 24px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  border-left: 4px solid;
+  opacity: 0;
+  transform: translateX(100px);
+  animation: slideIn 0.6s ease-out forwards;
+}
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.agent-card.orange { border-left-color: #FF9500; }
+.agent-card.green { border-left-color: #34C759; }
+.agent-card.blue { border-left-color: #00B0FF; }
+.agent-card.red { border-left-color: #FF3B30; }
+.agent-card.purple { border-left-color: var(--purple); }
+
+.card-header {
+  font-weight: 700;
+  margin-bottom: 12px;
+  font-size: 16px;
+}
+
+.card-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.card-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background: rgba(80, 90, 152, 0.2);
+  border: 1px solid var(--purple);
+  color: var(--purple);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.card-button:hover {
+  background: var(--purple);
+  color: var(--ink);
+}
+
+/* Three Powers */
+.powers-section {
+  padding: 100px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.powers-grid {
+  display: grid;
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.power-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 40px;
+  border-radius: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.power-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.power-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+
+.power-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.power-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+
+.power-example {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--purple);
+}
+
+/* Interactive Demo */
+.demo-section {
+  padding: 100px 20px;
+  background: rgba(80, 90, 152, 0.03);
+}
+
+.demo-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.question-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.chip {
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ink);
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.chip:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--purple);
+}
+.chip.active {
+  background: var(--purple);
+  border-color: var(--purple);
+}
+
+.demo-chat {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 32px;
+  min-height: 300px;
+}
+
+.chat-message {
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
+.user-message {
+  text-align: right;
+  margin-bottom: 16px;
+}
+
+.user-bubble {
+  display: inline-block;
+  background: var(--purple);
+  color: var(--ink);
+  padding: 12px 20px;
+  border-radius: 12px;
+  max-width: 80%;
+  word-wrap: break-word;
+  font-size: 15px;
+}
+
+.luca-bubble {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.luca-bubble .highlight {
+  color: var(--purple);
+  font-weight: 600;
+}
+
+/* Stats Section */
+.stats-section {
+  padding: 100px 20px;
+  background: var(--purple);
+  color: var(--ink);
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 40px;
+  max-width: 1000px;
+  margin: 60px auto 0;
+}
+
+.stat {
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+}
+
+.stat-number {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 8px;
+  letter-spacing: -0.02em;
+}
+
+.stat-label {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+  letter-spacing: 0.05em;
+}
+
+.stats-footer {
+  margin-top: 60px;
+  font-size: 16px;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+/* Capabilities */
+.capabilities-section {
+  padding: 100px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+  margin-top: 60px;
+}
+
+.capability-item {
+  display: flex;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease-out forwards;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.capability-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--purple);
+  border-radius: 50%;
+  margin-top: 7px;
+  flex-shrink: 0;
+}
+
+/* Statement */
+.statement-section {
+  padding: 120px 20px;
+  background: var(--bg);
+  text-align: center;
+}
+
+.statement {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.statement-line {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease-out forwards;
+  letter-spacing: -0.02em;
+}
+
+.statement-line.purple {
+  color: var(--purple);
+  font-style: italic;
+  margin-top: 32px;
+}
+
+/* Email Capture */
+.capture-section {
+  padding: 100px 20px;
+  background: rgba(80, 90, 152, 0.03);
+  text-align: center;
+}
+
+.capture-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.capture-subtitle {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.capture-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.capture-form input {
+  flex: 1;
+  min-width: 200px;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--ink);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 16px;
+}
+.capture-form input::placeholder {
+  color: var(--muted);
+}
+.capture-form button {
+  padding: 14px 28px;
+  background: var(--purple);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+.capture-form button:hover {
+  background: var(--purple-hi);
+  transform: translateY(-2px);
+}
+.capture-form button:disabled {
+  opacity: 0.6;
+}
+
+.capture-footer {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 24px;
+}
+
+.form-success {
+  font-size: 18px;
+  color: var(--purple);
+  font-weight: 600;
+  padding: 20px;
+}
+
+/* Footer */
+footer {
+  padding: 60px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-mark {
+  width: 24px;
+  height: 24px;
+}
+
+.footer-center {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+}
+
+.footer-center a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-center a:hover {
+  color: var(--ink);
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.footer-bottom {
+  grid-column: 1 / -1;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-form,
+  .question-chips,
+  .capture-form {
+    flex-direction: column;
+  }
+
+  .hero-form input,
+  .hero-form button,
+  .capture-form input,
+  .capture-form button {
+    width: 100%;
+  }
+
+  .question-chips {
+    flex-direction: column;
+  }
+
+  .chip {
+    width: 100%;
+  }
+
+  footer {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .footer-left, .footer-right {
+    text-align: center;
+  }
+
+  .footer-center {
+    justify-content: center;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
   </style>
 </head>
 <body>
-  <div id="root"></div>
+  <canvas id="particles"></canvas>
+
+  <section class="hero">
+    <div class="hero-content">
+      <svg class="logo-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#505A98">
+          <rect x="46" y="14" width="8" height="8" rx="1.5"/>
+          <rect x="78" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="46" y="78" width="8" height="8" rx="1.5"/>
+          <rect x="14" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)"/>
+          <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)"/>
+          <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
+          <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
+          <circle cx="50" cy="50" r="17"/>
+          <circle cx="50" cy="50" r="11" fill="#0A0A14"/>
+          <circle cx="50" cy="50" r="6"/>
+          <circle cx="50" cy="50" r="2.2" fill="#0A0A14"/>
+        </g>
+      </svg>
+      <div class="logo-wordmark">LUCA</div>
+      <div class="hero-headline">Your money never sleeps.<br><span class="purple">Neither does Luca.</span></div>
+      <div class="hero-subtext">The autonomous financial agent that works for you 24/7.</div>
+      <form class="hero-form" onsubmit="handleEmail(event, 'hero')">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit">Join the waitlist</button>
+      </form>
+      <div class="hero-micro">Powered by Claude · Bank-level encryption · Read-only access · We can never move your money</div>
+    </div>
+
+    <div class="scroll-indicator">
+      <svg viewBox="0 0 24 24"><path d="M12 19l7-7m0 0l-7-7m7 7H5" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </section>
+
+  <section class="agent-section">
+    <div class="section-header">
+      <h2 class="section-title">Luca is working right now.</h2>
+      <p class="section-subtitle">This is what your autonomous agent found while you slept.</p>
+    </div>
+    <div class="agent-feed" id="agentFeed"></div>
+  </section>
+
+  <section class="powers-section">
+    <div class="section-header">
+      <h2 class="section-title">One agent. Every dimension of your financial life.</h2>
+    </div>
+    <div class="powers-grid" id="powersGrid"></div>
+  </section>
+
+  <section class="demo-section">
+    <div class="demo-container">
+      <div class="section-header">
+        <h2 class="section-title">Ask your agent anything.</h2>
+        <p class="section-subtitle">Pick a question and watch Luca work in real time.</p>
+      </div>
+      <div class="question-chips" id="questionChips"></div>
+      <div class="demo-chat" id="demoChat"></div>
+    </div>
+  </section>
+
+  <section class="stats-section">
+    <div class="section-header">
+      <h2 class="section-title" style="color: inherit;">The financial advantage that used to cost thousands.</h2>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+    <div class="stats-footer">A financial advisor charges $250/hour. Luca never stops working for $14.99/month.</div>
+  </section>
+
+  <section class="capabilities-section">
+    <div class="section-header">
+      <h2 class="section-title">What Luca does while you sleep.</h2>
+    </div>
+    <div class="capabilities-grid" id="capabilitiesGrid"></div>
+  </section>
+
+  <section class="statement-section">
+    <div class="statement" id="statement"></div>
+  </section>
+
+  <section class="capture-section">
+    <div class="capture-container">
+      <h2 class="section-title">Your agent is almost ready.</h2>
+      <p class="capture-subtitle">Join the waitlist. Be first. No credit card. No commitment.</p>
+      <form class="capture-form" onsubmit="handleEmail(event, 'capture')" id="captureForm">
+        <input type="email" placeholder="Enter your email" required>
+        <button type="submit">Join the waitlist</button>
+      </form>
+      <div class="capture-footer">Powered by Claude AI by Anthropic · Launching June 2026 · meetluca.ai</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">
+      <svg class="footer-mark" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g fill="#505A98">
+          <rect x="46" y="14" width="8" height="8" rx="1.5"/>
+          <rect x="78" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="46" y="78" width="8" height="8" rx="1.5"/>
+          <rect x="14" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)"/>
+          <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)"/>
+          <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
+          <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
+          <circle cx="50" cy="50" r="17"/>
+          <circle cx="50" cy="50" r="11" fill="#0A0A14"/>
+          <circle cx="50" cy="50" r="6"/>
+          <circle cx="50" cy="50" r="2.2" fill="#0A0A14"/>
+        </g>
+      </svg>
+      <span>Luca</span>
+    </div>
+    <div class="footer-center">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Disclaimer</a>
+    </div>
+    <div class="footer-right">© 2026 Luca</div>
+    <div class="footer-bottom">Powered by Claude AI by Anthropic. Luca provides financial education and information. Not professional financial advice.</div>
+  </footer>
 
   <script>
-    window.SUPABASE_URL      = 'https://ioeqnfqparfunotdjosy.supabase.co';
-    window.SUPABASE_ANON_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    // Supabase config
+    const SUPABASE_URL = 'https://ioeqnfqparfunotdjosy.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
 
-  <script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+    // Particle system
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-const Mark = ({ size=22, fill="#F5F1E8", bg="#0B0B0E" }) => (
-  <svg viewBox="0 0 100 100" width={size} height={size} style={{display:"block",flexShrink:0}}>
-    <g fill={fill}>
-      <rect x="46" y="14" width="8" height="8" rx="1.5"/>
-      <rect x="78" y="46" width="8" height="8" rx="1.5"/>
-      <rect x="46" y="78" width="8" height="8" rx="1.5"/>
-      <rect x="14" y="46" width="8" height="8" rx="1.5"/>
-      <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)"/>
-      <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)"/>
-      <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
-      <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
-      <circle cx="50" cy="50" r="17"/>
-      <circle cx="50" cy="50" r="11" fill={bg}/>
-      <circle cx="50" cy="50" r="6"/>
-      <circle cx="50" cy="50" r="2.2" fill={bg}/>
-    </g>
-  </svg>
-);
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.size = Math.random() * 1.5;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
 
-function useReveal(){
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting){ el.classList.add('in'); io.unobserve(el); }
-    }, { threshold:.15 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return ref;
-}
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
+      }
 
-function useInView(threshold=.3){
-  const ref = useRef(null);
-  const [seen, setSeen] = useState(false);
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const io = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !seen){ setSeen(true); io.unobserve(el); }
-    }, { threshold });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [seen, threshold]);
-  return [ref, seen];
-}
-
-function useCounter(target, duration=1800){
-  const [val, setVal] = useState(0);
-  const fired = useRef(false);
-  const trigger = useCallback(() => {
-    if (fired.current) return;
-    fired.current = true;
-    const t0 = performance.now();
-    const tick = now => {
-      const p = Math.min((now - t0) / duration, 1);
-      const e = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(e * target));
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [target, duration]);
-  return [val, trigger];
-}
-
-function useWordStream(){
-  const [text, setText] = useState('');
-  const [done, setDone] = useState(false);
-  const timer = useRef(null);
-  const stream = useCallback((full, delay=48) => {
-    clearInterval(timer.current);
-    setText(''); setDone(false);
-    const words = full.split(' ');
-    let i = 0;
-    timer.current = setInterval(() => {
-      if (i < words.length){
-        const w = words[i]; i++;
-        setText(p => p ? p + ' ' + w : w);
-      } else { clearInterval(timer.current); setDone(true); }
-    }, delay);
-  }, []);
-  useEffect(() => () => clearInterval(timer.current), []);
-  return { text, done, stream };
-}
-
-const fmt = n => '$' + Math.abs(n).toLocaleString('en-US');
-
-/* ─── Top bar (theme-aware via scroll) ─── */
-const TopBar = () => {
-  const [light, setLight] = useState(false);
-  useEffect(() => {
-    const onScroll = () => {
-      const heroH = document.getElementById('hero')?.offsetHeight || 0;
-      setLight(window.scrollY > heroH - 80);
-    };
-    window.addEventListener('scroll', onScroll, { passive:true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return (
-    <header className={`topbar ${light ? 'is-light' : ''}`}>
-      <div className="shell topbar-inner">
-        <a href="#" className="brand">
-          <Mark size={22} fill={light ? "#2D2A6E" : "#F5F1E8"} bg={light ? "#FFFFFF" : "#0B0B0E"}/>
-          <span className="brand-name">Luca</span>
-        </a>
-        <nav className="nav">
-          <a href="#agent" className="nav-link">Agent</a>
-          <a href="#brief" className="nav-link">Brief</a>
-          <a href="#ask" className="nav-link">Ask</a>
-          <a href="#pricing" className="nav-link">Pricing</a>
-        </nav>
-        <a href="#join" className="topbar-cta">Join waitlist</a>
-      </div>
-    </header>
-  );
-};
-
-const EmailForm = ({ source, btn="Get early access", ph="Enter your email", cls="hero-form" }) => {
-  const [v, setV] = useState('');
-  const [ok, setOk] = useState(false);
-  const [ld, setLd] = useState(false);
-  const [er, setEr] = useState('');
-  const ref = useRef(null);
-  const go = async e => {
-    e.preventDefault();
-    if (!v.includes('@')){
-      setEr('Enter a valid email.');
-      ref.current?.classList.add('shake');
-      setTimeout(() => ref.current?.classList.remove('shake'), 400);
-      return;
+      draw() {
+        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+      }
     }
-    setLd(true); setEr('');
-    try {
-      const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-      const { error } = await sb.from("waitlist").insert([{ email: v, source: source || "landing" }]);
-      if (error && error.code !== "23505") setEr("Something went wrong. Try again.");
-      else setOk(true);
-    } catch { setEr("Something went wrong. Try again."); }
-    finally { setLd(false); }
-  };
-  if (ok) return <div className="hero-ok">You're on the list. Welcome to Luca.</div>;
-  return (
-    <>
-      <form ref={ref} className={cls} onSubmit={go}>
-        <input type="email" value={v} onChange={e=>{setV(e.target.value);setEr('')}} placeholder={ph} required/>
-        <button type="submit" disabled={ld}>{ld ? '…' : btn}</button>
-      </form>
-      {er && <div className="hero-err">{er}</div>}
-    </>
-  );
-};
 
-/* ─── Hero ─── */
-const Hero = () => (
-  <section id="hero" className="hero">
-    <div className="shell hero-inner">
-      <div className="eyebrow">The autonomous financial agent</div>
-      <h1 className="hero-title">
-        <span className="word">Your</span>{' '}
-        <span className="word">money</span>{' '}
-        <span className="word">has</span>{' '}
-        <span className="word">an</span>{' '}
-        <span className="word"><em>agent</em></span>{' '}
-        <span className="word">now.</span>
-      </h1>
-      <p className="hero-sub">
-        Luca watches every dollar around the clock. Catches fees before they post. Finds money you're losing.
-        Tells you exactly what to do — you just tap approve.
-      </p>
-      <EmailForm source="hero"/>
-      <div className="hero-micro">
-        <span>Bank-grade encryption</span>
-        <span>Read-only access</span>
-        <span>Cancel any time</span>
-      </div>
-    </div>
-  </section>
-);
+    const particles = [];
+    for (let i = 0; i < 80; i++) {
+      particles.push(new Particle());
+    }
 
-/* ─── Statement (white, sans split) ─── */
-const Statement = () => (
-  <section className="section theme-light shell">
-    <h2 className="statement">
-      Luca is an autonomous agent built for your money.{' '}
-      <span className="fade">It watches every account, finds money you're losing, and tells you exactly what to do.</span>
-    </h2>
-  </section>
-);
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
 
-/* ─── Capabilities cycle (Harvey-style) ─── */
-const CAPS = [
-  "Fee Disputes",
-  "Subscription Audits",
-  "Rate Negotiations",
-  "Tax Optimization",
-  "Cash Flow Planning",
-  "Investment Rebalancing",
-  "Debt Strategy",
-];
-
-const Capabilities = () => {
-  const [ref, seen] = useInView(.2);
-  const [active, setActive] = useState(0);
-  useEffect(() => {
-    if (!seen) return;
-    const id = setInterval(() => setActive(a => (a + 1) % CAPS.length), 1400);
-    return () => clearInterval(id);
-  }, [seen]);
-  return (
-    <section className="section theme-light shell" ref={ref}>
-      <div className="cap-eyebrow">What Luca does for you, every single day —</div>
-      <div className="cap-list">
-        {CAPS.map((c, i) => (
-          <div key={i} className={`cap-item ${i === active ? 'active' : ''}`}>{c}</div>
-        ))}
-      </div>
-      <a href="#agent" className="cap-cta">See it in action →</a>
-    </section>
-  );
-};
-
-/* ─── Live agent feed ─── */
-const FEED = [
-  { time:"2:34 AM", text:(<>Disputed a <span className="loss">−$35</span> overdraft fee from Chase. Letter drafted, ready to send.</>), kind:"approve" },
-  { time:"3:11 AM", text:(<>Found <span className="loss">−$9.99/mo</span> for iCloud you haven't used in 92 days. Cancellation prepared.</>), kind:"approve" },
-  { time:"4:48 AM", text:(<>Flagged <span className="save">+$340</span> in deductible business expenses. Added to your 2026 tax folder.</>), kind:"done" },
-  { time:"5:22 AM", text:(<>Your HYSA earns 0.01%. Switching to Ally at 4.2% would earn you <span className="save">+$1,240/yr</span>.</>), kind:"approve" },
-  { time:"6:09 AM", text:(<>Safe to spend today: <strong>$184</strong>. Already accounts for rent, groceries, Tuesday card payment.</>), kind:"done" },
-];
-
-const AgentFeed = () => {
-  const [ref, seen] = useInView(.2);
-  const [recovered, triggerRecovered] = useCounter(1395, 1400);
-  const [items, setItems] = useState(FEED);
-  const rowsRef = useRef([]);
-  const headRef = useReveal();
-
-  useEffect(() => {
-    if (!seen) return;
-    triggerRecovered();
-    rowsRef.current.forEach((r, i) => {
-      if (!r) return;
-      setTimeout(() => r.classList.add('in'), 80 + i * 140);
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
-  }, [seen, triggerRecovered]);
 
-  const onApprove = idx => setItems(prev => prev.map((it, i) => i === idx ? {...it, kind:"done"} : it));
-  const pending = items.filter(i => i.kind === "approve").length;
-  const completed = items.filter(i => i.kind === "done").length;
+    // Data
+    const agentCards = [
+      { color: 'orange', icon: '🛡️', title: 'Fee Detected — Chase Bank charged $35', text: 'I found an overdraft fee on your Chase account. I have generated a dispute script using CFPB consumer protection guidelines. This type of fee is reversed 73% of the time when disputed correctly.', btn: 'Copy Weapon' },
+      { color: 'green', icon: '💰', title: 'Rate Arbitrage Found — $840/year sitting on the table', text: 'Your Chase savings account earns 0.4%. Marcus is paying 4.8% today. Moving your $21,000 earns you an extra $840 this year with zero risk.', btn: 'Show Me How' },
+      { color: 'blue', icon: '📊', title: 'Tax Deduction Caught — $127 write-off identified', text: 'I matched your $127 purchase at Best Buy to a 100% legal home office equipment deduction. At your tax bracket this saves you approximately $28. Tap to log it before you forget.', btn: 'Log to Ledger' },
+      { color: 'red', icon: '🤖', title: 'Zombie Subscription Found — $15.99/month wasted', text: 'You have paid $191.88 to Peacock over the last 12 months. Based on your transaction patterns you have not streamed anything in 94 days. I found their cancellation page and drafted the opt-out email.', btn: 'Execute Cancel' },
+      { color: 'purple', icon: '📈', title: 'Portfolio Drift Detected — Rebalancing needed', text: 'Your tech allocation has grown to 34% of your portfolio after recent gains. Your target was 25%. I have calculated the exact trades needed to rebalance while minimizing tax impact.', btn: 'See Recommendation' }
+    ];
 
-  return (
-    <section id="agent" className="section theme-cream shell" ref={ref}>
-      <div className="section-head reveal" ref={headRef}>
-        <div className="section-num">§ 01 — Live Agent</div>
-        <h2 className="section-title">While you slept, <em>Luca went to work.</em></h2>
-        <p className="section-sub">Last night's decisions, ready for review. Tap approve to fix things in one second — the buttons below are real.</p>
-      </div>
+    const powers = [
+      { icon: '🛡️', title: 'It fights for you.', text: 'Banks, subscriptions, and corporations count on your silence. Luca never stays silent. The moment a fee hits your account Luca researches the exact dispute process, writes the script, and hands you the weapon. You just copy and paste.', example: 'Average user recovers $340/year in reversed fees.' },
+      { icon: '🔍', title: 'It finds what you are missing.', text: 'Hidden tax deductions. Zombie subscriptions. Savings accounts earning half what they should. Rate arbitrage opportunities. Luca scans every transaction, every account, every rate in real time so nothing slips through.', example: 'Average user finds $1,200/year in missed opportunities.' },
+      { icon: '🧠', title: 'It thinks ahead.', text: 'Luca does not just show you what happened. It models what is coming. Your safe to spend balance. Your retirement trajectory. Whether you are on track for your goals. You always know what your next move should be.', example: 'Average user increases savings rate by 12% in 60 days.' }
+    ];
 
-      <div className="agent">
-        <div className="agent-head">
-          <div className="agent-head-l"><span className="status-dot"/>Overnight Brief · May 22</div>
-          <div className="agent-head-r">
-            <span>Pending <b>{pending}</b></span>
-            <span>Completed <b>{completed}</b></span>
-            <span>Recovered <b>{fmt(recovered)}</b></span>
-          </div>
-        </div>
-        <div>
-          {items.map((it, i) => (
-            <div key={i} className="feed-row" ref={el => rowsRef.current[i] = el}>
-              <div className="feed-time">{it.time}</div>
-              <div className="feed-text">{it.text}</div>
-              {it.kind === "approve"
-                ? <button className="feed-btn" onClick={() => onApprove(i)}>Approve</button>
-                : <span className="feed-btn done">Done</span>}
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+    const questions = [
+      { q: 'Can I afford a house in 3 years?', a: 'Based on your current savings rate of $1,170/month and your Ally HYSA at 4.2% APY — yes, but tight. By October 2028 you will have $47,200 saved. For a 20% down payment on a $380,000 home you need $76,000. The gap is $28,800. The fastest way to close it: move your $32,400 checking balance to your HYSA today — that earns $1,360 extra this year. And eliminating your 3 zombie subscriptions frees up $47/month. Combined you hit your goal 8 months early.' },
+      { q: 'Am I paying too much in fees?', a: 'In the last 90 days I found 4 fees totaling $127 on your accounts. A $35 overdraft fee from Chase that I can dispute right now with an 80% success rate. A $12 monthly maintenance fee from Wells Fargo that you qualify to have waived. A $40 late fee from Citi that I can have reversed with one script. And $40 in out-of-network ATM fees that I can eliminate by helping you switch to a fee-free account. Total recoverable: $127. Want me to start with the Chase dispute?' },
+      { q: 'Where did my money go last month?', a: 'Last month $5,847 came in. Here is where it went: $1,840 rent, $1,240 dining and bars which is 34% above your 3-month average, $380 subscriptions of which $127 are services you have not used in over 60 days, $290 groceries, $220 transportation, and $1,877 saved. The biggest opportunity: your dining spend. Bringing it back to your average saves $354/month. That is $4,248/year — enough to max your Roth IRA.' }
+    ];
 
-/* ─── Morning brief ─── */
-const BRIEF = "Morning Alex. Net worth is up $1,840 this month. Your checking has $12,000 sitting idle earning nothing — that's $42 in interest you're losing every month. Your student loan at 6.8% is bleeding $94. Two fixes ready. Want to approve both?";
+    const stats = [
+      { num: '$1,200', label: 'Average annual savings found per user' },
+      { num: '$340', label: 'Average fees recovered per user per year' },
+      { num: '73%', label: 'Fee reversal success rate' },
+      { num: '24/7', label: 'Hours your agent is working' }
+    ];
 
-const ACCOUNTS = [
-  { bank:"Chase",    name:"Checking",         bal:32400 },
-  { bank:"Ally",     name:"HYSA · 4.2% APY",  bal:8100 },
-  { bank:"Fidelity", name:"401(k)",           bal:84200 },
-  { bank:"Fidelity", name:"Roth IRA",         bal:19400 },
-  { bank:"Navient",  name:"Student Loans",    bal:-18000 },
-];
+    const capabilities = [
+      'Monitors every account in real time',
+      'Catches fees the moment they hit',
+      'Writes dispute scripts that win',
+      'Finds zombie subscriptions and cancels them',
+      'Flags tax deductions as they happen',
+      'Builds your deduction ledger automatically',
+      'Monitors HYSA and CD rates daily',
+      'Alerts you to refinancing opportunities',
+      'Tracks your portfolio against benchmarks',
+      'Detects tax loss harvesting opportunities',
+      'Monitors your credit utilization',
+      'Calculates your true safe to spend balance',
+      'Projects your retirement trajectory',
+      'Tracks every savings goal in real time',
+      'Detects when your paycheck is late',
+      'Warns you before overdrafts happen',
+      'Finds insurance coverage gaps',
+      'Reminds you of quarterly tax deadlines'
+    ];
 
-const MorningBrief = () => {
-  const [ref, seen] = useInView(.3);
-  const { text, done, stream } = useWordStream();
-  const [worth, triggerWorth] = useCounter(126100, 2000);
-  const headRef = useReveal();
+    // Populate agent feed
+    const agentFeed = document.getElementById('agentFeed');
+    agentCards.forEach((card, i) => {
+      const el = document.createElement('div');
+      el.className = `agent-card ${card.color}`;
+      el.style.animation = `slideIn 0.6s ease-out ${i * 2}s both`;
+      el.innerHTML = `<div class="card-header">${card.icon} ${card.title}</div><div class="card-text">${card.text}</div><button class="card-button">${card.btn}</button>`;
+      agentFeed.appendChild(el);
+    });
 
-  useEffect(() => {
-    if (seen){
-      setTimeout(() => stream(BRIEF, 50), 300);
-      triggerWorth();
+    // Loop agent feed
+    setInterval(() => {
+      const cards = document.querySelectorAll('.agent-card');
+      cards.forEach(c => c.remove());
+      agentCards.forEach((card, i) => {
+        const el = document.createElement('div');
+        el.className = `agent-card ${card.color}`;
+        el.style.animation = `slideIn 0.6s ease-out ${i * 2}s both`;
+        el.innerHTML = `<div class="card-header">${card.icon} ${card.title}</div><div class="card-text">${card.text}</div><button class="card-button">${card.btn}</button>`;
+        agentFeed.appendChild(el);
+      });
+    }, 13000);
+
+    // Populate powers
+    const powersGrid = document.getElementById('powersGrid');
+    powers.forEach((p, i) => {
+      const el = document.createElement('div');
+      el.className = 'power-card';
+      el.innerHTML = `<div class="power-icon">${p.icon}</div><div class="power-title">${p.title}</div><div class="power-text">${p.text}</div><div class="power-example">${p.example}</div>`;
+      powersGrid.appendChild(el);
+    });
+
+    // Populate questions
+    const questionChips = document.getElementById('questionChips');
+    questions.forEach((q, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'chip';
+      btn.textContent = q.q;
+      btn.onclick = () => showAnswer(i);
+      questionChips.appendChild(btn);
+    });
+
+    let currentQuestion = null;
+
+    function showAnswer(i) {
+      currentQuestion = i;
+      document.querySelectorAll('.chip').forEach((c, idx) => {
+        c.classList.toggle('active', idx === i);
+      });
+
+      const chat = document.getElementById('demoChat');
+      chat.innerHTML = '';
+
+      const userMsg = document.createElement('div');
+      userMsg.className = 'chat-message';
+      userMsg.innerHTML = `<div class="user-message"><div class="user-bubble">${questions[i].q}</div></div>`;
+      chat.appendChild(userMsg);
+
+      setTimeout(() => {
+        const lucaMsg = document.createElement('div');
+        lucaMsg.className = 'chat-message';
+        lucaMsg.innerHTML = '<div class="luca-bubble"></div>';
+        chat.appendChild(lucaMsg);
+
+        const bubble = lucaMsg.querySelector('.luca-bubble');
+        const text = questions[i].a;
+        const words = text.split(' ');
+        let idx = 0;
+
+        const interval = setInterval(() => {
+          if (idx < words.length) {
+            let word = words[idx];
+            // Highlight dollar amounts
+            if (/\$[\d,]+/.test(word)) {
+              bubble.innerHTML += `<span class="highlight">${word}</span> `;
+            } else {
+              bubble.innerHTML += word + ' ';
+            }
+            idx++;
+          } else {
+            clearInterval(interval);
+          }
+        }, 30);
+      }, 600);
     }
-  }, [seen, stream, triggerWorth]);
 
-  return (
-    <section id="brief" className="section theme-light shell" ref={ref}>
-      <div className="section-head reveal" ref={headRef}>
-        <div className="section-num">§ 02 — Morning Brief</div>
-        <h2 className="section-title">Every morning. <em>One paragraph.</em></h2>
-        <p className="section-sub">No dashboards. No charts to read. Just what changed, what's wrong, and what to do — in plain language.</p>
-      </div>
+    // Statement
+    const statements = [
+      'Real financial intelligence has always belonged to the wealthy.',
+      'They have advisors, agents, and attorneys working for them around the clock.',
+      'You have a bank app that shows you charts.',
+      'Luca changes that.',
+      'The autonomous financial agent. Built for everyone.'
+    ];
 
-      <div className="brief-grid">
-        <div className="brief-panel">
-          <div className="brief-h">
-            <div className="brief-h-icon"><Mark size={18} fill="#2D2A6E" bg="#FFFFFF"/></div>
-            <div className="brief-h-l">Luca · 7:04 AM</div>
-            <div className="brief-h-r">{done ? "Complete" : "Streaming"}</div>
-          </div>
-          <div className="brief-text">
-            {text}{!done && <span className="brief-cursor"/>}
-          </div>
-        </div>
+    const statementEl = document.getElementById('statement');
+    statements.forEach((s, i) => {
+      const line = document.createElement('div');
+      line.className = `statement-line ${i === 4 ? 'purple' : ''}`;
+      line.textContent = s;
+      line.style.animationDelay = `${i * 1.2}s`;
+      statementEl.appendChild(line);
+    });
 
-        <div className="brief-side">
-          <div className="brief-side-h">Net worth · This month</div>
-          <div className="networth-num">${worth.toLocaleString()}</div>
-          <div className="networth-delta">+ $1,840 since April</div>
-          {ACCOUNTS.map((a, i) => (
-            <div key={i} className="acct">
-              <div>
-                <div className="acct-bank">{a.bank}</div>
-                <div className="acct-name">{a.name}</div>
-              </div>
-              <div className={`acct-bal ${a.bal < 0 ? 'neg' : ''}`}>{a.bal < 0 ? '−' : ''}{fmt(a.bal)}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
+    // Populate stats
+    const statsGrid = document.getElementById('statsGrid');
+    stats.forEach((s, i) => {
+      const el = document.createElement('div');
+      el.className = 'stat';
+      el.style.animationDelay = `${i * 0.1}s`;
+      el.innerHTML = `<div class="stat-number" data-target="${s.num.replace(/[^\d]/g, '')}">0</div><div class="stat-label">${s.label}</div>`;
+      statsGrid.appendChild(el);
+    });
 
-/* ─── Ask Luca ─── */
-const QA = [
-  { q:"Can I afford a house in 3 years?",
-    a:"Based on your savings rate of $1,170/month and HYSA at 4.2% APY — yes. By October 2028 you'll have $47,200 saved. For a $400K home with 10% down, you need $40K. You're ahead of schedule by four months." },
-  { q:"Should I pay off debt or invest?",
-    a:"Your student loan is at 6.8%. Your 401(k) returned 11.2% last year. Mathematically, invest first. But guaranteed beats expected — pay $300/mo extra on the loan and put $700 in the 401(k). Best of both." },
-  { q:"Where did my money go last month?",
-    a:"You spent $4,840. Top three: $1,240 on dining, $890 on subscriptions (4 unused), $640 on rideshare. Dining is up 38% from your trailing average. The unused subs are $214/mo — want me to cancel them?" },
-];
+    // Populate capabilities
+    const capGrid = document.getElementById('capabilitiesGrid');
+    capabilities.forEach((c, i) => {
+      const el = document.createElement('div');
+      el.className = 'capability-item';
+      el.style.animationDelay = `${i * 0.05}s`;
+      el.innerHTML = `<div class="capability-dot"></div><span>${c}</span>`;
+      capGrid.appendChild(el);
+    });
 
-const AskLuca = () => {
-  const [active, setActive] = useState(null);
-  const { text, done, stream } = useWordStream();
-  const headRef = useReveal();
-  const pick = i => { setActive(i); stream(QA[i].a, 42); };
-  return (
-    <section id="ask" className="section theme-cream shell">
-      <div className="section-head reveal" ref={headRef}>
-        <div className="section-num">§ 03 — Ask Luca</div>
-        <h2 className="section-title">Any question. <em>A real answer.</em></h2>
-        <p className="section-sub">Luca knows your accounts, your rates, your goals. Pick a question — watch it respond using your actual numbers.</p>
-      </div>
-      <div className="ask-grid">
-        <div>
-          <div className="ask-q-h">Try one</div>
-          {QA.map((it, i) => (
-            <button key={i} className={`qbtn ${active === i ? 'active' : ''}`} onClick={() => pick(i)}>
-              {it.q}
-            </button>
-          ))}
-        </div>
-        <div className="ask-a">
-          <div className="ask-a-head">
-            <Mark size={16} fill="#2D2A6E" bg="#FFFFFF"/>
-            <div className="ask-a-l">Luca · {active === null ? "ready" : done ? "complete" : "thinking"}</div>
-          </div>
-          <div className="ask-a-body">
-            {active === null
-              ? <span className="ask-a-empty">Pick a question on the left.</span>
-              : <>{text}{!done && <span className="brief-cursor"/>}</>}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+    // Scroll animations
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          if (e.target.classList.contains('stat-number')) {
+            countUp(e.target);
+          }
+        }
+      });
+    }, { threshold: 0.2 });
 
-/* ─── Stats (DARK) ─── */
-const STATS = [
-  { label:"Returned to users this year",    val:"$2,847,392" },
-  { label:"People on the waitlist",          val:"8,420+" },
-  { label:"Decisions made per day",          val:"1,284" },
-  { label:"Average saved per user, per year",val:"$3,408" },
-  { label:"Hours of money admin saved/mo",   val:"6.2" },
-];
+    document.querySelectorAll('.section-header, .power-card').forEach(el => {
+      observer.observe(el);
+    });
 
-const Stats = () => {
-  const headRef = useReveal();
-  return (
-    <section className="section theme-dark shell">
-      <div className="reveal" ref={headRef}>
-        <div className="section-num">§ 04 — Measurable Results</div>
-        <h2 className="stats-title">Helping people stay focused on what matters — not their checking balance.</h2>
-      </div>
-      <div className="stat-list">
-        {STATS.map((s, i) => (
-          <div key={i} className="stat">
-            <div className="stat-label">{s.label}</div>
-            <div className="stat-num">{s.val}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
+    function countUp(el) {
+      const target = parseInt(el.dataset.target);
+      let current = 0;
+      const increment = target / 60;
+      const interval = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+          el.textContent = el.parentElement.parentElement.querySelector('.stat-label')?.previousElementSibling?.textContent || target;
+          clearInterval(interval);
+        } else {
+          el.textContent = Math.floor(current);
+        }
+      }, 16);
+    }
 
-/* ─── Pricing (CREAM) ─── */
-const Pricing = () => {
-  const headRef = useReveal();
-  return (
-    <section id="pricing" className="section theme-cream shell">
-      <div className="section-head reveal" ref={headRef} style={{textAlign:"center",margin:"0 auto clamp(56px,7vw,96px)"}}>
-        <div className="section-num" style={{justifyContent:"center"}}>§ 05 — Access</div>
-        <h2 className="section-title">One plan. <em>That's it.</em></h2>
-      </div>
-      <div className="price-wrap">
-        <div className="price-card">
-          <div className="price-tag">Luca Pro</div>
-          <div className="price-num">$14.99<small>/ month</small></div>
-          <div className="price-sub">Launching June 2026 · Waitlist members locked at this price for life</div>
-          <div className="price-list">
-            <div className="price-li">Autonomous agent that monitors every account, 24/7</div>
-            <div className="price-li">Overnight decisions waiting for approval each morning</div>
-            <div className="price-li">Fee disputes, subscription audits, rate negotiations on autopilot</div>
-            <div className="price-li">Ask Luca any question — answers use your actual numbers</div>
-            <div className="price-li">Tax tracking, safe-to-spend, retirement projections, debt strategy</div>
-            <div className="price-li">Bank-grade encryption · Read-only access · Cancel anytime</div>
-          </div>
-          <a href="#join" className="price-cta">Join the waitlist · Free</a>
-          <div className="price-foot">No card. No commitment. Just be first.</div>
-        </div>
-      </div>
-    </section>
-  );
-};
+    // Email handling
+    async function handleEmail(e, source) {
+      e.preventDefault();
+      const form = e.target;
+      const email = form.querySelector('input[type="email"]').value;
+      const button = form.querySelector('button');
 
-/* ─── Final (DARK) ─── */
-const Final = () => (
-  <section id="join" className="final theme-dark">
-    <div className="shell final-inner">
-      <h2 className="final-title">Wake up to <em>fewer problems.</em></h2>
-      <p className="final-sub">Join the waitlist. We'll let you in when private beta opens.</p>
-      <EmailForm source="final" cls="final-form" btn="Join the waitlist"/>
-      <div className="final-micro">
-        <span>8,420 already joined</span>
-        <span>Launching June 2026</span>
-      </div>
-    </div>
-  </section>
-);
+      button.disabled = true;
+      button.textContent = '...';
 
-/* ─── Footer (DARK) ─── */
-const Footer = () => (
-  <footer className="footer theme-dark">
-    <div className="shell footer-inner">
-      <div className="footer-l">© 2026 Luca Financial · Not yet a registered investment advisor</div>
-      <div className="footer-r">
-        <a href="#agent">Agent</a>
-        <a href="#brief">Brief</a>
-        <a href="#ask">Ask</a>
-        <a href="#pricing">Pricing</a>
-      </div>
-    </div>
-  </footer>
-);
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          },
+          body: JSON.stringify({ email, source })
+        });
 
-const App = () => (
-  <>
-    <TopBar/>
-    <Hero/>
-    <Statement/>
-    <Capabilities/>
-    <AgentFeed/>
-    <MorningBrief/>
-    <AskLuca/>
-    <Stats/>
-    <Pricing/>
-    <Final/>
-    <Footer/>
-  </>
-);
+        if (res.ok || res.status === 409) {
+          form.innerHTML = '<div class="form-success">You are on the list. Luca will be in touch.</div>';
+        } else {
+          button.disabled = false;
+          button.textContent = source === 'hero' ? 'Join the waitlist' : 'Join the waitlist';
+        }
+      } catch (err) {
+        button.disabled = false;
+        button.textContent = source === 'hero' ? 'Join the waitlist' : 'Join the waitlist';
+      }
+    }
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+    // Scroll header visibility
+    const sectionHeaders = document.querySelectorAll('.section-header');
+    const headerObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sectionHeaders.forEach(h => headerObserver.observe(h));
   </script>
 </body>
 </html>
