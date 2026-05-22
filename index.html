@@ -5,25 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Luca — The autonomous financial agent.</title>
   <meta name="description" content="Luca watches every dollar 24/7. Finds problems before you know they exist. Delivers ready-to-execute solutions. You just tap approve.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%232D2A6E'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%23F8F5EE'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%23F8F5EE'/></g></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%232D2A6E'><rect x='46' y='14' width='8' height='8' rx='1.5'/><rect x='78' y='46' width='8' height='8' rx='1.5'/><rect x='46' y='78' width='8' height='8' rx='1.5'/><rect x='14' y='46' width='8' height='8' rx='1.5'/><rect x='69' y='23' width='8' height='8' rx='1.5' transform='rotate(45 73 27)'/><rect x='69' y='69' width='8' height='8' rx='1.5' transform='rotate(45 73 73)'/><rect x='23' y='69' width='8' height='8' rx='1.5' transform='rotate(45 27 73)'/><rect x='23' y='23' width='8' height='8' rx='1.5' transform='rotate(45 27 27)'/><circle cx='50' cy='50' r='17'/><circle cx='50' cy='50' r='11' fill='%23FFFFFF'/><circle cx='50' cy='50' r='6'/><circle cx='50' cy='50' r='2.2' fill='%23FFFFFF'/></g></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
 :root{
-  --bg:#F8F5EE;
-  --bg-2:#F2EEE3;
   --paper:#FFFFFF;
+  --cream:#F8F5EE;
+  --bg-dark:#0B0B0E;
+  --bg-dark-2:#15151A;
+
   --ink:#0E0E12;
   --ink-2:#26252A;
-  --muted:#5C5A55;
-  --dim:#8E8B82;
+  --muted:#6B6862;
+  --muted-2:#9A968D;
+  --dim:#B8B3A7;
+
+  --ink-on-dark:#F5F1E8;
+  --muted-on-dark:#A19D92;
+  --dim-on-dark:#5C594F;
+
   --line:#E5E1D5;
   --line-2:#D5D0C2;
-  --line-3:#BFB9A8;
+  --line-dark:#26252A;
+  --line-dark-2:#3A3833;
+
   --accent:#2D2A6E;
-  --accent-hi:#403E8C;
+  --accent-hi:#7B86E8;
   --accent-soft:rgba(45,42,110,.05);
+
   --green:#3F7A52;
   --red:#9C3A2E;
 
@@ -39,46 +50,67 @@
   --shadow-lg:0 1px 2px rgba(20,18,12,.04), 0 24px 60px -12px rgba(20,18,12,.10), 0 8px 24px rgba(20,18,12,.04);
 }
 *,*::before,*::after{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;font-feature-settings:"ss01","cv11"}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 html{scroll-behavior:smooth}
-body{
-  background:
-    radial-gradient(1200px 800px at 90% -10%, rgba(45,42,110,.04), transparent 60%),
-    radial-gradient(900px 700px at -10% 30%, rgba(212,182,106,.05), transparent 55%),
-    var(--bg);
-  min-height:100vh;overflow-x:hidden;
-}
-::selection{background:var(--accent);color:var(--bg)}
+body{min-height:100vh;overflow-x:hidden}
+::selection{background:var(--accent);color:#fff}
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:0;background:0;color:inherit}
 input{font-family:inherit}
 
 .shell{position:relative;max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
 
+/* ─── theme blocks ─── */
+.theme-light{background:var(--paper);color:var(--ink)}
+.theme-cream{background:var(--cream);color:var(--ink)}
+.theme-dark{background:var(--bg-dark);color:var(--ink-on-dark)}
+
 /* ─── topbar ─── */
-.topbar{position:sticky;top:0;z-index:50;background:rgba(248,245,238,.78);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);border-bottom:1px solid var(--line)}
+.topbar{position:sticky;top:0;z-index:50;backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);background:rgba(11,11,14,.65);border-bottom:1px solid rgba(255,255,255,.06);color:var(--ink-on-dark);transition:background .3s,color .3s,border-color .3s}
+.topbar.is-light{background:rgba(255,255,255,.78);color:var(--ink);border-bottom:1px solid var(--line)}
 .topbar-inner{display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{display:flex;align-items:center;gap:11px;font-weight:500;font-size:15.5px;letter-spacing:-.012em}
+.brand{display:flex;align-items:center;gap:11px;font-weight:500;font-size:16px;letter-spacing:-.012em}
+.brand-name{font-family:var(--serif);font-weight:400;font-size:22px;letter-spacing:-.02em;font-variation-settings:"opsz" 144}
 .nav{display:flex;align-items:center;gap:36px}
-.nav-link{font-size:13.5px;color:var(--muted);transition:color .2s;letter-spacing:-.005em}
-.nav-link:hover{color:var(--ink)}
-.topbar-cta{font-size:13.5px;color:var(--ink);padding:9px 16px;border:1px solid var(--line-2);border-radius:100px;background:var(--paper);box-shadow:var(--shadow-sm);transition:transform .2s,border-color .2s}
-.topbar-cta:hover{transform:translateY(-1px);border-color:var(--line-3)}
+.nav-link{font-size:13.5px;color:var(--muted-on-dark);transition:color .2s;letter-spacing:-.005em}
+.topbar.is-light .nav-link{color:var(--muted)}
+.nav-link:hover{color:var(--ink-on-dark)}
+.topbar.is-light .nav-link:hover{color:var(--ink)}
+.topbar-cta{font-size:13.5px;padding:10px 18px;border-radius:100px;background:var(--paper);color:var(--ink);font-weight:500;letter-spacing:-.005em;transition:transform .2s,background .2s}
+.topbar-cta:hover{transform:translateY(-1px);background:#fff}
 @media(max-width:760px){.nav{display:none}}
 
-/* ─── hero ─── */
-.hero{padding:clamp(80px,14vw,180px) 0 clamp(80px,12vw,160px);position:relative}
-.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:48px}
-.eyebrow::before{content:"";width:24px;height:1px;background:var(--line-3)}
+/* ─── HERO (dark) ─── */
+.hero{
+  position:relative;
+  background:
+    radial-gradient(800px 600px at 80% 30%, rgba(123,134,232,.10), transparent 60%),
+    radial-gradient(700px 500px at 10% 80%, rgba(212,182,106,.08), transparent 60%),
+    linear-gradient(180deg, #0B0B0E 0%, #0E0E14 100%);
+  color:var(--ink-on-dark);
+  padding:clamp(80px,12vw,160px) 0 clamp(80px,12vw,160px);
+  overflow:hidden;
+  border-bottom:1px solid var(--line-dark);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='.5'/></svg>");
+  opacity:.06;mix-blend-mode:overlay;
+}
+.hero-inner{position:relative;z-index:1;max-width:920px}
+
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.14em;margin-bottom:56px}
+.eyebrow::before{content:"";width:24px;height:1px;background:rgba(255,255,255,.18)}
 
 .hero-title{
   font-family:var(--serif);font-weight:400;
-  font-size:clamp(48px,7.8vw,108px);
-  line-height:.96;letter-spacing:-.028em;
-  color:var(--ink);margin:0 0 40px;max-width:14ch;
+  font-size:clamp(54px,9vw,128px);
+  line-height:.94;letter-spacing:-.028em;
+  color:var(--ink-on-dark);margin:0 0 40px;
   font-variation-settings:"opsz" 144,"SOFT" 50;
+  max-width:14ch;
 }
-.hero-title em{font-style:italic;font-weight:400;color:var(--accent)}
+.hero-title em{font-style:italic;font-weight:400;color:var(--accent-hi)}
 .hero-title .word{display:inline-block;opacity:0;transform:translateY(28px);animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards}
 .hero-title .word:nth-child(1){animation-delay:.06s}
 .hero-title .word:nth-child(2){animation-delay:.14s}
@@ -90,64 +122,83 @@ input{font-family:inherit}
 
 .hero-sub{
   font-family:var(--sans);font-weight:400;
-  font-size:clamp(17px,1.8vw,21px);line-height:1.5;
-  color:var(--muted);max-width:48ch;margin:0 0 56px;
+  font-size:clamp(17px,1.7vw,20px);line-height:1.55;
+  color:var(--muted-on-dark);max-width:56ch;margin:0 0 48px;
   letter-spacing:-.008em;
   opacity:0;animation:rise 1s .56s cubic-bezier(.2,.7,.2,1) forwards;
 }
 
 .hero-form{
-  display:flex;gap:0;align-items:center;
-  background:var(--paper);
-  border:1px solid var(--line-2);border-radius:100px;
+  display:flex;align-items:center;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.10);border-radius:100px;
   padding:7px;max-width:520px;
-  box-shadow:var(--shadow);
-  transition:border-color .25s,box-shadow .25s,transform .25s;
+  transition:border-color .25s,box-shadow .25s,background .25s;
   opacity:0;animation:rise 1s .72s cubic-bezier(.2,.7,.2,1) forwards;
+  backdrop-filter:blur(8px);
 }
-.hero-form:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft),var(--shadow)}
-.hero-form input{flex:1;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink);padding:14px 22px;letter-spacing:-.008em}
-.hero-form input::placeholder{color:var(--dim)}
-.hero-form button{background:var(--ink);color:var(--bg);font-weight:500;font-size:14.5px;padding:14px 26px;border-radius:100px;letter-spacing:-.005em;transition:transform .2s,background .2s}
-.hero-form button:hover{background:var(--accent);transform:translateY(-1px)}
+.hero-form:focus-within{border-color:var(--accent-hi);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(123,134,232,.12)}
+.hero-form input{flex:1;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink-on-dark);padding:14px 22px;letter-spacing:-.008em}
+.hero-form input::placeholder{color:var(--dim-on-dark)}
+.hero-form button{background:var(--paper);color:var(--ink);font-weight:500;font-size:14.5px;padding:14px 26px;border-radius:100px;letter-spacing:-.005em;transition:transform .2s,background .2s}
+.hero-form button:hover{background:#fff;transform:translateY(-1px)}
 .hero-form button:disabled{opacity:.5;cursor:wait}
 .hero-form.shake{animation:shake .4s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 
-.hero-micro{display:flex;flex-wrap:wrap;gap:24px;margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;opacity:0;animation:rise 1s .88s cubic-bezier(.2,.7,.2,1) forwards}
+.hero-micro{display:flex;flex-wrap:wrap;gap:24px;margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em;opacity:0;animation:rise 1s .88s cubic-bezier(.2,.7,.2,1) forwards}
 .hero-micro span{display:flex;align-items:center;gap:8px}
-.hero-micro span::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--line-3)}
+.hero-micro span::before{content:"";width:3px;height:3px;border-radius:50%;background:var(--dim-on-dark)}
 
-.hero-ok{font-family:var(--serif);font-style:italic;color:var(--accent);font-size:20px;padding:16px 6px}
-.hero-err{color:var(--red);font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;padding:12px 6px 0}
+.hero-ok{font-family:var(--serif);font-style:italic;color:var(--accent-hi);font-size:22px;padding:18px 6px;font-variation-settings:"opsz" 144}
+.hero-err{color:#E07C6E;font-family:var(--mono);font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;padding:12px 6px 0}
 
 /* ─── section frame ─── */
-.section{padding:clamp(96px,16vw,200px) 0;border-top:1px solid var(--line)}
+.section{padding:clamp(96px,16vw,200px) 0}
+.section + .section{border-top:1px solid var(--line)}
+.theme-dark + .theme-dark, .theme-dark.section{border-top-color:var(--line-dark)}
+
+/* ─── Statement (sans split) ─── */
+.statement{
+  font-family:var(--sans);font-weight:500;
+  font-size:clamp(36px,5.2vw,68px);
+  line-height:1.08;letter-spacing:-.022em;
+  margin:0;max-width:18ch;
+}
+.statement .fade{color:var(--muted-2)}
+.statement .dark-fade{color:#5A5852}
+
+/* ─── Capabilities cycle (Harvey-style list) ─── */
+.cap-eyebrow{font-family:var(--sans);font-size:clamp(20px,2.4vw,28px);font-weight:500;color:var(--ink);letter-spacing:-.012em;margin-bottom:48px;max-width:30ch}
+.cap-list{display:flex;flex-direction:column;gap:clamp(8px,1.5vw,18px);margin-bottom:64px}
+.cap-item{
+  font-family:var(--serif);font-weight:400;
+  font-size:clamp(40px,6.4vw,84px);
+  line-height:1.08;letter-spacing:-.022em;
+  color:#D8D4C7;
+  transition:color .5s ease;
+  cursor:default;font-variation-settings:"opsz" 144;
+}
+.cap-item.active{color:var(--ink)}
+.cap-cta{display:inline-block;font-size:14.5px;padding:14px 24px;border:1px solid var(--line-2);border-radius:100px;color:var(--ink);background:var(--paper);box-shadow:var(--shadow-sm);transition:transform .2s,border-color .2s,box-shadow .2s;letter-spacing:-.005em;font-weight:500}
+.cap-cta:hover{transform:translateY(-1px);border-color:var(--line-3);box-shadow:var(--shadow)}
+
+/* ─── Section heads ─── */
 .section-head{margin-bottom:clamp(56px,7vw,96px);max-width:880px}
 .section-num{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;margin-bottom:24px;display:flex;align-items:center;gap:10px}
-.section-num::before{content:"";width:18px;height:1px;background:var(--accent);opacity:.5}
-.section-title{
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(38px,5.4vw,72px);
-  line-height:1;letter-spacing:-.024em;
-  margin:0 0 24px;font-variation-settings:"opsz" 144;
-}
-.section-title em{font-style:italic;color:var(--accent);font-weight:400}
-.section-sub{font-size:clamp(16px,1.6vw,19px);line-height:1.5;color:var(--muted);max-width:62ch;margin:0;letter-spacing:-.008em}
+.section-num::before{content:"";width:18px;height:1px;background:var(--accent);opacity:.4}
+.theme-dark .section-num{color:var(--accent-hi)}
+.theme-dark .section-num::before{background:var(--accent-hi);opacity:.4}
+.section-title{font-family:var(--sans);font-weight:500;font-size:clamp(36px,5.2vw,64px);line-height:1.06;letter-spacing:-.022em;margin:0 0 24px;color:var(--ink)}
+.section-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent);font-variation-settings:"opsz" 144}
+.theme-dark .section-title{color:var(--ink-on-dark)}
+.theme-dark .section-title em{color:var(--accent-hi)}
+.section-sub{font-size:clamp(16px,1.6vw,18px);line-height:1.55;color:var(--muted);max-width:62ch;margin:0;letter-spacing:-.008em}
+.theme-dark .section-sub{color:var(--muted-on-dark)}
 
-/* ─── live agent ─── */
-.agent{
-  background:var(--paper);
-  border:1px solid var(--line-2);
-  border-radius:24px;
-  box-shadow:var(--shadow-lg);
-  overflow:hidden;
-}
-.agent-head{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px 28px;border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg,#FBFAF4 0%,var(--paper) 100%);
-}
+/* ─── Live agent panel ─── */
+.agent{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;box-shadow:var(--shadow-lg);overflow:hidden}
+.agent-head{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,#FBFAF4 0%,var(--paper) 100%)}
 .agent-head-l{display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:12px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.12em}
 .status-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(63,122,82,.45);animation:pulse 2.4s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(63,122,82,.45)}70%{box-shadow:0 0 0 8px rgba(63,122,82,0)}100%{box-shadow:0 0 0 0 rgba(63,122,82,0)}}
@@ -155,13 +206,7 @@ input{font-family:inherit}
 .agent-head-r b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
 @media(max-width:680px){.agent-head{flex-direction:column;align-items:flex-start;gap:14px;padding:20px 22px}.agent-head-r{gap:18px;font-size:11px}}
 
-.feed-row{
-  display:grid;grid-template-columns:96px 1fr auto;
-  gap:28px;align-items:center;
-  padding:22px 28px;border-bottom:1px solid var(--line);
-  transition:background .2s;
-  opacity:0;transform:translateY(8px);
-}
+.feed-row{display:grid;grid-template-columns:96px 1fr auto;gap:28px;align-items:center;padding:22px 28px;border-bottom:1px solid var(--line);transition:background .2s;opacity:0;transform:translateY(8px)}
 .feed-row.in{opacity:1;transform:translateY(0);transition:opacity .6s,transform .6s,background .2s}
 .feed-row:last-child{border-bottom:0}
 .feed-row:hover{background:#FBFAF4}
@@ -171,41 +216,21 @@ input{font-family:inherit}
 .feed-text strong{color:var(--ink);font-weight:500}
 .feed-text .save{color:var(--green);font-weight:500;font-variant-numeric:tabular-nums}
 .feed-text .loss{color:var(--red);font-weight:500;font-variant-numeric:tabular-nums}
-.feed-btn{
-  font-size:13.5px;font-weight:500;
-  padding:10px 20px;border-radius:100px;
-  background:var(--ink);color:var(--bg);
-  letter-spacing:-.005em;
-  transition:transform .2s,background .2s;
-  white-space:nowrap;border:1px solid var(--ink);
-}
+.feed-btn{font-size:13.5px;font-weight:500;padding:10px 20px;border-radius:100px;background:var(--ink);color:var(--paper);letter-spacing:-.005em;transition:transform .2s,background .2s;white-space:nowrap;border:1px solid var(--ink)}
 .feed-btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
-.feed-btn.done{
-  background:transparent;color:var(--green);border:1px solid var(--line-2);
-  display:inline-flex;align-items:center;gap:8px;cursor:default;pointer-events:none;
-}
+.feed-btn.done{background:transparent;color:var(--green);border:1px solid var(--line-2);display:inline-flex;align-items:center;gap:8px;cursor:default;pointer-events:none}
 .feed-btn.done::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--green)}
 @media(max-width:760px){.feed-btn{justify-self:start}}
 
-/* ─── morning brief ─── */
+/* ─── Morning brief ─── */
 .brief-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(32px,5vw,72px);align-items:start}
 @media(max-width:980px){.brief-grid{grid-template-columns:1fr;gap:40px}}
-
-.brief-panel{
-  background:var(--paper);border:1px solid var(--line-2);
-  border-radius:24px;padding:clamp(28px,4vw,48px);
-  box-shadow:var(--shadow-lg);min-height:300px;position:relative;
-}
+.brief-panel{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;padding:clamp(28px,4vw,48px);box-shadow:var(--shadow-lg);min-height:300px;position:relative}
 .brief-h{display:flex;align-items:center;gap:12px;margin-bottom:32px}
 .brief-h-icon{width:34px;height:34px;border-radius:10px;background:var(--accent-soft);border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center}
 .brief-h-l{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em}
 .brief-h-r{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-left:auto}
-.brief-text{
-  font-family:var(--serif);font-weight:400;
-  font-size:clamp(22px,2.6vw,30px);line-height:1.36;
-  color:var(--ink);letter-spacing:-.012em;
-  min-height:180px;font-variation-settings:"opsz" 144;
-}
+.brief-text{font-family:var(--serif);font-weight:400;font-size:clamp(22px,2.6vw,30px);line-height:1.36;color:var(--ink);letter-spacing:-.012em;min-height:180px;font-variation-settings:"opsz" 144}
 .brief-text strong{font-style:italic;color:var(--accent);font-weight:500}
 .brief-cursor{display:inline-block;width:2px;height:.95em;background:var(--accent);margin-left:2px;vertical-align:text-bottom;animation:blink 1s infinite}
 @keyframes blink{50%{opacity:0}}
@@ -214,99 +239,40 @@ input{font-family:inherit}
 .brief-side-h{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px}
 .networth-num{font-family:var(--serif);font-size:clamp(44px,5.4vw,60px);letter-spacing:-.022em;line-height:1;font-variant-numeric:tabular-nums;color:var(--ink);margin-bottom:8px;font-variation-settings:"opsz" 144}
 .networth-delta{font-family:var(--mono);font-size:11.5px;color:var(--green);text-transform:uppercase;letter-spacing:.12em;margin-bottom:24px}
-
-.acct{
-  display:flex;justify-content:space-between;align-items:center;gap:16px;
-  padding:18px 22px;background:var(--paper);
-  border:1px solid var(--line);border-radius:14px;
-  box-shadow:var(--shadow-sm);
-  transition:transform .25s,box-shadow .25s,border-color .25s;
-}
+.acct{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-sm);transition:transform .25s,box-shadow .25s,border-color .25s}
 .acct:hover{transform:translateX(3px);box-shadow:var(--shadow);border-color:var(--line-2)}
 .acct-bank{font-size:14.5px;color:var(--ink);font-weight:500;letter-spacing:-.008em}
 .acct-name{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:3px}
 .acct-bal{font-family:var(--serif);font-size:22px;letter-spacing:-.014em;font-variant-numeric:tabular-nums;color:var(--ink)}
 .acct-bal.neg{color:var(--red)}
 
-/* ─── ask luca ─── */
+/* ─── Ask Luca ─── */
 .ask-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(28px,4vw,56px)}
 @media(max-width:980px){.ask-grid{grid-template-columns:1fr}}
 .ask-q-h{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em;margin-bottom:14px}
-.qbtn{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  text-align:left;width:100%;
-  padding:20px 22px;border-radius:14px;
-  background:var(--paper);border:1px solid var(--line);
-  color:var(--ink-2);font-size:15.5px;letter-spacing:-.008em;
-  box-shadow:var(--shadow-sm);margin-bottom:12px;
-  transition:transform .25s,box-shadow .25s,border-color .25s,background .25s;
-  font-family:var(--sans);font-weight:400;
-}
+.qbtn{display:flex;align-items:center;justify-content:space-between;gap:14px;text-align:left;width:100%;padding:20px 22px;border-radius:14px;background:var(--paper);border:1px solid var(--line);color:var(--ink-2);font-size:15.5px;letter-spacing:-.008em;box-shadow:var(--shadow-sm);margin-bottom:12px;transition:transform .25s,box-shadow .25s,border-color .25s,background .25s;font-family:var(--sans);font-weight:400}
 .qbtn::after{content:"→";color:var(--dim);font-size:18px;transition:transform .25s,color .25s}
 .qbtn:hover{transform:translateX(3px);box-shadow:var(--shadow);border-color:var(--line-2)}
 .qbtn:hover::after{color:var(--accent);transform:translateX(3px)}
 .qbtn.active{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
 .qbtn.active::after{color:var(--accent)}
-
-.ask-a{
-  background:var(--paper);border:1px solid var(--line-2);
-  border-radius:24px;padding:clamp(28px,4vw,48px);
-  box-shadow:var(--shadow-lg);min-height:360px;
-  display:flex;flex-direction:column;
-}
+.ask-a{background:var(--paper);border:1px solid var(--line-2);border-radius:24px;padding:clamp(28px,4vw,48px);box-shadow:var(--shadow-lg);min-height:360px;display:flex;flex-direction:column}
 .ask-a-head{display:flex;align-items:center;gap:10px;margin-bottom:28px}
 .ask-a-l{font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.14em}
-.ask-a-body{
-  font-family:var(--serif);font-size:clamp(20px,2vw,25px);
-  line-height:1.42;color:var(--ink);letter-spacing:-.012em;
-  flex:1;font-variation-settings:"opsz" 144;
-}
+.ask-a-body{font-family:var(--serif);font-size:clamp(20px,2vw,25px);line-height:1.42;color:var(--ink);letter-spacing:-.012em;flex:1;font-variation-settings:"opsz" 144}
 .ask-a-empty{color:var(--dim);font-style:italic}
 
-/* ─── health ─── */
-.health-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(40px,6vw,80px);align-items:center}
-@media(max-width:980px){.health-grid{grid-template-columns:1fr}}
-.health-num{font-family:var(--serif);font-weight:400;font-size:clamp(120px,18vw,220px);line-height:.88;letter-spacing:-.04em;color:var(--ink);font-variant-numeric:tabular-nums;display:flex;align-items:baseline;font-variation-settings:"opsz" 144}
-.health-num small{font-size:.3em;color:var(--muted);font-family:var(--mono);font-weight:400;margin-left:10px;letter-spacing:.02em}
-.health-cap{font-size:17px;line-height:1.55;color:var(--muted);max-width:380px;margin-top:24px;letter-spacing:-.008em}
-.health-cap em{color:var(--accent);font-style:normal;font-weight:500}
+/* ─── Stats (DARK Harvey-style) ─── */
+.stats-title{font-family:var(--sans);font-weight:500;font-size:clamp(36px,5.2vw,64px);line-height:1.06;letter-spacing:-.022em;margin:0 0 clamp(48px,8vw,96px);max-width:18ch;color:var(--ink-on-dark)}
+.stat-list{display:flex;flex-direction:column}
+.stat{display:flex;flex-direction:column;gap:clamp(20px,3vw,36px);padding:clamp(36px,5vw,56px) 0;border-top:1px solid var(--line-dark-2)}
+.stat:last-child{border-bottom:1px solid var(--line-dark-2)}
+.stat-label{font-size:clamp(15px,1.5vw,17px);color:var(--ink-on-dark);font-weight:400;letter-spacing:-.005em}
+.stat-num{font-family:var(--serif);font-weight:400;font-size:clamp(56px,9vw,108px);line-height:.95;letter-spacing:-.028em;color:var(--ink-on-dark);font-variant-numeric:tabular-nums;font-variation-settings:"opsz" 144}
 
-.bars{display:flex;flex-direction:column;gap:26px;background:var(--paper);border:1px solid var(--line-2);border-radius:24px;padding:clamp(28px,4vw,40px);box-shadow:var(--shadow-lg)}
-.bar-h{display:flex;justify-content:space-between;align-items:baseline;font-size:14.5px;margin-bottom:10px}
-.bar-name{color:var(--ink-2);letter-spacing:-.008em}
-.bar-score{font-family:var(--mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.bar-track{height:6px;background:#EBE6D8;border-radius:100px;overflow:hidden}
-.bar-fill{height:100%;width:0;border-radius:100px;background:var(--accent);transition:width 1.4s cubic-bezier(.2,.7,.2,1)}
-.bar-fill.green{background:var(--green)}
-.bar-fill.weak{background:var(--red)}
-.bar.weak .bar-name{color:var(--red)}
-
-/* ─── proof ─── */
-.proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-@media(max-width:880px){.proof-grid{grid-template-columns:1fr}}
-.proof{
-  padding:clamp(28px,3.5vw,40px);background:var(--paper);
-  border:1px solid var(--line-2);border-radius:20px;
-  display:flex;flex-direction:column;gap:18px;
-  box-shadow:var(--shadow);
-  transition:transform .3s,box-shadow .3s;
-}
-.proof:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.proof-l{font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.14em}
-.proof-num{font-family:var(--serif);font-weight:400;font-size:clamp(56px,5vw,76px);line-height:.95;letter-spacing:-.022em;color:var(--accent);font-variation-settings:"opsz" 144}
-.proof-num small{font-size:.36em;color:var(--muted);font-family:var(--mono);margin-left:6px;font-weight:400;letter-spacing:.02em}
-.proof-t{font-size:15px;line-height:1.55;color:var(--muted);letter-spacing:-.008em}
-.proof.luca{border-color:var(--accent);background:linear-gradient(180deg,#F4F2EB 0%,var(--paper) 100%);box-shadow:0 1px 2px rgba(20,18,12,.04), 0 24px 60px -10px rgba(45,42,110,.18)}
-
-/* ─── pricing ─── */
+/* ─── Pricing (CREAM) ─── */
 .price-wrap{display:flex;justify-content:center}
-.price-card{
-  width:100%;max-width:540px;
-  background:var(--paper);border:1px solid var(--line-2);
-  border-radius:28px;padding:clamp(36px,5vw,56px);
-  box-shadow:var(--shadow-lg);
-  position:relative;
-}
+.price-card{width:100%;max-width:540px;background:var(--paper);border:1px solid var(--line-2);border-radius:28px;padding:clamp(36px,5vw,56px);box-shadow:var(--shadow-lg);position:relative}
 .price-tag{display:inline-block;font-family:var(--mono);font-size:11.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.16em;padding:5px 12px;border:1px solid var(--line-2);border-radius:100px;background:var(--accent-soft)}
 .price-num{font-family:var(--serif);font-weight:400;font-size:clamp(72px,9vw,112px);line-height:1;letter-spacing:-.028em;color:var(--ink);font-variant-numeric:tabular-nums;margin:28px 0 8px;display:flex;align-items:baseline;font-variation-settings:"opsz" 144}
 .price-num small{font-size:.2em;color:var(--muted);font-family:var(--mono);font-weight:400;margin-left:10px;letter-spacing:.04em}
@@ -314,33 +280,38 @@ input{font-family:inherit}
 .price-list{display:flex;flex-direction:column;gap:14px;margin-bottom:36px;border-top:1px solid var(--line);padding-top:28px}
 .price-li{display:flex;align-items:flex-start;gap:14px;font-size:15px;line-height:1.5;color:var(--ink-2);letter-spacing:-.008em}
 .price-li::before{content:"";flex-shrink:0;width:14px;height:14px;border-radius:50%;background:var(--accent-soft);border:1.5px solid var(--accent);margin-top:3px}
-.price-cta{display:block;width:100%;text-align:center;background:var(--ink);color:var(--bg);padding:17px 22px;border-radius:100px;font-size:15px;font-weight:500;letter-spacing:-.005em;transition:transform .2s,background .2s}
+.price-cta{display:block;width:100%;text-align:center;background:var(--ink);color:var(--paper);padding:17px 22px;border-radius:100px;font-size:15px;font-weight:500;letter-spacing:-.005em;transition:transform .2s,background .2s}
 .price-cta:hover{background:var(--accent);transform:translateY(-1px)}
 .price-foot{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;text-align:center;margin-top:16px}
 
-/* ─── final ─── */
-.final{padding:clamp(100px,16vw,200px) 0;border-top:1px solid var(--line);text-align:center;position:relative}
-.final-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(700px 500px at 50% 50%, rgba(45,42,110,.06), transparent 70%)}
+/* ─── Final (DARK) ─── */
+.final{padding:clamp(100px,16vw,200px) 0;text-align:center;position:relative;overflow:hidden}
+.final::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(700px 500px at 50% 50%, rgba(123,134,232,.10), transparent 70%),
+    radial-gradient(500px 400px at 80% 80%, rgba(212,182,106,.06), transparent 60%);
+}
 .final-inner{position:relative;z-index:1;max-width:820px;margin:0 auto}
-.final-title{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7.4vw,96px);line-height:.96;letter-spacing:-.028em;margin:0 0 28px;font-variation-settings:"opsz" 144}
-.final-title em{font-style:italic;color:var(--accent)}
-.final-sub{font-size:18px;line-height:1.5;color:var(--muted);max-width:540px;margin:0 auto 48px;letter-spacing:-.008em}
-.final-form{display:flex;gap:0;align-items:center;background:var(--paper);border:1px solid var(--line-2);border-radius:100px;padding:7px;max-width:520px;margin:0 auto;box-shadow:var(--shadow);transition:border-color .25s,box-shadow .25s}
-.final-form:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft),var(--shadow)}
-.final-form input{flex:1;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink);padding:14px 22px;letter-spacing:-.008em}
-.final-form input::placeholder{color:var(--dim)}
-.final-form button{background:var(--ink);color:var(--bg);font-weight:500;font-size:14.5px;padding:14px 26px;border-radius:100px;transition:transform .2s,background .2s}
-.final-form button:hover{background:var(--accent);transform:translateY(-1px)}
+.final-title{font-family:var(--serif);font-weight:400;font-size:clamp(48px,7.4vw,96px);line-height:.96;letter-spacing:-.028em;margin:0 0 28px;font-variation-settings:"opsz" 144;color:var(--ink-on-dark)}
+.final-title em{font-style:italic;color:var(--accent-hi)}
+.final-sub{font-size:18px;line-height:1.55;color:var(--muted-on-dark);max-width:540px;margin:0 auto 48px;letter-spacing:-.008em}
+.final-form{display:flex;align-items:center;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.10);border-radius:100px;padding:7px;max-width:520px;margin:0 auto;transition:border-color .25s,box-shadow .25s,background .25s;backdrop-filter:blur(8px)}
+.final-form:focus-within{border-color:var(--accent-hi);background:rgba(255,255,255,.06);box-shadow:0 0 0 4px rgba(123,134,232,.12)}
+.final-form input{flex:1;background:0;border:0;outline:0;font-size:15.5px;color:var(--ink-on-dark);padding:14px 22px;letter-spacing:-.008em}
+.final-form input::placeholder{color:var(--dim-on-dark)}
+.final-form button{background:var(--paper);color:var(--ink);font-weight:500;font-size:14.5px;padding:14px 26px;border-radius:100px;transition:transform .2s,background .2s}
+.final-form button:hover{background:#fff;transform:translateY(-1px)}
 .final-form.shake{animation:shake .4s}
-.final-micro{display:flex;justify-content:center;flex-wrap:wrap;gap:28px;margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em}
+.final-micro{display:flex;justify-content:center;flex-wrap:wrap;gap:28px;margin-top:24px;font-family:var(--mono);font-size:11.5px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em}
 
-/* ─── footer ─── */
-.footer{padding:56px 0 72px;border-top:1px solid var(--line)}
+/* ─── Footer (DARK) ─── */
+.footer{padding:56px 0 72px;border-top:1px solid var(--line-dark-2)}
 .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
-.footer-l{font-family:var(--mono);font-size:11.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em}
-.footer-r{display:flex;gap:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em}
+.footer-l{font-family:var(--mono);font-size:11.5px;color:var(--dim-on-dark);text-transform:uppercase;letter-spacing:.12em}
+.footer-r{display:flex;gap:28px;font-family:var(--mono);font-size:11.5px;color:var(--muted-on-dark);text-transform:uppercase;letter-spacing:.12em}
 .footer-r a{transition:color .2s}
-.footer-r a:hover{color:var(--ink)}
+.footer-r a:hover{color:var(--ink-on-dark)}
 
 .reveal{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:translateY(0)}
@@ -361,7 +332,7 @@ input{font-family:inherit}
   <script type="text/babel">
 const { useState, useEffect, useRef, useCallback } = React;
 
-const Mark = ({ size=22, fill="#2D2A6E", bg="#F8F5EE" }) => (
+const Mark = ({ size=22, fill="#F5F1E8", bg="#0B0B0E" }) => (
   <svg viewBox="0 0 100 100" width={size} height={size} style={{display:"block",flexShrink:0}}>
     <g fill={fill}>
       <rect x="46" y="14" width="8" height="8" rx="1.5"/>
@@ -447,20 +418,36 @@ function useWordStream(){
 
 const fmt = n => '$' + Math.abs(n).toLocaleString('en-US');
 
-const TopBar = () => (
-  <header className="topbar">
-    <div className="shell topbar-inner">
-      <a href="#" className="brand"><Mark size={22}/>Luca</a>
-      <nav className="nav">
-        <a href="#agent" className="nav-link">Agent</a>
-        <a href="#brief" className="nav-link">Brief</a>
-        <a href="#ask" className="nav-link">Ask</a>
-        <a href="#pricing" className="nav-link">Pricing</a>
-      </nav>
-      <a href="#join" className="topbar-cta">Join waitlist</a>
-    </div>
-  </header>
-);
+/* ─── Top bar (theme-aware via scroll) ─── */
+const TopBar = () => {
+  const [light, setLight] = useState(false);
+  useEffect(() => {
+    const onScroll = () => {
+      const heroH = document.getElementById('hero')?.offsetHeight || 0;
+      setLight(window.scrollY > heroH - 80);
+    };
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+  return (
+    <header className={`topbar ${light ? 'is-light' : ''}`}>
+      <div className="shell topbar-inner">
+        <a href="#" className="brand">
+          <Mark size={22} fill={light ? "#2D2A6E" : "#F5F1E8"} bg={light ? "#FFFFFF" : "#0B0B0E"}/>
+          <span className="brand-name">Luca</span>
+        </a>
+        <nav className="nav">
+          <a href="#agent" className="nav-link">Agent</a>
+          <a href="#brief" className="nav-link">Brief</a>
+          <a href="#ask" className="nav-link">Ask</a>
+          <a href="#pricing" className="nav-link">Pricing</a>
+        </nav>
+        <a href="#join" className="topbar-cta">Join waitlist</a>
+      </div>
+    </header>
+  );
+};
 
 const EmailForm = ({ source, btn="Get early access", ph="Enter your email", cls="hero-form" }) => {
   const [v, setV] = useState('');
@@ -497,30 +484,76 @@ const EmailForm = ({ source, btn="Get early access", ph="Enter your email", cls=
   );
 };
 
+/* ─── Hero ─── */
 const Hero = () => (
-  <section className="hero shell">
-    <div className="eyebrow">The autonomous financial agent</div>
-    <h1 className="hero-title">
-      <span className="word">Your</span>{' '}
-      <span className="word">money</span>{' '}
-      <span className="word">has</span>{' '}
-      <span className="word">an</span>{' '}
-      <span className="word"><em>agent</em></span>{' '}
-      <span className="word">now.</span>
-    </h1>
-    <p className="hero-sub">
-      Luca watches every dollar around the clock. Catches fees before they post. Finds money you're losing.
-      Tells you exactly what to do — you just tap approve.
-    </p>
-    <EmailForm source="hero"/>
-    <div className="hero-micro">
-      <span>Bank-grade encryption</span>
-      <span>Read-only access</span>
-      <span>Cancel any time</span>
+  <section id="hero" className="hero">
+    <div className="shell hero-inner">
+      <div className="eyebrow">The autonomous financial agent</div>
+      <h1 className="hero-title">
+        <span className="word">Your</span>{' '}
+        <span className="word">money</span>{' '}
+        <span className="word">has</span>{' '}
+        <span className="word">an</span>{' '}
+        <span className="word"><em>agent</em></span>{' '}
+        <span className="word">now.</span>
+      </h1>
+      <p className="hero-sub">
+        Luca watches every dollar around the clock. Catches fees before they post. Finds money you're losing.
+        Tells you exactly what to do — you just tap approve.
+      </p>
+      <EmailForm source="hero"/>
+      <div className="hero-micro">
+        <span>Bank-grade encryption</span>
+        <span>Read-only access</span>
+        <span>Cancel any time</span>
+      </div>
     </div>
   </section>
 );
 
+/* ─── Statement (white, sans split) ─── */
+const Statement = () => (
+  <section className="section theme-light shell">
+    <h2 className="statement">
+      Luca is an autonomous agent built for your money.{' '}
+      <span className="fade">It watches every account, finds money you're losing, and tells you exactly what to do.</span>
+    </h2>
+  </section>
+);
+
+/* ─── Capabilities cycle (Harvey-style) ─── */
+const CAPS = [
+  "Fee Disputes",
+  "Subscription Audits",
+  "Rate Negotiations",
+  "Tax Optimization",
+  "Cash Flow Planning",
+  "Investment Rebalancing",
+  "Debt Strategy",
+];
+
+const Capabilities = () => {
+  const [ref, seen] = useInView(.2);
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    if (!seen) return;
+    const id = setInterval(() => setActive(a => (a + 1) % CAPS.length), 1400);
+    return () => clearInterval(id);
+  }, [seen]);
+  return (
+    <section className="section theme-light shell" ref={ref}>
+      <div className="cap-eyebrow">What Luca does for you, every single day —</div>
+      <div className="cap-list">
+        {CAPS.map((c, i) => (
+          <div key={i} className={`cap-item ${i === active ? 'active' : ''}`}>{c}</div>
+        ))}
+      </div>
+      <a href="#agent" className="cap-cta">See it in action →</a>
+    </section>
+  );
+};
+
+/* ─── Live agent feed ─── */
 const FEED = [
   { time:"2:34 AM", text:(<>Disputed a <span className="loss">−$35</span> overdraft fee from Chase. Letter drafted, ready to send.</>), kind:"approve" },
   { time:"3:11 AM", text:(<>Found <span className="loss">−$9.99/mo</span> for iCloud you haven't used in 92 days. Cancellation prepared.</>), kind:"approve" },
@@ -546,12 +579,11 @@ const AgentFeed = () => {
   }, [seen, triggerRecovered]);
 
   const onApprove = idx => setItems(prev => prev.map((it, i) => i === idx ? {...it, kind:"done"} : it));
-
   const pending = items.filter(i => i.kind === "approve").length;
   const completed = items.filter(i => i.kind === "done").length;
 
   return (
-    <section id="agent" className="section shell" ref={ref}>
+    <section id="agent" className="section theme-cream shell" ref={ref}>
       <div className="section-head reveal" ref={headRef}>
         <div className="section-num">§ 01 — Live Agent</div>
         <h2 className="section-title">While you slept, <em>Luca went to work.</em></h2>
@@ -583,6 +615,7 @@ const AgentFeed = () => {
   );
 };
 
+/* ─── Morning brief ─── */
 const BRIEF = "Morning Alex. Net worth is up $1,840 this month. Your checking has $12,000 sitting idle earning nothing — that's $42 in interest you're losing every month. Your student loan at 6.8% is bleeding $94. Two fixes ready. Want to approve both?";
 
 const ACCOUNTS = [
@@ -607,7 +640,7 @@ const MorningBrief = () => {
   }, [seen, stream, triggerWorth]);
 
   return (
-    <section id="brief" className="section shell" ref={ref}>
+    <section id="brief" className="section theme-light shell" ref={ref}>
       <div className="section-head reveal" ref={headRef}>
         <div className="section-num">§ 02 — Morning Brief</div>
         <h2 className="section-title">Every morning. <em>One paragraph.</em></h2>
@@ -617,7 +650,7 @@ const MorningBrief = () => {
       <div className="brief-grid">
         <div className="brief-panel">
           <div className="brief-h">
-            <div className="brief-h-icon"><Mark size={18} bg="#FFFFFF"/></div>
+            <div className="brief-h-icon"><Mark size={18} fill="#2D2A6E" bg="#FFFFFF"/></div>
             <div className="brief-h-l">Luca · 7:04 AM</div>
             <div className="brief-h-r">{done ? "Complete" : "Streaming"}</div>
           </div>
@@ -645,6 +678,7 @@ const MorningBrief = () => {
   );
 };
 
+/* ─── Ask Luca ─── */
 const QA = [
   { q:"Can I afford a house in 3 years?",
     a:"Based on your savings rate of $1,170/month and HYSA at 4.2% APY — yes. By October 2028 you'll have $47,200 saved. For a $400K home with 10% down, you need $40K. You're ahead of schedule by four months." },
@@ -658,17 +692,14 @@ const AskLuca = () => {
   const [active, setActive] = useState(null);
   const { text, done, stream } = useWordStream();
   const headRef = useReveal();
-
   const pick = i => { setActive(i); stream(QA[i].a, 42); };
-
   return (
-    <section id="ask" className="section shell">
+    <section id="ask" className="section theme-cream shell">
       <div className="section-head reveal" ref={headRef}>
         <div className="section-num">§ 03 — Ask Luca</div>
         <h2 className="section-title">Any question. <em>A real answer.</em></h2>
         <p className="section-sub">Luca knows your accounts, your rates, your goals. Pick a question — watch it respond using your actual numbers.</p>
       </div>
-
       <div className="ask-grid">
         <div>
           <div className="ask-q-h">Try one</div>
@@ -678,10 +709,9 @@ const AskLuca = () => {
             </button>
           ))}
         </div>
-
         <div className="ask-a">
           <div className="ask-a-head">
-            <Mark size={16} bg="#FFFFFF"/>
+            <Mark size={16} fill="#2D2A6E" bg="#FFFFFF"/>
             <div className="ask-a-l">Luca · {active === null ? "ready" : done ? "complete" : "thinking"}</div>
           </div>
           <div className="ask-a-body">
@@ -695,100 +725,44 @@ const AskLuca = () => {
   );
 };
 
-const HEALTH = [
-  { name:"Emergency fund",       score:22, max:25, kind:"green" },
-  { name:"Debt ratio",           score:14, max:20, kind:"" },
-  { name:"Savings rate",         score:16, max:20, kind:"green" },
-  { name:"Net worth trend",      score:12, max:15, kind:"" },
-  { name:"Spending consistency", score:7,  max:20, kind:"weak" },
+/* ─── Stats (DARK) ─── */
+const STATS = [
+  { label:"Returned to users this year",    val:"$2,847,392" },
+  { label:"People on the waitlist",          val:"8,420+" },
+  { label:"Decisions made per day",          val:"1,284" },
+  { label:"Average saved per user, per year",val:"$3,408" },
+  { label:"Hours of money admin saved/mo",   val:"6.2" },
 ];
 
-const Health = () => {
-  const [ref, seen] = useInView(.3);
-  const [score, triggerScore] = useCounter(71, 1800);
-  const [animated, setAnimated] = useState(false);
+const Stats = () => {
   const headRef = useReveal();
-
-  useEffect(() => {
-    if (seen){
-      triggerScore();
-      setTimeout(() => setAnimated(true), 200);
-    }
-  }, [seen, triggerScore]);
-
   return (
-    <section className="section shell" ref={ref}>
-      <div className="section-head reveal" ref={headRef}>
-        <div className="section-num">§ 04 — Financial Health</div>
-        <h2 className="section-title">Your money, <em>diagnosed.</em></h2>
-        <p className="section-sub">A real score, broken down by what's strong and what's weak. Luca tells you the one thing to fix that moves the number most.</p>
+    <section className="section theme-dark shell">
+      <div className="reveal" ref={headRef}>
+        <div className="section-num">§ 04 — Measurable Results</div>
+        <h2 className="stats-title">Helping people stay focused on what matters — not their checking balance.</h2>
       </div>
-
-      <div className="health-grid">
-        <div>
-          <div className="health-num">{score}<small>/ 100</small></div>
-          <div className="health-cap">
-            Stronger than 78% of users your age. Fix <em>spending consistency</em> and your score jumps to 88.
+      <div className="stat-list">
+        {STATS.map((s, i) => (
+          <div key={i} className="stat">
+            <div className="stat-label">{s.label}</div>
+            <div className="stat-num">{s.val}</div>
           </div>
-        </div>
-        <div className="bars">
-          {HEALTH.map((h, i) => (
-            <div key={i} className={`bar ${h.kind === 'weak' ? 'weak' : ''}`}>
-              <div className="bar-h">
-                <span className="bar-name">{h.name}</span>
-                <span className="bar-score">{h.score} / {h.max}</span>
-              </div>
-              <div className="bar-track">
-                <div className={`bar-fill ${h.kind}`} style={{width: animated ? `${(h.score / h.max) * 100}%` : 0, transitionDelay: `${i * 120}ms`}}/>
-              </div>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </section>
   );
 };
 
-const Proof = () => {
-  const headRef = useReveal();
-  return (
-    <section className="section shell">
-      <div className="section-head reveal" ref={headRef}>
-        <div className="section-num">§ 05 — The Difference</div>
-        <h2 className="section-title">A tool waits. <em>An agent acts.</em></h2>
-        <p className="section-sub">Every other money app is a dashboard you have to open. Luca works while you don't.</p>
-      </div>
-
-      <div className="proof-grid">
-        <div className="proof">
-          <div className="proof-l">Tools</div>
-          <div className="proof-num">23</div>
-          <div className="proof-t">Apps to check. Charts to read. Decisions you still have to make. Most people open them twice and forget.</div>
-        </div>
-        <div className="proof">
-          <div className="proof-l">Advisors</div>
-          <div className="proof-num">1<small>% / yr</small></div>
-          <div className="proof-t">A human you meet quarterly for ten minutes. Useful at $2M. Inaccessible until then.</div>
-        </div>
-        <div className="proof luca">
-          <div className="proof-l" style={{color:"var(--accent)"}}>Luca</div>
-          <div className="proof-num">24<small> / 7</small></div>
-          <div className="proof-t">An agent that watches everything, finds what's wrong, fixes it overnight, and tells you in the morning.</div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
+/* ─── Pricing (CREAM) ─── */
 const Pricing = () => {
   const headRef = useReveal();
   return (
-    <section id="pricing" className="section shell">
+    <section id="pricing" className="section theme-cream shell">
       <div className="section-head reveal" ref={headRef} style={{textAlign:"center",margin:"0 auto clamp(56px,7vw,96px)"}}>
-        <div className="section-num" style={{justifyContent:"center"}}>§ 06 — Access</div>
+        <div className="section-num" style={{justifyContent:"center"}}>§ 05 — Access</div>
         <h2 className="section-title">One plan. <em>That's it.</em></h2>
       </div>
-
       <div className="price-wrap">
         <div className="price-card">
           <div className="price-tag">Luca Pro</div>
@@ -810,9 +784,9 @@ const Pricing = () => {
   );
 };
 
+/* ─── Final (DARK) ─── */
 const Final = () => (
-  <section id="join" className="final">
-    <div className="final-bg"/>
+  <section id="join" className="final theme-dark">
     <div className="shell final-inner">
       <h2 className="final-title">Wake up to <em>fewer problems.</em></h2>
       <p className="final-sub">Join the waitlist. We'll let you in when private beta opens.</p>
@@ -825,8 +799,9 @@ const Final = () => (
   </section>
 );
 
+/* ─── Footer (DARK) ─── */
 const Footer = () => (
-  <footer className="footer">
+  <footer className="footer theme-dark">
     <div className="shell footer-inner">
       <div className="footer-l">© 2026 Luca Financial · Not yet a registered investment advisor</div>
       <div className="footer-r">
@@ -843,11 +818,12 @@ const App = () => (
   <>
     <TopBar/>
     <Hero/>
+    <Statement/>
+    <Capabilities/>
     <AgentFeed/>
     <MorningBrief/>
     <AskLuca/>
-    <Health/>
-    <Proof/>
+    <Stats/>
     <Pricing/>
     <Final/>
     <Footer/>
