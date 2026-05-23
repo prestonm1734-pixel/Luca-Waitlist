@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LUCA // AIRLIST TERMINAL v0.1.0</title>
+  <title>Luca // Airlist Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -23,29 +23,42 @@
       --purple: #A855F7;
       --green: #22C55E;
       --amber: #F59E0B;
-      --blue: #60A5FA;
       --red: #EF4444;
-      --font: 'JetBrains Mono', 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
+      --blue: #60A5FA;
     }
 
     html, body {
+      height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
-      font-size: 13px;
+      font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
       font-variant-numeric: tabular-nums;
-      height: 100%;
+      font-size: 13px;
       overflow: hidden;
     }
 
+    /* BACKDROP */
+    #backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 10;
+      pointer-events: none;
+    }
+    #backdrop.active { display: block; }
+
+    /* APP SHELL */
     #app {
       display: flex;
       flex-direction: column;
       height: 100vh;
+      position: relative;
+      z-index: 20;
     }
 
-    /* ── TOP BAR ── */
-    #top-bar {
+    /* ─── TOP BAR ─────────────────────────────────────────── */
+    #topbar {
       height: 40px;
       border-bottom: 1px solid var(--border);
       display: flex;
@@ -53,1006 +66,877 @@
       justify-content: space-between;
       padding: 0 16px;
       flex-shrink: 0;
-      z-index: 10;
-      background: var(--bg);
     }
-
-    #top-bar-title {
+    #topbar .title {
       color: var(--muted);
       font-size: 12px;
       letter-spacing: 0.05em;
     }
-
-    #top-bar-title span {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    #top-bar-keys {
-      display: flex;
-      gap: 6px;
-    }
-
-    .key-badge {
+    #topbar .title .brand { color: var(--text); font-weight: 600; }
+    #topbar .hints { display: flex; gap: 6px; align-items: center; }
+    .kbd {
       border: 1px solid var(--border);
       padding: 2px 6px;
       font-size: 10px;
       color: var(--muted);
-      font-family: var(--font);
+      font-family: inherit;
+      border-radius: 0;
     }
 
-    /* ── MAIN SPLIT ── */
+    /* ─── MAIN SPLIT ──────────────────────────────────────── */
     #main {
       display: flex;
       flex: 1;
       overflow: hidden;
     }
 
-    /* ── LEFT PANEL ── */
+    /* ─── LEFT PANEL ──────────────────────────────────────── */
     #left-panel {
       width: 30%;
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      flex-shrink: 0;
     }
-
-    #left-panel-title {
-      padding: 10px 14px;
+    .panel-title {
+      padding: 10px 12px;
+      font-size: 10px;
       color: var(--muted);
-      font-size: 11px;
+      letter-spacing: 0.1em;
       border-bottom: 1px solid var(--border-dim);
       flex-shrink: 0;
-      letter-spacing: 0.08em;
     }
-
     #status-feed {
       flex: 1;
       overflow-y: auto;
-      padding: 8px 0;
-      font-size: 11px;
-      line-height: 1.6;
+      padding: 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
-
-    #status-feed::-webkit-scrollbar {
-      width: 4px;
-    }
-    #status-feed::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-    #status-feed::-webkit-scrollbar-thumb {
-      background: var(--border);
-    }
+    #status-feed::-webkit-scrollbar { width: 3px; }
+    #status-feed::-webkit-scrollbar-track { background: transparent; }
+    #status-feed::-webkit-scrollbar-thumb { background: var(--border); }
 
     .feed-entry {
-      padding: 1px 14px;
+      font-size: 11px;
+      line-height: 1.6;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .feed-time { color: var(--border-dim); margin-right: 4px; }
+    .feed-type-SYS  { color: var(--muted); }
+    .feed-type-NET  { color: var(--blue); }
+    .feed-type-MEM  { color: var(--amber); }
+    .feed-type-SEC  { color: var(--purple); }
 
-    .feed-ts {
-      color: var(--border);
-    }
-
-    .feed-type-SYS { color: var(--muted); }
-    .feed-type-NET { color: var(--blue); }
-    .feed-type-MEM { color: var(--amber); }
-    .feed-type-SEC { color: var(--purple); }
-
-    .feed-msg {
-      color: var(--muted);
-    }
-
-    /* ── RIGHT PANEL ── */
+    /* ─── RIGHT PANEL ─────────────────────────────────────── */
     #right-panel {
       flex: 1;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
+      overflow-y: auto;
       position: relative;
-      z-index: 2;
+      z-index: 25;
     }
+    #right-panel::-webkit-scrollbar { width: 3px; }
+    #right-panel::-webkit-scrollbar-thumb { background: var(--border); }
 
-    /* ── BACKDROP ── */
-    #backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 1;
-      display: none;
-      pointer-events: none;
-    }
-    #backdrop.active {
-      display: block;
-    }
-
-    /* ── SEED ZONE ── */
-    #seed-zone {
-      flex: 1;
+    /* ─── PHASE 1 ─────────────────────────────────────────── */
+    #phase1 {
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 40px 80px;
-      position: relative;
-      overflow-y: auto;
+      align-items: center;
+      padding: 60px 80px 40px;
+      min-height: 240px;
     }
-
-    #seed-inner {
+    .seed-comments {
       width: 100%;
       max-width: 600px;
+      margin-bottom: 16px;
     }
-
-    .comment-line {
+    .seed-comment {
       color: var(--muted);
       font-size: 13px;
-      margin-bottom: 4px;
+      line-height: 1.9;
     }
 
-    #prompt-wrapper {
-      margin-top: 20px;
-      transition: transform 0.2s ease;
+    .seed-prompt-wrapper {
+      width: 100%;
+      max-width: 600px;
+      transition: transform 0.3s ease;
     }
+    .seed-prompt-wrapper.shifted { transform: translateY(-20px); }
 
-    #prompt-wrapper.shifted {
-      transform: translateY(-20px);
-    }
-
-    #prompt-row {
+    .prompt-line {
       display: flex;
       align-items: center;
       border: 1px solid var(--border);
       background: var(--bg);
-      padding: 0;
-      position: relative;
+      padding: 0 12px;
+      height: 44px;
+      border-radius: 2px;
+      transition: border-color 0.15s ease;
     }
+    .prompt-line.focused  { border-color: var(--purple); }
+    .prompt-line.error    { border-color: var(--red); }
+    .prompt-line.locked   { border-color: var(--purple); }
 
-    #prompt-row.focused {
-      border-color: var(--purple);
-    }
-
-    #prompt-row.error {
-      border-color: var(--red);
-    }
-
-    #prompt-prefix {
+    .prompt-prefix {
       color: var(--purple);
-      padding: 10px 10px 10px 14px;
-      font-size: 15px;
+      margin-right: 8px;
       flex-shrink: 0;
-      user-select: none;
+      font-size: 15px;
     }
-
     #email-input {
       flex: 1;
       background: transparent;
       border: none;
       outline: none;
       color: var(--text);
-      font-family: var(--font);
+      font-family: inherit;
       font-size: 15px;
       font-variant-numeric: tabular-nums;
-      padding: 10px 14px 10px 0;
-      border-radius: 2px;
+      caret-color: transparent;
     }
+    #email-input::placeholder { color: transparent; }
+    #email-input:disabled { color: var(--muted); }
 
-    #email-input::placeholder {
-      color: transparent;
-    }
-
-    #email-input:disabled {
-      color: var(--muted);
-    }
-
-    #cursor-char {
+    .blink-cursor {
       color: var(--text);
-      font-size: 15px;
-      padding-right: 6px;
-      flex-shrink: 0;
       animation: blink 1s step-end infinite;
-      user-select: none;
+      font-size: 15px;
+      flex-shrink: 0;
     }
-
-    #cursor-char.hidden {
-      display: none;
-    }
+    .blink-cursor.hidden { display: none; }
 
     @keyframes blink {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+      50%       { opacity: 0; }
     }
 
-    #error-msg {
-      margin-top: 8px;
+    .error-msg {
       color: var(--red);
       font-size: 12px;
+      margin-top: 8px;
+      max-width: 600px;
+      width: 100%;
       min-height: 18px;
     }
 
-    #shortcuts-row {
-      margin-top: 16px;
+    .shortcut-row {
       display: flex;
-      gap: 10px;
-      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      max-width: 600px;
+      width: 100%;
     }
-
     .shortcut-item {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       color: var(--muted);
       font-size: 11px;
     }
 
-    .shortcut-badge {
-      border: 1px solid var(--border);
-      padding: 2px 6px;
-      font-size: 10px;
-      color: var(--muted);
-      font-family: var(--font);
+    /* ─── PHASE 2 ─────────────────────────────────────────── */
+    #phase2 {
+      display: none;
+      flex-direction: column;
+      padding: 32px 80px 0;
     }
+    #phase2.visible { display: flex; }
 
-    /* ── CONSOLE BOX ── */
+    .phase2-prompt {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .phase2-prefix { color: var(--purple); margin-right: 8px; font-size: 15px; }
+    .phase2-email  { color: var(--muted); font-size: 15px; }
+
     #console-box {
       border: 1px solid var(--border);
       background: var(--bg);
-      margin-top: 24px;
-      padding: 12px;
-      display: none;
+      padding: 16px;
       font-size: 12px;
       line-height: 1.8;
-    }
-
-    #console-box.visible {
-      display: block;
     }
 
     .log-line {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      gap: 8px;
+      min-height: 1.8em;
     }
-
+    .log-left {
+      display: flex;
+      align-items: baseline;
+      flex: 1;
+      gap: 6px;
+      min-width: 0;
+    }
     .log-tag {
       color: var(--muted);
       flex-shrink: 0;
-      width: 60px;
+      min-width: 78px;
     }
-
-    .log-text {
-      flex: 1;
-    }
-
-    .log-status {
-      flex-shrink: 0;
-      font-weight: 600;
-      min-width: 48px;
-      text-align: right;
-    }
-
-    .log-status.ok { color: var(--green); }
-    .log-status.sig { color: var(--purple); }
-    .log-status.done { color: var(--amber); }
-    .log-status.warn { color: var(--amber); }
+    .log-text   { color: var(--text); flex: 1; }
+    .log-suffix { flex-shrink: 0; margin-left: 16px; }
+    .log-suffix-ok   { color: var(--green); }
+    .log-suffix-sig  { color: var(--purple); }
+    .log-suffix-done { color: var(--amber); }
+    .log-suffix-warn { color: var(--amber); }
+    .log-tag-err { color: var(--amber); }
 
     .log-cursor {
-      display: inline;
+      color: var(--text);
       animation: blink 1s step-end infinite;
     }
 
-    /* ── ACTION CARD ── */
-    #action-card {
-      margin-top: 24px;
+    /* ─── PHASE 3 ─────────────────────────────────────────── */
+    #phase3 {
       display: none;
+      padding: 24px 80px 40px;
       opacity: 0;
       transform: translateY(40px);
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+                  opacity  0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-
-    #action-card.visible {
-      display: block;
-    }
-
-    #action-card.animated {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    #phase3.visible { display: block; }
+    #phase3.animate { opacity: 1; transform: translateY(0); }
 
     #card-pre {
       white-space: pre;
       overflow-x: auto;
-      font-family: var(--font);
       font-size: 12px;
-      line-height: 1.6;
+      line-height: 1.7;
       color: var(--text);
+      border: none;
+      background: transparent;
+      font-family: inherit;
     }
+    #card-pre::-webkit-scrollbar { height: 3px; }
+    #card-pre::-webkit-scrollbar-thumb { background: var(--border); }
 
-    #card-pre::-webkit-scrollbar {
-      height: 4px;
-    }
-    #card-pre::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-    #card-pre::-webkit-scrollbar-thumb {
-      background: var(--border);
-    }
-
-    .card-header {
-      color: var(--muted);
-    }
-
-    .card-label {
-      color: var(--muted);
-    }
-
-    .card-value {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .card-id {
-      color: var(--purple);
-      font-weight: 600;
-    }
-
-    .card-status-active {
-      color: var(--green);
-      font-weight: 600;
-    }
-
-    #share-btn-wrapper {
-      margin-top: 0;
-      padding: 8px 0 2px 0;
-    }
-
-    #share-btn {
+    .card-share-btn {
       border: 1px solid var(--text);
       background: transparent;
       color: var(--text);
       padding: 10px 24px;
-      font-family: var(--font);
+      font-family: inherit;
       font-size: 13px;
       cursor: pointer;
+      border-radius: 0;
+      margin-top: 10px;
+      display: inline-block;
       transition: none;
-      display: block;
-      margin: 0 auto;
     }
-
-    #share-btn:hover {
+    .card-share-btn:hover {
       background: #FAFAFA;
       color: #000000;
       border-color: #FAFAFA;
     }
 
-    /* ── BOTTOM STATUS BAR ── */
-    #bottom-bar {
+    /* ─── BOTTOM STATUS BAR ───────────────────────────────── */
+    #bottombar {
       height: 32px;
       border-top: 1px solid var(--border);
       display: flex;
-      align-items: center;
+      align-items: stretch;
       flex-shrink: 0;
-      background: var(--bg);
-      z-index: 10;
     }
-
     .status-section {
+      display: flex;
+      align-items: center;
       padding: 0 14px;
       font-size: 11px;
       color: var(--muted);
-      height: 100%;
-      display: flex;
-      align-items: center;
       border-right: 1px solid var(--border);
+      white-space: nowrap;
+      gap: 4px;
     }
+    .status-section:last-child { border-right: none; }
+    .status-val { color: var(--text); }
 
-    .status-section:last-child {
-      border-right: none;
-    }
+    #node-status { transition: color 0.15s ease; }
+    #node-status.pulse { color: var(--green); }
 
-    .status-section span.val {
-      color: var(--text);
-      margin-left: 4px;
-    }
-
-    #node-indicator {
-      color: var(--muted);
-    }
-
-    #node-indicator.pulse {
-      animation: pulse-green 0.6s ease forwards;
-    }
-
-    @keyframes pulse-green {
-      0% { color: var(--muted); }
-      30% { color: var(--green); }
-      100% { color: var(--muted); }
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 767px) {
-      #left-panel {
-        display: none;
-      }
-
-      #seed-zone {
-        padding: 30px 20px;
-        font-size: 12px;
-      }
-
-      .comment-line {
-        font-size: 12px;
-      }
-
-      #email-input {
-        font-size: 14px;
-      }
-
-      #prompt-prefix {
-        font-size: 14px;
-      }
-
-      #cursor-char {
-        font-size: 14px;
-      }
-
-      #card-pre {
-        font-size: 11px;
-      }
-
-      #share-btn {
-        font-size: 12px;
-      }
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 768px) {
+      #left-panel { display: none; }
+      #right-panel { width: 100%; }
+      #phase1  { padding: 40px 20px 24px; }
+      #phase2  { padding: 20px 20px 0; }
+      #phase3  { padding: 16px 20px 32px; }
+      .seed-comment { font-size: 12px; }
+      #email-input  { font-size: 14px; }
+      #card-pre     { font-size: 10px; }
     }
   </style>
 </head>
 <body>
+
+<div id="backdrop"></div>
+
 <div id="app">
 
   <!-- TOP BAR -->
-  <div id="top-bar">
-    <div id="top-bar-title">
-      <span>LUCA</span> <span style="color:var(--muted)">//</span> <span>AIRLIST TERMINAL</span>
-      <span style="color:var(--muted); margin-left:8px;">v0.1.0</span>
+  <div id="topbar">
+    <div class="title">
+      <span class="brand">LUCA</span> // AIRLIST TERMINAL &nbsp;&nbsp;v0.1.0
     </div>
-    <div id="top-bar-keys">
-      <div class="key-badge">[ESC]</div>
-      <div class="key-badge">[ENTER]</div>
+    <div class="hints">
+      <span class="kbd">[ESC]</span>
+      <span class="kbd">[ENTER]</span>
     </div>
   </div>
-
-  <!-- BACKDROP -->
-  <div id="backdrop"></div>
 
   <!-- MAIN SPLIT -->
   <div id="main">
 
     <!-- LEFT PANEL -->
     <div id="left-panel">
-      <div id="left-panel-title">// STATUS FEED</div>
+      <div class="panel-title">// STATUS FEED</div>
       <div id="status-feed"></div>
     </div>
 
     <!-- RIGHT PANEL -->
     <div id="right-panel">
-      <div id="seed-zone">
-        <div id="seed-inner">
-          <div class="comment-line">// AIRLIST ENROLLMENT PROTOCOL</div>
-          <div class="comment-line">// Version 2.4.1 — Alpha Node Active</div>
 
-          <div id="prompt-wrapper">
-            <div id="prompt-row">
-              <div id="prompt-prefix">▸ </div>
-              <input
-                id="email-input"
-                type="email"
-                autocomplete="email"
-                spellcheck="false"
-                aria-label="Enter your email address"
-              />
-              <span id="cursor-char">▋</span>
-            </div>
-            <div id="error-msg"></div>
+      <!-- PHASE 1: idle / seed bar -->
+      <div id="phase1">
+        <div class="seed-comments">
+          <div class="seed-comment">// AIRLIST ENROLLMENT PROTOCOL</div>
+          <div class="seed-comment">// Version 2.4.1 — Alpha Node Active</div>
+        </div>
+        <div class="seed-prompt-wrapper" id="prompt-wrapper">
+          <div class="prompt-line" id="prompt-line">
+            <span class="prompt-prefix">▸</span>
+            <input
+              type="email"
+              id="email-input"
+              placeholder="Enter your email to reserve execution slot..."
+              autocomplete="off"
+              spellcheck="false"
+            />
+            <span class="blink-cursor" id="blink-cursor">▋</span>
           </div>
-
-          <div id="shortcuts-row">
-            <div class="shortcut-item">
-              <span class="shortcut-badge">[ENTER]</span>
-              <span>submit</span>
-            </div>
-            <div class="shortcut-item">
-              <span class="shortcut-badge">[ESC]</span>
-              <span>clear</span>
-            </div>
-            <div class="shortcut-item">
-              <span class="shortcut-badge">[TAB]</span>
-              <span>focus</span>
-            </div>
-          </div>
-
-          <!-- CONSOLE BOX -->
-          <div id="console-box"></div>
-
-          <!-- ACTION CARD -->
-          <div id="action-card">
-            <div id="card-pre"></div>
-            <div id="share-btn-wrapper">
-              <button id="share-btn">[ SHARE OPERATIONAL LOG TO EXPEDITE DEPLOYMENT ]</button>
-            </div>
-          </div>
-
+        </div>
+        <div class="error-msg" id="error-msg"></div>
+        <div class="shortcut-row">
+          <div class="shortcut-item"><span class="kbd">[ENTER]</span><span>submit</span></div>
+          <div class="shortcut-item"><span class="kbd">[ESC]</span><span>clear</span></div>
+          <div class="shortcut-item"><span class="kbd">[TAB]</span><span>focus</span></div>
         </div>
       </div>
-    </div>
 
-  </div>
+      <!-- PHASE 2: log stream -->
+      <div id="phase2">
+        <div class="phase2-prompt">
+          <span class="phase2-prefix">▸</span>
+          <span class="phase2-email" id="phase2-email"></span>
+        </div>
+        <div id="console-box"></div>
+      </div>
+
+      <!-- PHASE 3: receipt card -->
+      <div id="phase3">
+        <pre id="card-pre"></pre>
+        <button class="card-share-btn" id="share-btn">
+          [ SHARE OPERATIONAL LOG TO EXPEDITE DEPLOYMENT ]
+        </button>
+      </div>
+
+    </div><!-- /right-panel -->
+  </div><!-- /main -->
 
   <!-- BOTTOM STATUS BAR -->
-  <div id="bottom-bar">
-    <div class="status-section">uptime:<span class="val" id="uptime-val">00:00:00</span></div>
-    <div class="status-section">slots:<span class="val" id="slots-val">4,891 remaining</span></div>
-    <div class="status-section" id="node-section">
-      <span id="node-indicator">node: ALPHA-7 // ONLINE</span>
+  <div id="bottombar">
+    <div class="status-section">
+      uptime: <span class="status-val" id="uptime">00:00:00</span>
+    </div>
+    <div class="status-section">
+      slots: <span class="status-val" id="slots-count">4,891</span> remaining
+    </div>
+    <div class="status-section" id="node-status">
+      node: ALPHA-7 // ONLINE
     </div>
   </div>
 
-</div>
+</div><!-- /app -->
 
 <script>
-  // ── CONSTANTS ──
-  const SUPABASE_URL = 'https://ioeqnfqparfunotdjosy.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
+/* ================================================================
+   CONFIG
+================================================================ */
+var SUPABASE_URL = 'https://ioeqnfqparfunotdjosy.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
 
-  // ── STATE ──
-  let phase = 1; // 1=idle, 2=submitting, 3=done
-  let slotsRemaining = 4891;
-  let uptimeStart = performance.now();
+/* ================================================================
+   STATE
+================================================================ */
+var phase = 1;
+var slotsRemaining = 4891;
+var submittedEmail = '';
+var supabaseResult = null; // null=pending, true=ok, false=err
 
-  // ── DOM REFS ──
-  const emailInput = document.getElementById('email-input');
-  const promptRow = document.getElementById('prompt-row');
-  const promptWrapper = document.getElementById('prompt-wrapper');
-  const cursorChar = document.getElementById('cursor-char');
-  const errorMsg = document.getElementById('error-msg');
-  const consoleBox = document.getElementById('console-box');
-  const actionCard = document.getElementById('action-card');
-  const cardPre = document.getElementById('card-pre');
-  const shareBtn = document.getElementById('share-btn');
-  const backdrop = document.getElementById('backdrop');
-  const statusFeed = document.getElementById('status-feed');
-  const uptimeVal = document.getElementById('uptime-val');
-  const slotsVal = document.getElementById('slots-val');
-  const nodeIndicator = document.getElementById('node-indicator');
+/* ================================================================
+   UPTIME COUNTER
+================================================================ */
+var startTime = performance.now();
+var uptimeEl = document.getElementById('uptime');
 
-  // ── UPTIME COUNTER ──
-  setInterval(function() {
-    var elapsed = Math.floor((performance.now() - uptimeStart) / 1000);
-    var h = Math.floor(elapsed / 3600);
-    var m = Math.floor((elapsed % 3600) / 60);
-    var s = elapsed % 60;
-    uptimeVal.textContent = pad2(h) + ':' + pad2(m) + ':' + pad2(s);
-  }, 1000);
+function padTwo(n) { return String(n).padStart(2, '0'); }
 
-  function pad2(n) {
-    return n < 10 ? '0' + n : '' + n;
+function formatUptime(ms) {
+  var total = Math.floor(ms / 1000);
+  var h = Math.floor(total / 3600);
+  var m = Math.floor((total % 3600) / 60);
+  var s = total % 60;
+  return padTwo(h) + ':' + padTwo(m) + ':' + padTwo(s);
+}
+
+setInterval(function() {
+  uptimeEl.textContent = formatUptime(performance.now() - startTime);
+}, 1000);
+
+/* ================================================================
+   SLOTS
+================================================================ */
+var slotsEl = document.getElementById('slots-count');
+
+function formatNumber(n) {
+  return n.toLocaleString('en-US');
+}
+
+/* ================================================================
+   LEFT PANEL — STATUS FEED
+================================================================ */
+var feedEl = document.getElementById('status-feed');
+var MAX_FEED = 100;
+
+var feedPool = {
+  SYS: [
+    'Kernel watchdog nominal. Load: 0.12',
+    'GC sweep: 2.3MB reclaimed',
+    'CPU governor: performance mode active',
+    'Process scheduler: nominal',
+    'Disk I/O: 12ms avg latency',
+    'Entropy pool: 3891 bits available',
+  ],
+  NET: [
+    'Peer mesh sync — 847 active connections',
+    'Routing table updated — 12 new nodes',
+    'BGP route convergence: stable',
+    'Packet loss: 0.01% (acceptable)',
+    'CDN edge latency: 8ms avg',
+    'Socket pool: 256/512 open',
+  ],
+  MEM: [
+    'Heap pressure: 23% (stable)',
+    'Buffer pool: 64/256 slots allocated',
+    'Cache hit ratio: 94.7%',
+    'Memory fragmentation: low',
+    'SWAP usage: 0MB',
+    'Virtual memory paged: 0 faults',
+  ],
+  SEC: [
+    'Auth token rotation cycle complete',
+    'TLS handshake pool refreshed',
+    'Intrusion detection: no anomalies',
+    'Certificate expiry check: all valid',
+    'Rate limiter: nominal thresholds',
+    'API key audit: 0 stale entries',
+  ],
+};
+
+var feedTypes = ['SYS', 'NET', 'MEM', 'SEC'];
+
+function tsFromDate(d) {
+  return '[' + padTwo(d.getHours()) + ':' + padTwo(d.getMinutes()) + ':' + padTwo(d.getSeconds()) + ']';
+}
+
+function nowTs() { return tsFromDate(new Date()); }
+
+function pastTs(secondsAgo) {
+  return tsFromDate(new Date(Date.now() - secondsAgo * 1000));
+}
+
+function addFeedEntry(type, msg, ts) {
+  var timestamp = ts || nowTs();
+  var el = document.createElement('div');
+  el.className = 'feed-entry';
+
+  var timeSpan = document.createElement('span');
+  timeSpan.className = 'feed-time';
+  timeSpan.textContent = timestamp + ' ';
+
+  var bodySpan = document.createElement('span');
+  bodySpan.className = 'feed-type-' + type;
+  bodySpan.textContent = type + '  ' + msg;
+
+  el.appendChild(timeSpan);
+  el.appendChild(bodySpan);
+  feedEl.appendChild(el);
+
+  while (feedEl.children.length > MAX_FEED) {
+    feedEl.removeChild(feedEl.firstChild);
   }
 
-  function formatTimestamp(d) {
-    return '[' + pad2(d.getHours()) + ':' + pad2(d.getMinutes()) + ':' + pad2(d.getSeconds()) + ']';
+  feedEl.scrollTop = feedEl.scrollHeight;
+}
+
+// Pre-seed
+var seeds = [
+  { type: 'SYS', msg: 'Kernel watchdog nominal. Load: 0.12',     ago: 180 },
+  { type: 'NET', msg: 'Peer mesh sync — 847 active connections',  ago: 155 },
+  { type: 'MEM', msg: 'Heap pressure: 23% (stable)',              ago: 130 },
+  { type: 'SEC', msg: 'Auth token rotation cycle complete',        ago: 108 },
+  { type: 'SYS', msg: 'GC sweep: 2.3MB reclaimed',               ago: 85  },
+  { type: 'NET', msg: 'Routing table updated — 12 new nodes',     ago: 62  },
+  { type: 'MEM', msg: 'Buffer pool: 64/256 slots allocated',      ago: 40  },
+  { type: 'SEC', msg: 'TLS handshake pool refreshed',             ago: 18  },
+];
+seeds.forEach(function(s) { addFeedEntry(s.type, s.msg, pastTs(s.ago)); });
+
+function scheduleNextFeed() {
+  var delay = 2000 + Math.random() * 2000;
+  setTimeout(function() {
+    var type = feedTypes[Math.floor(Math.random() * feedTypes.length)];
+    var pool = feedPool[type];
+    var msg = pool[Math.floor(Math.random() * pool.length)];
+    addFeedEntry(type, msg);
+    scheduleNextFeed();
+  }, delay);
+}
+scheduleNextFeed();
+
+/* ================================================================
+   EMAIL INPUT
+================================================================ */
+var emailInput   = document.getElementById('email-input');
+var promptLine   = document.getElementById('prompt-line');
+var blinkCursor  = document.getElementById('blink-cursor');
+var backdropEl   = document.getElementById('backdrop');
+var errorMsgEl   = document.getElementById('error-msg');
+var promptWrapper = document.getElementById('prompt-wrapper');
+
+function updateCursor() {
+  if (emailInput.value.length === 0) {
+    blinkCursor.classList.remove('hidden');
+  } else {
+    blinkCursor.classList.add('hidden');
+  }
+}
+
+emailInput.addEventListener('focus', function() {
+  promptLine.classList.add('focused');
+  backdropEl.classList.add('active');
+  updateCursor();
+});
+
+emailInput.addEventListener('blur', function() {
+  promptLine.classList.remove('focused');
+  backdropEl.classList.remove('active');
+  updateCursor();
+});
+
+emailInput.addEventListener('input', function() {
+  updateCursor();
+  clearError();
+});
+
+function clearError() {
+  errorMsgEl.textContent = '';
+  promptLine.classList.remove('error');
+}
+
+function showError(msg) {
+  errorMsgEl.textContent = msg;
+  promptLine.classList.add('error');
+  setTimeout(function() { promptLine.classList.remove('error'); }, 600);
+  setTimeout(function() { errorMsgEl.textContent = ''; }, 2000);
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+/* ================================================================
+   KEYBOARD SHORTCUTS
+================================================================ */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Tab' && document.activeElement !== emailInput && phase === 1) {
+    e.preventDefault();
+    emailInput.focus();
+    return;
+  }
+  if (e.key === 'Escape') {
+    if (phase === 1) emailInput.blur();
+    // phase 2/3: submission is final, ignore
+    return;
+  }
+  if (e.key === 'Enter' && document.activeElement === emailInput) {
+    e.preventDefault();
+    handleSubmit();
+  }
+});
+
+/* ================================================================
+   SUBMISSION
+================================================================ */
+function handleSubmit() {
+  if (phase !== 1) return;
+
+  var email = emailInput.value.trim();
+
+  if (!validateEmail(email)) {
+    showError('// INVALID FORMAT — EXPECTED user@domain.tld');
+    return;
   }
 
-  // ── LEFT PANEL FEED ──
-  var feedTypes = ['SYS', 'NET', 'MEM', 'SEC'];
-  var feedMessages = {
-    SYS: [
-      'Kernel watchdog nominal. Load: {load}',
-      'GC sweep: {mb}MB reclaimed',
-      'Process pool rebalanced — {n} workers active',
-      'Scheduler tick: 0 deferred tasks',
-      'Filesystem cache hit rate: {pct}%',
-    ],
-    NET: [
-      'Peer mesh sync — {n} active connections',
-      'Routing table updated — {n} new nodes',
-      'Latency probe: avg {ms}ms to primary relay',
-      'Packet loss: 0.0% on primary uplink',
-      'DNS resolution cache refreshed',
-    ],
-    MEM: [
-      'Heap pressure: {pct}% (stable)',
-      'Buffer pool: {a}/{b} slots allocated',
-      'Swap usage: 0MB — all resident',
-      'Large object count: {n} tracked',
-      'Arena compaction: {pct}% fragmentation',
-    ],
-    SEC: [
-      'Auth token rotation cycle complete',
-      'TLS handshake pool refreshed',
-      'Entropy pool refilled: 256 bits available',
-      'Certificate pinning verified — 0 anomalies',
-      'Rate limit counters reset for epoch',
-    ],
-  };
+  submittedEmail = email;
+  phase = 2;
 
-  function randomBetween(a, b) {
-    return Math.floor(Math.random() * (b - a + 1)) + a;
-  }
+  // Lock input UI
+  emailInput.disabled = true;
+  promptLine.classList.remove('focused');
+  promptLine.classList.add('locked');
+  blinkCursor.classList.add('hidden');
+  backdropEl.classList.remove('active');
 
-  function renderFeedMessage(tmpl) {
-    return tmpl
-      .replace('{load}', (Math.random() * 0.5 + 0.05).toFixed(2))
-      .replace('{mb}', (Math.random() * 4 + 0.5).toFixed(1))
-      .replace('{n}', randomBetween(5, 999))
-      .replace('{pct}', randomBetween(10, 89))
-      .replace('{ms}', randomBetween(8, 120))
-      .replace('{a}', randomBetween(10, 120))
-      .replace('{b}', '256');
-  }
+  // Shift prompt up
+  promptWrapper.classList.add('shifted');
 
-  function addFeedEntry(type, msg, ts) {
-    var d = ts || new Date();
-    var entry = document.createElement('div');
-    entry.className = 'feed-entry';
+  // Show phase2 area
+  var phase2El = document.getElementById('phase2');
+  var phase2EmailEl = document.getElementById('phase2-email');
+  phase2El.classList.add('visible');
+  phase2EmailEl.textContent = email;
 
-    var tsSpan = document.createElement('span');
-    tsSpan.className = 'feed-ts';
-    tsSpan.textContent = formatTimestamp(d) + ' ';
+  // Fire Supabase in parallel
+  fireSupabase(email);
 
-    var typeSpan = document.createElement('span');
-    typeSpan.className = 'feed-type-' + type;
-    typeSpan.textContent = type + '  ';
+  // Start log stream
+  startLogStream(email);
+}
 
-    var msgSpan = document.createElement('span');
-    msgSpan.className = 'feed-msg';
-    msgSpan.textContent = msg;
+/* ================================================================
+   SUPABASE
+================================================================ */
+function fireSupabase(email) {
+  fetch(SUPABASE_URL + '/rest/v1/waitlist', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({ email: email, source: 'airlist' }),
+  })
+  .then(function(res) {
+    supabaseResult = (res.ok || res.status === 409) ? true : false;
+  })
+  .catch(function() {
+    supabaseResult = false;
+  });
+}
 
-    entry.appendChild(tsSpan);
-    entry.appendChild(typeSpan);
-    entry.appendChild(msgSpan);
-    statusFeed.appendChild(entry);
+/* ================================================================
+   LOG STREAM
+================================================================ */
+var LOG_DEFS = [
+  { tag: '[LOG]   ', text: 'Initiating handshake with global routing matrix...',   suffix: '[OK]',   cls: 'log-suffix-ok'   },
+  { tag: '[LOG]   ', text: 'Allocating sandbox memory register (256MB)...',         suffix: '[OK]',   cls: 'log-suffix-ok'   },
+  { tag: '[LOG]   ', text: 'Scanning IANA namespace for collision conflicts...',     suffix: '[OK]',   cls: 'log-suffix-ok'   },
+  { tag: '[LOG]   ', text: 'Reserving hardware slot for {email}...',                suffix: '[OK]',   cls: 'log-suffix-ok'   },
+  { tag: '[STATUS]', text: 'Enrollment signature generated.',                       suffix: '[SIG]',  cls: 'log-suffix-sig'  },
+  { tag: '[STATUS]', text: 'Writing to Alpha Node persistent store...',             suffix: '[OK]',   cls: 'log-suffix-ok'   },
+  { tag: '[STATUS]', text: 'Position secured. Queue depth: 4,891.',                suffix: '[DONE]', cls: 'log-suffix-done' },
+];
+var ERR_DEF = { tag: '[ERR]   ', text: 'Registration write failed — slot reserved locally.', suffix: '[WARN]', cls: 'log-suffix-warn' };
 
-    // Trim to 100 lines
-    while (statusFeed.children.length > 100) {
-      statusFeed.removeChild(statusFeed.firstChild);
-    }
+function startLogStream(email) {
+  var consoleBox = document.getElementById('console-box');
 
-    statusFeed.scrollTop = statusFeed.scrollHeight;
-  }
-
-  // Pre-seed with 8 static entries (~3 min before now)
-  var seedData = [
-    { type: 'SYS', msg: 'Kernel watchdog nominal. Load: 0.12' },
-    { type: 'NET', msg: 'Peer mesh sync — 847 active connections' },
-    { type: 'MEM', msg: 'Heap pressure: 23% (stable)' },
-    { type: 'SEC', msg: 'Auth token rotation cycle complete' },
-    { type: 'SYS', msg: 'GC sweep: 2.3MB reclaimed' },
-    { type: 'NET', msg: 'Routing table updated — 12 new nodes' },
-    { type: 'MEM', msg: 'Buffer pool: 64/256 slots allocated' },
-    { type: 'SEC', msg: 'TLS handshake pool refreshed' },
-  ];
-  var baseTime = new Date(Date.now() - 3 * 60 * 1000);
-  for (var i = 0; i < seedData.length; i++) {
-    var seedTs = new Date(baseTime.getTime() + i * 22000);
-    addFeedEntry(seedData[i].type, seedData[i].msg, seedTs);
-  }
-
-  // Auto-generate new messages
-  function scheduleNextFeedEntry() {
-    var delay = randomBetween(2000, 4000);
-    setTimeout(function() {
-      var type = feedTypes[Math.floor(Math.random() * feedTypes.length)];
-      var msgs = feedMessages[type];
-      var tmpl = msgs[Math.floor(Math.random() * msgs.length)];
-      addFeedEntry(type, renderFeedMessage(tmpl));
-      scheduleNextFeedEntry();
-    }, delay);
-  }
-  scheduleNextFeedEntry();
-
-  // ── INPUT FOCUS HANDLING ──
-  emailInput.addEventListener('focus', function() {
-    promptRow.classList.add('focused');
-    backdrop.classList.add('active');
-    cursorChar.classList.add('hidden');
+  // Resolve email placeholder
+  var lines = LOG_DEFS.map(function(l) {
+    return {
+      tag: l.tag,
+      text: l.text.replace('{email}', email),
+      suffix: l.suffix,
+      cls: l.cls,
+    };
   });
 
-  emailInput.addEventListener('blur', function() {
-    promptRow.classList.remove('focused');
-    backdrop.classList.remove('active');
-    if (!emailInput.value) {
-      cursorChar.classList.remove('hidden');
-    }
-  });
+  var lineIdx = 0;
 
-  emailInput.addEventListener('input', function() {
-    if (emailInput.value.length > 0) {
-      cursorChar.classList.add('hidden');
-    } else {
-      cursorChar.classList.remove('hidden');
-    }
-    // Clear error on typing
-    if (promptRow.classList.contains('error')) {
-      promptRow.classList.remove('error');
-      errorMsg.textContent = '';
-    }
-  });
+  function makeLineEl(def) {
+    var lineEl = document.createElement('div');
+    lineEl.className = 'log-line';
 
-  // ── KEYBOARD SHORTCUTS ──
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Tab' && document.activeElement !== emailInput && phase === 1) {
-      e.preventDefault();
-      emailInput.focus();
-    }
-    if (e.key === 'Escape') {
-      if (phase === 1) {
-        emailInput.blur();
+    var leftEl = document.createElement('div');
+    leftEl.className = 'log-left';
+
+    var tagEl = document.createElement('span');
+    tagEl.className = 'log-tag';
+    tagEl.textContent = def.tag;
+
+    var textEl = document.createElement('span');
+    textEl.className = 'log-text';
+
+    var cursorEl = document.createElement('span');
+    cursorEl.className = 'log-cursor';
+    cursorEl.textContent = '▋';
+
+    leftEl.appendChild(tagEl);
+    leftEl.appendChild(textEl);
+    leftEl.appendChild(cursorEl);
+    lineEl.appendChild(leftEl);
+    consoleBox.appendChild(lineEl);
+
+    return { lineEl: lineEl, textEl: textEl, cursorEl: cursorEl };
+  }
+
+  function typeLine(def, callback) {
+    var els = makeLineEl(def);
+    var ci = 0;
+
+    function typeChar() {
+      if (ci < def.text.length) {
+        els.textEl.textContent += def.text[ci];
+        ci++;
+        setTimeout(typeChar, 15);
+      } else {
+        // Done typing — remove cursor, add suffix
+        els.cursorEl.remove();
+        var suffixEl = document.createElement('span');
+        suffixEl.className = 'log-suffix ' + def.cls;
+        suffixEl.textContent = def.suffix;
+        els.lineEl.appendChild(suffixEl);
+        setTimeout(callback, 50);
       }
-      // phase 2/3: do nothing
     }
-    if (e.key === 'Enter' && document.activeElement === emailInput) {
-      e.preventDefault();
-      handleSubmit();
-    }
-  });
 
-  // ── EMAIL VALIDATION ──
-  function isValidEmail(v) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+    typeChar();
   }
 
-  // ── SUBMISSION ──
-  function handleSubmit() {
-    if (phase !== 1) return;
-    var email = emailInput.value.trim();
-    if (!isValidEmail(email)) {
-      promptRow.classList.add('error');
-      errorMsg.textContent = '// INVALID FORMAT — EXPECTED user@domain.tld';
-      setTimeout(function() {
-        promptRow.classList.remove('error');
-        errorMsg.textContent = '';
-      }, 2000);
+  function nextLine() {
+    if (lineIdx < lines.length) {
+      typeLine(lines[lineIdx], function() {
+        lineIdx++;
+        nextLine();
+      });
+    } else {
+      // All base lines done — wait for supabase or add idle cursor
+      waitForSupabase();
+    }
+  }
+
+  function waitForSupabase() {
+    if (supabaseResult === null) {
+      setTimeout(waitForSupabase, 150);
       return;
     }
-    phase = 2;
-    startSubmission(email);
-  }
-
-  function startSubmission(email) {
-    // Lock input
-    emailInput.disabled = true;
-    promptRow.classList.add('focused');
-    cursorChar.classList.add('hidden');
-
-    // Shift prompt up
-    promptWrapper.classList.add('shifted');
-
-    // Fire Supabase fetch in parallel
-    var supabasePromise = fetch(SUPABASE_URL + '/rest/v1/waitlist', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_KEY,
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'Prefer': 'return=minimal',
-      },
-      body: JSON.stringify({ email: email, source: 'airlist' }),
-    });
-
-    // Show console box
-    consoleBox.classList.add('visible');
-    consoleBox.innerHTML = '';
-
-    // Define log lines
-    var logLines = [
-      { tag: '[LOG]',    text: 'Initiating handshake with global routing matrix...',     status: '[OK]',   statusClass: 'ok'   },
-      { tag: '[LOG]',    text: 'Allocating sandbox memory register (256MB)...',           status: '[OK]',   statusClass: 'ok'   },
-      { tag: '[LOG]',    text: 'Scanning IANA namespace for collision conflicts...',       status: '[OK]',   statusClass: 'ok'   },
-      { tag: '[LOG]',    text: 'Reserving hardware slot for ' + email + '...',            status: '[OK]',   statusClass: 'ok'   },
-      { tag: '[STATUS]', text: 'Enrollment signature generated.',                         status: '[SIG]',  statusClass: 'sig'  },
-      { tag: '[STATUS]', text: 'Writing to Alpha Node persistent store...',               status: '[OK]',   statusClass: 'ok'   },
-      { tag: '[STATUS]', text: 'Position secured. Queue depth: 4,891.',                  status: '[DONE]', statusClass: 'done' },
-    ];
-
-    var lineIndex = 0;
-    var charIndex = 0;
-    var currentLineEl = null;
-    var currentTextEl = null;
-    var currentCursorEl = null;
-
-    function buildLineElement(lineData) {
-      var lineEl = document.createElement('div');
-      lineEl.className = 'log-line';
-
-      var tagEl = document.createElement('span');
-      tagEl.className = 'log-tag';
-      tagEl.textContent = lineData.tag;
-
-      var textEl = document.createElement('span');
-      textEl.className = 'log-text';
-
-      var cursorEl = document.createElement('span');
-      cursorEl.className = 'log-cursor';
-      cursorEl.textContent = '▋';
-      textEl.appendChild(cursorEl);
-
-      lineEl.appendChild(tagEl);
-      lineEl.appendChild(textEl);
-      consoleBox.appendChild(lineEl);
-
-      return { lineEl: lineEl, textEl: textEl, cursorEl: cursorEl };
-    }
-
-    function startNextLine() {
-      if (lineIndex >= logLines.length) {
-        // All lines done — move cursor to idle blink after last line
-        if (currentCursorEl) {
-          // already blinking at end
-        }
-        // Wait for supabase result then maybe show error
-        supabasePromise.then(function(res) {
-          if (!res.ok && res.status !== 409) {
-            // Append error line
-            var errLine = document.createElement('div');
-            errLine.className = 'log-line';
-            var errTag = document.createElement('span');
-            errTag.className = 'log-tag';
-            errTag.style.color = 'var(--amber)';
-            errTag.textContent = '[ERR]';
-            var errText = document.createElement('span');
-            errText.className = 'log-text';
-            errText.textContent = 'Registration write failed — slot reserved locally.';
-            var errStatus = document.createElement('span');
-            errStatus.className = 'log-status warn';
-            errStatus.textContent = '[WARN]';
-            errLine.appendChild(errTag);
-            errLine.appendChild(errText);
-            errLine.appendChild(errStatus);
-            consoleBox.appendChild(errLine);
-          }
-          // Remove cursor from last line
-          if (currentCursorEl) {
-            currentCursorEl.remove();
-          }
-          setTimeout(showActionCard.bind(null, email), 350);
-        }).catch(function() {
-          // Network error — still proceed
-          if (currentCursorEl) currentCursorEl.remove();
-          setTimeout(showActionCard.bind(null, email), 350);
-        });
-        return;
-      }
-
-      var lineData = logLines[lineIndex];
-      var els = buildLineElement(lineData);
-      currentLineEl = els.lineEl;
-      currentTextEl = els.textEl;
-      currentCursorEl = els.cursorEl;
-      charIndex = 0;
-
-      // Remove cursor from previous line's status if it exists
-      // (cursor is only in textEl before status is appended)
-
-      function typeChar() {
-        if (charIndex < lineData.text.length) {
-          // Insert char before cursor
-          var textNode = document.createTextNode(lineData.text[charIndex]);
-          currentTextEl.insertBefore(textNode, currentCursorEl);
-          charIndex++;
-          setTimeout(typeChar, 15);
-        } else {
-          // Line done — remove cursor, append status, pause then next line
-          currentCursorEl.remove();
-          currentCursorEl = null;
-
-          var statusEl = document.createElement('span');
-          statusEl.className = 'log-status ' + lineData.statusClass;
-          statusEl.textContent = lineData.status;
-          currentLineEl.appendChild(statusEl);
-
-          lineIndex++;
-          setTimeout(startNextLine, 50);
-        }
-      }
-
-      typeChar();
-    }
-
-    startNextLine();
-  }
-
-  // ── ACTION CARD ──
-  function showActionCard(email) {
-    phase = 3;
-
-    // Decrement slots
-    slotsRemaining = Math.max(0, slotsRemaining - 1);
-    slotsVal.textContent = slotsRemaining.toLocaleString() + ' remaining';
-
-    // Pulse node indicator
-    nodeIndicator.classList.remove('pulse');
-    void nodeIndicator.offsetWidth; // reflow
-    nodeIndicator.classList.add('pulse');
-
-    // Build enrollment ID
-    var enrollId = '0x' + btoa(email).substring(0, 8) + '...';
-
-    // Build card text
-    var line = '─'.repeat(66);
-    var cardText =
-      '┌' + line + '┐\n' +
-      '│  <span class="card-header">SYSTEM REGISTER COMPLIANT // ALPHA NODE ACTIVATED</span>               │\n' +
-      '├' + line + '┤\n' +
-      '│                                                                  │\n' +
-      '│  ▸ ENROLLMENT ID:   <span class="card-id">' + padRight(enrollId, 44) + '</span>│\n' +
-      '│  ▸ TIER METRIC:     <span class="card-value">Prosumer Operator                              </span>│\n' +
-      '│  ▸ NODE:            <span class="card-value">ALPHA-7                                        </span>│\n' +
-      '│  ▸ QUEUE POSITION:  <span class="card-value">#4,891                                         </span>│\n' +
-      '│  ▸ STATUS:          <span class="card-status-active">ACTIVE                                         </span>│\n' +
-      '│                                                                  │\n' +
-      '├' + line + '┤\n' +
-      '│                                                                  │\n' +
-      '│                                                                  │\n' +
-      '└' + line + '┘';
-
-    cardPre.innerHTML = cardText;
-
-    actionCard.classList.add('visible');
-    // Trigger animation on next frame
-    requestAnimationFrame(function() {
-      requestAnimationFrame(function() {
-        actionCard.classList.add('animated');
-      });
-    });
-  }
-
-  function padRight(str, len) {
-    // Pad plain string to fixed length (no HTML in str)
-    while (str.length < len) str += ' ';
-    return str;
-  }
-
-  // ── SHARE BUTTON ──
-  shareBtn.addEventListener('click', function() {
-    var msg = 'I just joined the Luca Airlist — reserve your slot before Alpha fills up.';
-    var originalText = shareBtn.textContent;
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(msg).then(function() {
-        shareBtn.textContent = '[ COPIED TO CLIPBOARD ✓ ]';
-        setTimeout(function() {
-          shareBtn.textContent = originalText;
-        }, 2000);
-      }).catch(function() {
-        fallbackCopy(msg, originalText);
+    if (supabaseResult === false) {
+      typeLine(ERR_DEF, function() {
+        showIdleCursorThenCard();
       });
     } else {
-      fallbackCopy(msg, originalText);
+      showIdleCursorThenCard();
     }
-  });
-
-  function fallbackCopy(text, originalText) {
-    var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.top = '-9999px';
-    document.body.appendChild(ta);
-    ta.select();
-    try {
-      document.execCommand('copy');
-      shareBtn.textContent = '[ COPIED TO CLIPBOARD ✓ ]';
-      setTimeout(function() {
-        shareBtn.textContent = originalText;
-      }, 2000);
-    } catch(e) {}
-    document.body.removeChild(ta);
   }
 
-  // ── INIT ──
-  // Show cursor blinking hint when empty and unfocused
-  emailInput.addEventListener('focus', function() {
-    cursorChar.classList.add('hidden');
+  function showIdleCursorThenCard() {
+    var idleEl = document.createElement('div');
+    idleEl.innerHTML = '<span class="log-cursor">▋</span>';
+    consoleBox.appendChild(idleEl);
+    setTimeout(showPhase3, 350);
+  }
+
+  nextLine();
+}
+
+/* ================================================================
+   PHASE 3 — RECEIPT CARD
+================================================================ */
+function buildCard(enrollId, queuePos) {
+  var W = 66; // inner width
+  var bar = '';
+  for (var i = 0; i < W; i++) bar += '─';
+
+  function row(inner) {
+    var s = inner;
+    while (s.length < W) s += ' ';
+    if (s.length > W) s = s.substring(0, W);
+    return '│' + s + '│';
+  }
+
+  return [
+    '┌' + bar + '┐',
+    row('  SYSTEM REGISTER COMPLIANT // ALPHA NODE ACTIVATED'),
+    '├' + bar + '┤',
+    row(''),
+    row('  ▸ ENROLLMENT ID:   ' + enrollId),
+    row('  ▸ TIER METRIC:     Prosumer Operator'),
+    row('  ▸ NODE:            ALPHA-7'),
+    row('  ▸ QUEUE POSITION:  ' + queuePos),
+    row('  ▸ STATUS:          ACTIVE'),
+    row(''),
+    '└' + bar + '┘',
+  ].join('\n');
+}
+
+function showPhase3() {
+  // Decrement slots
+  if (slotsRemaining > 0) slotsRemaining--;
+  slotsEl.textContent = formatNumber(slotsRemaining);
+
+  // Pulse node status green
+  var nodeEl = document.getElementById('node-status');
+  nodeEl.classList.add('pulse');
+  setTimeout(function() { nodeEl.classList.remove('pulse'); }, 2000);
+
+  // Build card
+  var enrollId = '0x' + btoa(submittedEmail).substring(0, 8) + '...';
+  var queuePos = '#' + formatNumber(slotsRemaining);
+  var cardText = buildCard(enrollId, queuePos);
+
+  var phase3El = document.getElementById('phase3');
+  var cardPre  = document.getElementById('card-pre');
+  cardPre.textContent = cardText;
+
+  phase3El.classList.add('visible');
+  phase = 3;
+
+  // Animate in (double rAF to ensure display:block is applied first)
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      phase3El.classList.add('animate');
+    });
   });
+
+  // Wire share button
+  var shareBtn = document.getElementById('share-btn');
+  shareBtn.addEventListener('click', function() {
+    var shareText = 'I just joined the Luca Airlist — reserve your slot before Alpha fills up.';
+    navigator.clipboard.writeText(shareText).catch(function() {});
+    shareBtn.textContent = '[ COPIED TO CLIPBOARD ✓ ]';
+    setTimeout(function() {
+      shareBtn.textContent = '[ SHARE OPERATIONAL LOG TO EXPEDITE DEPLOYMENT ]';
+    }, 2000);
+  });
+}
+
+/* ================================================================
+   INIT
+================================================================ */
+updateCursor();
 </script>
 </body>
 </html>
