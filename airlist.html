@@ -150,8 +150,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 60px 80px 40px;
-      min-height: 240px;
+      padding: 48px 80px 40px;
+      min-height: 100%;
     }
     .seed-comments {
       width: 100%;
@@ -365,16 +365,75 @@
     #node-status { transition: color 0.15s ease; }
     #node-status.pulse { color: var(--green); }
 
+    /* ─── HERO SECTION ───────────────────────────────────── */
+    .hero-section {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .hero-logo {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .hero-logo svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.9;
+    }
+    .hero-headline {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .hero-sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    /* ─── SYSTEM STATUS TAG ───────────────────────────────── */
+    .system-status {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 10px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+    .system-status::before {
+      content: '// ';
+      color: var(--muted);
+    }
+
+    /* ─── SHORTCUT ROW (muted) ────────────────────────────── */
+    .shortcut-item span:not(.kbd) {
+      color: var(--border);
+      font-size: 10px;
+    }
+    .shortcut-item .kbd {
+      font-size: 9px;
+      color: var(--border);
+      border-color: var(--border-dim);
+    }
+
     /* ─── RESPONSIVE ──────────────────────────────────────── */
     @media (max-width: 768px) {
       #left-panel { display: none; }
       #right-panel { width: 100%; }
-      #phase1  { padding: 40px 20px 24px; }
+      #phase1  { padding: 32px 20px 24px; }
       #phase2  { padding: 20px 20px 0; }
       #phase3  { padding: 16px 20px 32px; }
-      .seed-comment { font-size: 12px; }
-      #email-input  { font-size: 14px; }
-      #card-pre     { font-size: 10px; }
+      .hero-headline { font-size: 17px; }
+      .hero-sub      { font-size: 11px; }
+      #email-input   { font-size: 14px; }
+      #card-pre      { font-size: 10px; }
     }
   </style>
 </head>
@@ -387,6 +446,21 @@
   <!-- TOP BAR -->
   <div id="topbar">
     <div class="title">
+      <!-- Luca logo mark -->
+      <svg width="18" height="18" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px;opacity:0.85">
+        <rect x="46" y="14" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+        <rect x="78" y="46" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+        <rect x="46" y="78" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+        <rect x="14" y="46" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+        <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)" fill="#FAFAFA"/>
+        <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)" fill="#FAFAFA"/>
+        <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)" fill="#FAFAFA"/>
+        <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)" fill="#FAFAFA"/>
+        <circle cx="50" cy="50" r="17" fill="#FAFAFA"/>
+        <circle cx="50" cy="50" r="11" fill="#000000"/>
+        <circle cx="50" cy="50" r="6" fill="#FAFAFA"/>
+        <circle cx="50" cy="50" r="2.2" fill="#000000"/>
+      </svg>
       <span class="brand">LUCA</span> // AIRLIST TERMINAL &nbsp;&nbsp;v0.1.0
     </div>
     <div class="hints">
@@ -409,17 +483,38 @@
 
       <!-- PHASE 1: idle / seed bar -->
       <div id="phase1">
-        <div class="seed-comments">
-          <div class="seed-comment">// AIRLIST ENROLLMENT PROTOCOL</div>
-          <div class="seed-comment">// Version 2.4.1 — Alpha Node Active</div>
+
+        <!-- HERO -->
+        <div class="hero-section">
+          <div class="hero-logo">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="46" y="14" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+              <rect x="78" y="46" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+              <rect x="46" y="78" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+              <rect x="14" y="46" width="8" height="8" rx="1.5" fill="#FAFAFA"/>
+              <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)" fill="#FAFAFA"/>
+              <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)" fill="#FAFAFA"/>
+              <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)" fill="#FAFAFA"/>
+              <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)" fill="#FAFAFA"/>
+              <circle cx="50" cy="50" r="17" fill="#FAFAFA"/>
+              <circle cx="50" cy="50" r="11" fill="#000000"/>
+              <circle cx="50" cy="50" r="6" fill="#FAFAFA"/>
+              <circle cx="50" cy="50" r="2.2" fill="#000000"/>
+            </svg>
+          </div>
+          <div class="hero-headline">Stop wasting time managing your money.<br>Let an autonomous agent execute it for you.</div>
+          <div class="hero-sub">Luca pairs secure open-banking infrastructure with intelligent local browser automation to scan your accounts, instantly eliminate hidden subscription leaks, claw back predatory banking fees, and route your idle checking balances into risk-free high-yield nodes automatically.</div>
         </div>
+
+        <!-- SYSTEM STATUS + INPUT -->
+        <div class="system-status">SYSTEM STATUS: ACTIVE // OPEN PLATFORM ENROLLMENT PHASE</div>
         <div class="seed-prompt-wrapper" id="prompt-wrapper">
           <div class="prompt-line" id="prompt-line">
             <span class="prompt-prefix">▸</span>
             <input
               type="email"
               id="email-input"
-              placeholder="Enter your email to reserve execution slot..."
+              placeholder="Enter your email to reserve your automated CFO slot..."
               autocomplete="off"
               spellcheck="false"
             />
