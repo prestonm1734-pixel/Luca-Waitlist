@@ -1,942 +1,1906 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luca // Airlist Terminal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luca — talk to your money.</title>
+  <meta name="description" content="Luca is an AI personal finance advisor that connects to your real bank and investment accounts and gives you specific, personalized advice based on your actual numbers.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+/* Luca — landing page styles */
+:root {
+  --indigo: #4F5A97;
+  --indigo-deep: #3D4778;
+  --indigo-soft: #ECEFF7;
+  --indigo-ink: #1E2240;
+  --ink: #0A0A0A;
+  --ink-2: #1A1A1A;
+  --muted: #6B6B6B;
+  --muted-2: #9B9B9B;
+  --line: #ECECEA;
+  --line-strong: #CFCFCB;
+  --paper: #FAFAF8;
+  --white: #FFFFFF;
+  --green: #2F7A4F;
 
-    :root {
-      --bg: #000000;
-      --border: #27272A;
-      --border-dim: #18181B;
-      --text: #FAFAFA;
-      --muted: #71717A;
-      --purple: #A855F7;
-      --green: #22C55E;
-      --amber: #F59E0B;
-      --red: #EF4444;
-      --blue: #60A5FA;
-    }
+  --maxw: 1240px;
+  --pad: clamp(24px, 4vw, 56px);
 
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, 'Cascadia Code', monospace;
-      font-variant-numeric: tabular-nums;
-      font-size: 13px;
-      overflow: hidden;
-    }
+  --display: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
+  --serif: "Instrument Serif", "Times New Roman", serif;
+}
 
-    /* BACKDROP */
-    #backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 10;
-      pointer-events: none;
-    }
-    #backdrop.active { display: block; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
 
-    /* APP SHELL */
-    #app {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      position: relative;
-      z-index: 20;
-    }
+button { font-family: inherit; cursor: pointer; }
+input, textarea { font-family: inherit; }
+a { color: inherit; text-decoration: none; }
 
-    /* ─── TOP BAR ─────────────────────────────────────────── */
-    #topbar {
-      height: 40px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 16px;
-      flex-shrink: 0;
-    }
-    #topbar .title {
-      color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 0.05em;
-    }
-    #topbar .title .brand { color: var(--text); font-weight: 600; }
-    #topbar .hints { display: flex; gap: 6px; align-items: center; }
-    .kbd {
-      border: 1px solid var(--border);
-      padding: 2px 6px;
-      font-size: 10px;
-      color: var(--muted);
-      font-family: inherit;
-      border-radius: 0;
-    }
+::selection { background: var(--indigo); color: white; }
 
-    /* ─── MAIN SPLIT ──────────────────────────────────────── */
-    #main {
-      display: flex;
-      flex: 1;
-      overflow: hidden;
-    }
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
 
-    /* ─── LEFT PANEL ──────────────────────────────────────── */
-    #left-panel {
-      width: 30%;
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    .panel-title {
-      padding: 10px 12px;
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid var(--border-dim);
-      flex-shrink: 0;
-    }
-    #status-feed {
-      flex: 1;
-      overflow-y: auto;
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    #status-feed::-webkit-scrollbar { width: 3px; }
-    #status-feed::-webkit-scrollbar-track { background: transparent; }
-    #status-feed::-webkit-scrollbar-thumb { background: var(--border); }
+/* Header */
+.nav {
+  position: sticky; top: 0;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  z-index: 50;
+  transition: border-color .2s ease;
+}
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav .wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.nav-brand img { display: block; width: 26px; height: 26px; }
+.nav-brand-word {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.nav-links {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+.nav-links a {
+  font-size: 14px;
+  color: var(--muted-2);
+  transition: color .15s ease;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 9px 16px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+  white-space: nowrap;
+}
+.nav-cta:hover { background: var(--indigo); transform: translateY(-1px); }
 
-    .feed-entry {
-      font-size: 11px;
-      line-height: 1.6;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .feed-time { color: var(--border-dim); margin-right: 4px; }
-    .feed-type-SYS  { color: var(--muted); }
-    .feed-type-NET  { color: var(--blue); }
-    .feed-type-MEM  { color: var(--amber); }
-    .feed-type-SEC  { color: var(--purple); }
+@media (max-width: 720px) {
+  .nav .wrap { padding: 0 20px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+  .nav-inner { height: 58px; }
+  .nav-brand img { width: 22px; height: 22px; }
+  .nav-brand-word { font-size: 16px; }
+  .nav-cta { padding: 7px 13px; font-size: 11.5px; line-height: 1.2; }
+}
 
-    /* ─── RIGHT PANEL ─────────────────────────────────────── */
-    #right-panel {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      position: relative;
-      z-index: 25;
-    }
-    #right-panel::-webkit-scrollbar { width: 3px; }
-    #right-panel::-webkit-scrollbar-thumb { background: var(--border); }
+.logo-mark { width: 32px; height: 32px; display: block; }
 
-    /* ─── PHASE 1 ─────────────────────────────────────────── */
-    #phase1 {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 60px 80px 40px;
-      min-height: 240px;
-    }
-    .seed-comments {
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 16px;
-    }
-    .seed-comment {
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.9;
-    }
+/* === Hero === */
+.hero {
+  padding: clamp(48px, 9vw, 120px) 0 clamp(40px, 6vw, 64px);
+  position: relative;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-bottom: 36px;
+}
+.eyebrow::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--indigo);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
 
-    .seed-prompt-wrapper {
-      width: 100%;
-      max-width: 600px;
-      transition: transform 0.3s ease;
-    }
-    .seed-prompt-wrapper.shifted { transform: translateY(-20px); }
+.hero h1 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(38px, 5.6vw, 84px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  margin: 0 0 32px;
+  max-width: 18ch;
+}
+.hero h1 .ital {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.hero-sub {
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--muted);
+  max-width: 54ch;
+  line-height: 1.5;
+  margin: 0 0 56px;
+  letter-spacing: -0.005em;
+}
 
-    .prompt-line {
-      display: flex;
-      align-items: center;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      padding: 0 12px;
-      height: 44px;
-      border-radius: 2px;
-      transition: border-color 0.15s ease;
-    }
-    .prompt-line.focused  { border-color: var(--purple); }
-    .prompt-line.error    { border-color: var(--red); }
-    .prompt-line.locked   { border-color: var(--purple); }
+/* === Chat demo === */
+.demo {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--white);
+  box-shadow: 0 1px 0 rgba(10,10,10,0.02), 0 30px 60px -30px rgba(40,50,100,0.18);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  min-height: 420px;
+}
+@media (max-width: 880px) {
+  .demo { grid-template-columns: 1fr; }
+  .demo-profile {
+    border-left: none !important;
+    border-bottom: 1px solid var(--line);
+    order: -1;
+  }
+}
 
-    .prompt-prefix {
-      color: var(--purple);
-      margin-right: 8px;
-      flex-shrink: 0;
-      font-size: 15px;
-    }
-    #email-input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--text);
-      font-family: inherit;
-      font-size: 15px;
-      font-variant-numeric: tabular-nums;
-      caret-color: transparent;
-    }
-    #email-input::placeholder { color: transparent; }
-    #email-input:disabled { color: var(--muted); }
+.demo-chat {
+  display: flex; flex-direction: column;
+  padding: 28px 28px 18px;
+  position: relative;
+  min-height: 420px;
+  min-width: 0;
+}
+.demo-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 18px;
+  gap: 12px;
+  min-width: 0;
+}
+.demo-head-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: 0.02em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.demo-head-title > span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.demo-head-text-short { display: none; }
+@media (max-width: 720px) {
+  .demo-head-text-full { display: none; }
+  .demo-head-text-short { display: inline; }
+}
+.demo-head-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 4px rgba(47,122,79,0.12);
+}
+.demo-reset {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted-2); background: none; border: none; padding: 4px 8px;
+  border-radius: 6px;
+}
+.demo-reset:hover { background: var(--paper); color: var(--ink); }
 
-    .blink-cursor {
-      color: var(--text);
-      animation: blink 1s step-end infinite;
-      font-size: 15px;
-      flex-shrink: 0;
-    }
-    .blink-cursor.hidden { display: none; }
+.demo-scroll {
+  flex: 1; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 18px;
+  padding-right: 6px;
+  min-height: 240px;
+}
+.msg { display: flex; gap: 14px; max-width: 92%; }
+.msg.user { align-self: flex-end; flex-direction: row-reverse; max-width: 80%; }
+.msg-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  flex-shrink: 0;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+}
+.msg.luca .msg-avatar { background: var(--indigo-soft); color: var(--indigo); }
+.msg.user .msg-avatar { background: var(--ink); color: white; }
+.msg-bubble {
+  font-size: 15.5px;
+  line-height: 1.55;
+  letter-spacing: -0.005em;
+  white-space: pre-wrap;
+}
+.msg.user .msg-bubble {
+  background: var(--paper);
+  padding: 10px 14px;
+  border-radius: 14px 14px 4px 14px;
+  border: 1px solid var(--line);
+}
+.msg.luca .msg-bubble { padding-top: 3px; }
+.msg-bubble strong { color: var(--indigo); font-weight: 600; }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
-    }
+.typing {
+  display: inline-flex; gap: 4px; align-items: center;
+  padding: 4px 0;
+}
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--indigo);
+  opacity: 0.4;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce { 0%,80%,100% { opacity:0.3; transform: translateY(0);} 40%{opacity:1; transform: translateY(-3px);} }
 
-    .error-msg {
-      color: var(--red);
-      font-size: 12px;
-      margin-top: 8px;
-      max-width: 600px;
-      width: 100%;
-      min-height: 18px;
-    }
+.demo-input-wrap { margin-top: 14px; min-width: 0; }
+.suggest-row {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px;
+  min-width: 0;
+}
+.suggest-chip {
+  font-family: var(--sans);
+  font-size: 13px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  padding: 7px 12px;
+  border-radius: 999px;
+  transition: all .15s ease;
+  letter-spacing: -0.005em;
+}
+.suggest-chip:hover { border-color: var(--indigo); color: var(--indigo); background: var(--indigo-soft); }
+.suggest-chip:disabled { opacity: 0.4; cursor: default; }
+.demo-input {
+  display: flex; align-items: center;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 4px 4px 4px 16px;
+  transition: border-color .15s ease;
+}
+.demo-input:focus-within { border-color: var(--indigo); background: white; }
+.demo-input input {
+  flex: 1; background: none; border: none; outline: none;
+  font-size: 15.5px; color: var(--ink);
+  padding: 12px 6px;
+}
+.demo-input input::placeholder { color: var(--muted-2); }
+.demo-send {
+  background: var(--ink); color: white; border: none;
+  width: 38px; height: 38px; border-radius: 10px;
+  display: grid; place-items: center;
+  transition: background .15s ease;
+}
+.demo-send:hover:not(:disabled) { background: var(--indigo); }
+.demo-send:disabled { opacity: 0.3; cursor: default; }
 
-    .shortcut-row {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-      max-width: 600px;
-      width: 100%;
-    }
-    .shortcut-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 11px;
-    }
+.demo-profile {
+  border-left: 1px solid var(--line);
+  background: var(--paper);
+  padding: 26px 26px 22px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  color: var(--muted);
+  display: flex; flex-direction: column; gap: 18px;
+  min-width: 0;
+}
+.demo-profile h4 {
+  font-family: var(--sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted-2);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+.demo-profile .name {
+  font-family: var(--display);
+  font-size: 17px;
+  color: var(--ink);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.profile-grid { display: grid; gap: 10px; }
+.profile-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.profile-row:last-child { border-bottom: none; }
+.profile-row b {
+  color: var(--ink); font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.profile-note {
+  font-size: 11px; line-height: 1.5;
+  color: var(--muted-2);
+  font-family: var(--sans);
+  letter-spacing: -0.005em;
+  margin-top: 4px;
+}
 
-    /* ─── PHASE 2 ─────────────────────────────────────────── */
-    #phase2 {
-      display: none;
-      flex-direction: column;
-      padding: 32px 80px 0;
-    }
-    #phase2.visible { display: flex; }
+/* === Luca's read === */
+.lucas-read {
+  margin-top: 4px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line-strong);
+}
+.lucas-read-tag {
+  font-family: var(--mono); font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--indigo);
+  margin-bottom: 8px;
+}
+.lucas-read p {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--indigo-ink);
+  margin: 0;
+}
+.lucas-read p b {
+  font-style: normal;
+  font-family: var(--display);
+  font-weight: 500;
+  color: var(--indigo);
+}
 
-    .phase2-prompt {
-      display: flex;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .phase2-prefix { color: var(--purple); margin-right: 8px; font-size: 15px; }
-    .phase2-email  { color: var(--muted); font-size: 15px; }
+/* === Differentiator === */
+.diff-section { background: var(--paper); border-top: 1px solid var(--line); }
+.diff-grid {
+  margin-top: 56px;
+  display: flex; flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.diff-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+}
+.diff-them, .diff-us { padding: 28px 32px; }
+.diff-them { border-right: 1px solid var(--line); color: var(--muted); }
+.diff-us { background: white; }
+.diff-label {
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted-2);
+  margin-bottom: 14px;
+}
+.diff-us .diff-label { color: var(--indigo); }
+.diff-them p, .diff-us p {
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+.diff-us p { color: var(--ink); }
+.diff-us p b { font-weight: 500; color: var(--indigo); }
 
-    #console-box {
-      border: 1px solid var(--border);
-      background: var(--bg);
-      padding: 16px;
-      font-size: 12px;
-      line-height: 1.8;
-    }
+@media (max-width: 720px) {
+  .diff-grid { margin-top: 32px; }
+  .diff-row { grid-template-columns: 1fr; }
+  .diff-them, .diff-us { padding: 22px 20px; }
+  .diff-them { border-right: none; border-bottom: 1px dashed var(--line); }
+  .diff-them p, .diff-us p { font-size: 15.5px; }
+  .lucas-read p { font-size: 16px; line-height: 1.4; }
+}
 
-    .log-line {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      min-height: 1.8em;
-    }
-    .log-left {
-      display: flex;
-      align-items: baseline;
-      flex: 1;
-      gap: 6px;
-      min-width: 0;
-    }
-    .log-tag {
-      color: var(--muted);
-      flex-shrink: 0;
-      min-width: 78px;
-    }
-    .log-text   { color: var(--text); flex: 1; }
-    .log-suffix { flex-shrink: 0; margin-left: 16px; }
-    .log-suffix-ok   { color: var(--green); }
-    .log-suffix-sig  { color: var(--purple); }
-    .log-suffix-done { color: var(--amber); }
-    .log-suffix-warn { color: var(--amber); }
-    .log-tag-err { color: var(--amber); }
+.savings-figure-small {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line-strong);
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--indigo);
+  line-height: 1.4;
+}
+@media (max-width: 720px) { .savings-figure-small { font-size: 16px; } }
 
-    .log-cursor {
-      color: var(--text);
-      animation: blink 1s step-end infinite;
-    }
+/* === Manifesto === */
+.manifesto {
+  padding: clamp(64px, 9vw, 120px) 0 clamp(64px, 9vw, 120px);
+  border-top: 1px solid var(--line);
+}
+.manifesto-rule {
+  width: 48px; height: 1px;
+  background: var(--indigo);
+  margin-bottom: 32px;
+}
+.manifesto-text {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(26px, 3.6vw, 52px);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 18px;
+  max-width: 24ch;
+}
+.manifesto-text:last-of-type { color: var(--indigo); margin-bottom: 0; }
+.manifesto-text .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
 
-    /* ─── PHASE 3 ─────────────────────────────────────────── */
-    #phase3 {
-      display: none;
-      padding: 24px 80px 40px;
-      opacity: 0;
-      transform: translateY(40px);
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
-                  opacity  0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    #phase3.visible { display: block; }
-    #phase3.animate { opacity: 1; transform: translateY(0); }
+/* === Sections === */
+.section {
+  padding: clamp(80px, 10vw, 140px) 0;
+  border-top: 1px solid var(--line);
+}
+.section-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--indigo);
+  margin-bottom: 28px;
+  display: flex; gap: 12px; align-items: center;
+}
+.section-eyebrow .num { display: inline-block; min-width: 24px; }
+.section h2 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(30px, 4vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 0 0 28px;
+  max-width: 22ch;
+}
+.section h2 .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.section-lead {
+  font-size: clamp(17px, 1.5vw, 20px);
+  color: var(--muted);
+  max-width: 56ch;
+  line-height: 1.5;
+  margin: 0;
+}
 
-    #card-pre {
-      white-space: pre;
-      overflow-x: auto;
-      font-size: 12px;
-      line-height: 1.7;
-      color: var(--text);
-      border: none;
-      background: transparent;
-      font-family: inherit;
-    }
-    #card-pre::-webkit-scrollbar { height: 3px; }
-    #card-pre::-webkit-scrollbar-thumb { background: var(--border); }
+/* === Account connector === */
+.accounts-stage {
+  margin-top: 64px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: stretch;
+}
+@media (max-width: 880px) { .accounts-stage { grid-template-columns: 1fr; } }
 
-    .card-share-btn {
-      border: 1px solid var(--text);
-      background: transparent;
-      color: var(--text);
-      padding: 10px 24px;
-      font-family: inherit;
-      font-size: 13px;
-      cursor: pointer;
-      border-radius: 0;
-      margin-top: 10px;
-      display: inline-block;
-      transition: none;
-    }
-    .card-share-btn:hover {
-      background: #FAFAFA;
-      color: #000000;
-      border-color: #FAFAFA;
-    }
+.accounts-list { display: flex; flex-direction: column; gap: 12px; }
+.account-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: white;
+  transition: all .25s cubic-bezier(.2,.7,.2,1);
+  position: relative;
+  overflow: hidden;
+}
+.account-card.connected {
+  border-color: var(--indigo);
+  box-shadow: 0 10px 30px -20px rgba(79,90,151,0.4);
+}
+.account-card .acc-logo {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center;
+  font-family: var(--display); font-weight: 700;
+  letter-spacing: -0.02em;
+  font-size: 16px;
+  color: white;
+  flex-shrink: 0;
+}
+.account-card .acc-info { flex: 1; min-width: 0; }
+.account-card .acc-name { font-weight: 500; font-size: 15px; letter-spacing: -0.01em; }
+.account-card .acc-meta { font-family: var(--mono); font-size: 12px; color: var(--muted-2); margin-top: 2px; }
+.account-card .acc-bal {
+  font-family: var(--mono);
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-align: right;
+}
+.account-card .acc-bal .small { color: var(--muted-2); font-size: 11px; display: block; }
 
-    /* ─── BOTTOM STATUS BAR ───────────────────────────────── */
-    #bottombar {
-      height: 32px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: stretch;
-      flex-shrink: 0;
-    }
-    .status-section {
-      display: flex;
-      align-items: center;
-      padding: 0 14px;
-      font-size: 11px;
-      color: var(--muted);
-      border-right: 1px solid var(--border);
-      white-space: nowrap;
-      gap: 4px;
-    }
-    .status-section:last-child { border-right: none; }
-    .status-val { color: var(--text); }
+.accounts-snapshot {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px;
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 18px;
+  position: relative;
+}
+.snapshot-label {
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted-2);
+}
+.snapshot-figure {
+  font-family: var(--display);
+  font-size: clamp(48px, 6.5vw, 88px);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.snapshot-delta {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--green);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.snapshot-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-top: 8px;
+}
+.snapshot-item { border-top: 1px solid var(--line-strong); padding-top: 12px; }
+.snapshot-item .k {
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted-2);
+  margin-bottom: 4px;
+}
+.snapshot-item .v {
+  font-family: var(--display); font-size: 22px;
+  font-weight: 500; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.snapshot-spark { margin-top: 12px; }
 
-    #node-status { transition: color 0.15s ease; }
-    #node-status.pulse { color: var(--green); }
+/* === Daily brief === */
+.brief-wrap { margin-top: 56px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 36px; align-items: start; }
+@media (max-width: 880px) { .brief-wrap { grid-template-columns: 1fr; } }
 
-    /* ─── RESPONSIVE ──────────────────────────────────────── */
-    @media (max-width: 768px) {
-      #left-panel { display: none; }
-      #right-panel { width: 100%; }
-      #phase1  { padding: 40px 20px 24px; }
-      #phase2  { padding: 20px 20px 0; }
-      #phase3  { padding: 16px 20px 32px; }
-      .seed-comment { font-size: 12px; }
-      #email-input  { font-size: 14px; }
-      #card-pre     { font-size: 10px; }
-    }
+.brief-card {
+  background: var(--ink);
+  color: white;
+  border-radius: 24px;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+  min-height: 460px;
+}
+.brief-meta {
+  font-family: var(--mono); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.brief-meta::before {
+  content: ""; width: 24px; height: 1px; background: rgba(255,255,255,0.3);
+}
+.brief-card h3 {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(24px, 2.6vw, 34px);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin: 0 0 24px;
+  color: white;
+}
+.brief-card h3 .accent { color: #B4BEE7; }
+.brief-card p {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: rgba(255,255,255,0.78);
+  margin: 0 0 18px;
+  letter-spacing: -0.005em;
+}
+.brief-card p strong { color: white; font-weight: 600; }
+.brief-bullets { list-style: none; padding: 0; margin: 22px 0 0; display: flex; flex-direction: column; gap: 14px; }
+.brief-bullets li {
+  font-size: 14px; line-height: 1.4;
+  color: rgba(255,255,255,0.85);
+  padding-left: 22px;
+  position: relative;
+}
+.brief-bullets li::before {
+  content: ""; position: absolute; left: 0; top: 7px;
+  width: 12px; height: 1px; background: var(--indigo);
+}
+.brief-bullets li b { color: white; font-weight: 600; }
+
+.alerts-list { display: flex; flex-direction: column; gap: 12px; }
+.alert {
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+  background: white;
+  transition: border-color .15s, transform .15s;
+  cursor: pointer;
+}
+.alert:hover { border-color: var(--indigo); transform: translateX(4px); }
+.alert-icon {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 6px;
+  background: var(--indigo-soft);
+  color: var(--indigo);
+  display: inline-flex; align-items: center;
+  flex-shrink: 0;
+  font-family: var(--mono); font-weight: 500;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+}
+.alert-body .alert-title {
+  font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+.alert-body .alert-detail { font-size: 13.5px; color: var(--muted); line-height: 1.45; }
+.alert-time { font-family: var(--mono); font-size: 11px; color: var(--muted-2); white-space: nowrap; }
+
+/* === Affordability === */
+.afford-stage {
+  margin-top: 56px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 40px;
+  background: var(--white);
+}
+.afford-q {
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(22px, 2.6vw, 32px);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 0 0 32px;
+}
+.afford-q .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.afford-q .var {
+  color: var(--indigo);
+  font-variant-numeric: tabular-nums;
+  border-bottom: 2px dashed var(--indigo);
+  padding: 0 4px;
+}
+.afford-controls {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+  margin: 28px 0 36px;
+}
+@media (max-width: 720px) { .afford-controls { grid-template-columns: 1fr; } }
+.afford-control label {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-family: var(--mono); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted-2);
+  margin-bottom: 10px;
+}
+.afford-control label b {
+  font-family: var(--display); font-size: 17px;
+  color: var(--ink); font-weight: 500;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  text-transform: none;
+}
+.range {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px;
+  background: var(--line);
+  border-radius: 999px;
+  outline: none;
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink);
+  cursor: grab; border: 4px solid white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2), 0 0 0 1px var(--line-strong);
+  transition: transform .15s;
+}
+.range::-webkit-slider-thumb:hover { transform: scale(1.15); background: var(--indigo); }
+.range::-moz-range-thumb {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--ink); cursor: grab; border: 4px solid white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2), 0 0 0 1px var(--line-strong);
+}
+
+.afford-answer {
+  background: var(--indigo-soft);
+  border-radius: 16px;
+  padding: 28px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 32px;
+}
+@media (max-width: 720px) { .afford-answer { grid-template-columns: 1fr; } }
+.afford-answer .verdict {
+  font-family: var(--display);
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--indigo-ink);
+  margin: 0 0 12px;
+}
+.afford-answer .verdict.no { color: #8A3D3D; }
+.afford-answer .verdict.yes { color: var(--green); }
+.afford-answer .verdict .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+.afford-answer p {
+  font-size: 14.5px;
+  color: var(--indigo-ink);
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.85;
+}
+.afford-numbers { display: flex; flex-direction: column; gap: 14px; }
+.afford-num-row {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 13px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(79,90,151,0.2);
+}
+.afford-num-row:last-child { border-bottom: none; }
+.afford-num-row .k { color: var(--indigo-ink); opacity: 0.65; }
+.afford-num-row .v { color: var(--indigo-ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* === Pricing === */
+.compare-wrap {
+  margin-top: 56px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+}
+@media (max-width: 720px) { .compare-wrap { grid-template-columns: 1fr; } }
+
+.compare-col { padding: 40px; position: relative; }
+.compare-col + .compare-col { border-left: 1px solid var(--line); }
+@media (max-width: 720px) {
+  .compare-col + .compare-col { border-left: none; border-top: 1px solid var(--line); }
+}
+.compare-col.them { background: var(--paper); }
+.compare-col.us { background: white; }
+.compare-tag {
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted-2);
+  margin-bottom: 14px;
+}
+.compare-col.us .compare-tag { color: var(--indigo); }
+.compare-name {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 28px;
+}
+.compare-price { display: baseline; font-family: var(--display); margin-bottom: 4px; }
+.compare-price .big {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 600; letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.compare-price .unit { font-size: 16px; color: var(--muted); margin-left: 8px; }
+.compare-col.them .big { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: rgba(0,0,0,0.2); }
+.compare-sub { font-family: var(--mono); font-size: 12px; color: var(--muted-2); margin: 12px 0 32px; }
+.compare-feats { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.compare-feats li {
+  padding-left: 28px; position: relative;
+  font-size: 14.5px; line-height: 1.4;
+  color: var(--ink-2);
+}
+.compare-feats li::before {
+  content: ""; position: absolute; left: 0; top: 9px;
+  width: 14px; height: 1.5px; background: var(--muted-2);
+}
+.compare-col.us .compare-feats li::before { background: var(--indigo); }
+.compare-feats li b { font-weight: 500; }
+
+.savings-ticker { margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line); }
+.savings-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* === Trust === */
+.trust-grid { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+@media (max-width: 880px) { .trust-grid { grid-template-columns: 1fr; gap: 16px; } }
+.trust-card {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  transition: border-color .15s, transform .15s;
+}
+.trust-card:hover { border-color: var(--indigo); transform: translateY(-2px); }
+.trust-card .num {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--indigo);
+  margin-bottom: 18px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.trust-card h4 {
+  font-family: var(--display);
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+.trust-card p { font-size: 14.5px; color: var(--muted); line-height: 1.5; margin: 0; }
+
+/* === Waitlist === */
+.waitlist {
+  padding: clamp(80px, 12vw, 160px) 0;
+  border-top: 1px solid var(--line);
+  position: relative;
+  text-align: center;
+}
+.waitlist .mark-wrap { display: inline-flex; margin-bottom: 36px; }
+.waitlist h2 { max-width: 16ch; margin: 0 auto 28px; text-align: center; }
+.waitlist-sub {
+  font-size: clamp(17px, 1.5vw, 19px);
+  color: var(--muted);
+  max-width: 50ch;
+  margin: 0 auto 40px;
+  line-height: 1.5;
+}
+.waitlist-form { max-width: 460px; margin: 0 auto; }
+.waitlist-input-wrap {
+  display: flex; align-items: center; gap: 8px;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 6px 6px 6px 20px;
+  transition: border-color .15s;
+}
+.waitlist-input-wrap:focus-within { border-color: var(--indigo); }
+.waitlist-input-wrap input {
+  flex: 1; background: none; border: none; outline: none;
+  font-size: 16px;
+  padding: 14px 0;
+  color: var(--ink);
+}
+.waitlist-input-wrap input::placeholder { color: var(--muted-2); }
+.waitlist-submit {
+  background: var(--ink); color: white; border: none;
+  padding: 14px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: background .15s, transform .15s;
+}
+.waitlist-submit:hover:not(:disabled) { background: var(--indigo); }
+.waitlist-submit:active { transform: scale(0.97); }
+.waitlist-submit:disabled { opacity: 0.6; cursor: default; }
+.waitlist-foot {
+  font-family: var(--mono); font-size: 11px;
+  color: var(--muted-2); margin-top: 18px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.waitlist-error {
+  font-family: var(--mono); font-size: 12px;
+  color: #8A3D3D;
+  margin-top: 12px;
+  letter-spacing: 0.02em;
+}
+.waitlist-thanks {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--indigo);
+}
+.waitlist-thanks .ital { font-family: var(--serif); font-style: italic; font-weight: 400; }
+
+/* === Footer === */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 36px 0;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--muted-2);
+}
+.footer-inner {
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; flex-wrap: wrap;
+}
+.footer-left { display: flex; flex-direction: column; gap: 10px; }
+.footer-mark {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--ink);
+  letter-spacing: 0.02em;
+}
+.footer-mark img { display: block; }
+.footer-fine { font-size: 11px; color: var(--muted-2); letter-spacing: 0.02em; }
+.footer a:hover { color: var(--indigo); }
+.footer-links { display: flex; gap: 24px; }
+
+/* Sparkline */
+.spark { width: 100%; height: 56px; }
+.spark path.line { stroke: var(--indigo); stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.spark path.fill { fill: var(--indigo); opacity: 0.08; }
+
+/* Big logo for waitlist */
+.big-mark { width: 84px; height: 84px; }
+
+/* Reveal animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+
+/* Claude pill */
+.claude-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 6px 14px 6px 8px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  font-family: var(--mono); font-size: 11px;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-top: 24px;
+}
+.claude-pill .dot {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: #D97757;
+}
+
+/* Sticky mobile CTA */
+.sticky-cta {
+  display: none;
+  position: fixed;
+  left: 12px; right: 12px; bottom: 12px;
+  background: var(--ink);
+  color: white;
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 40;
+  box-shadow: 0 14px 30px -8px rgba(10,10,10,0.35);
+  text-decoration: none;
+  transition: transform .2s ease, opacity .2s ease;
+  transform: translateY(120%);
+  opacity: 0;
+}
+.sticky-cta.in { transform: translateY(0); opacity: 1; }
+.sticky-cta .arrow {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--indigo);
+  display: grid; place-items: center;
+}
+
+/* === Mobile === */
+@media (max-width: 720px) {
+  .sticky-cta { display: flex; }
+  .hero { padding: 56px 0 56px; }
+  .eyebrow { margin-bottom: 32px; font-size: 11px; }
+  .hero h1 { font-size: 36px; letter-spacing: -0.03em; line-height: 1.08; margin-bottom: 32px; max-width: none; }
+  .hero-sub { font-size: 16px; line-height: 1.55; margin-bottom: 52px; max-width: none; }
+  .demo { border-radius: 20px; box-shadow: 0 1px 0 rgba(10,10,10,0.02), 0 14px 30px -20px rgba(40,50,100,0.18); }
+  .demo-chat { padding: 22px 18px 18px; min-height: 380px; }
+  .demo-head { padding-bottom: 16px; margin-bottom: 16px; }
+  .demo-head-title { font-size: 11px; }
+  .demo-scroll { min-height: 220px; gap: 16px; }
+  .msg-bubble { font-size: 15px; line-height: 1.55; }
+  .msg.user .msg-bubble { padding: 9px 13px; }
+  .msg-avatar { width: 26px; height: 26px; font-size: 10px; }
+  .suggest-row { flex-wrap: nowrap; overflow-x: auto; margin: 0 -18px 14px; padding: 4px 18px; scrollbar-width: none; -ms-overflow-style: none; }
+  .suggest-row::-webkit-scrollbar { display: none; }
+  .suggest-chip { flex-shrink: 0; font-size: 13px; padding: 10px 14px; }
+  .demo-input { border-radius: 12px; padding: 4px 4px 4px 14px; }
+  .demo-input input { font-size: 16px; padding: 13px 4px; }
+  .demo-send { width: 40px; height: 40px; }
+  .demo-profile { padding: 26px 22px 28px; gap: 22px; }
+  .demo-profile h4 { font-size: 10px; letter-spacing: 0.1em; margin-bottom: 6px; }
+  .demo-profile .name { font-size: 17px; margin-bottom: 8px; }
+  .profile-note { font-size: 13px; line-height: 1.5; }
+  .profile-grid { grid-template-columns: 1fr; gap: 0; }
+  .profile-row { padding: 13px 0; font-size: 13px; border-bottom: 1px dashed var(--line); }
+  .profile-row b { font-size: 14px; }
+  .claude-pill { margin-top: 28px; font-size: 10.5px; padding: 6px 12px 6px 6px; }
+  .claude-pill .dot { width: 16px; height: 16px; }
+  .section { padding: 96px 0; }
+  .section-eyebrow { margin-bottom: 28px; font-size: 11px; }
+  .section h2 { font-size: 32px; line-height: 1.08; letter-spacing: -0.03em; margin-bottom: 28px; max-width: none; }
+  .section-lead { font-size: 16px; line-height: 1.6; max-width: none; }
+  .manifesto { padding: 84px 0; }
+  .manifesto-text { font-size: 26px; line-height: 1.25; max-width: none; margin-bottom: 22px; }
+  .manifesto-rule { margin-bottom: 32px; }
+  .accounts-stage { margin-top: 48px; gap: 26px; }
+  .account-card { padding: 18px 18px; gap: 14px; border-radius: 14px; }
+  .account-card .acc-logo { width: 42px; height: 42px; border-radius: 10px; font-size: 15px; }
+  .account-card .acc-name { font-size: 15px; }
+  .account-card .acc-meta { font-size: 11px; }
+  .account-card .acc-bal { font-size: 14px; }
+  .account-card .acc-bal .small { font-size: 10px; }
+  .accounts-snapshot { padding: 28px 24px 26px; border-radius: 18px; }
+  .snapshot-figure { font-size: 52px; }
+  .snapshot-grid { grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+  .snapshot-item .v { font-size: 19px; }
+  .snapshot-spark { margin-top: 8px; }
+  .lucas-read { padding-top: 24px; }
+  .lucas-read p { font-size: 17px; line-height: 1.45; }
+  .brief-wrap { margin-top: 48px; gap: 26px; }
+  .brief-card { padding: 32px 26px; border-radius: 20px; min-height: auto; }
+  .brief-card h3 { font-size: 23px; line-height: 1.22; margin-bottom: 22px; }
+  .brief-card p { font-size: 15px; margin-bottom: 16px; line-height: 1.55; }
+  .brief-meta { font-size: 11px; margin-bottom: 24px; }
+  .brief-bullets { gap: 18px; margin-top: 28px; }
+  .brief-bullets li { font-size: 14px; line-height: 1.45; }
+  .alerts-list { gap: 14px; }
+  .alert { padding: 18px 18px; border-radius: 14px; gap: 14px; }
+  .alert-icon { height: 22px; padding: 0 8px; font-size: 9.5px; }
+  .alert-body .alert-title { font-size: 14.5px; line-height: 1.4; }
+  .alert-body .alert-detail { font-size: 13px; margin-top: 4px; line-height: 1.5; }
+  .alert-time { font-size: 10px; }
+  .afford-stage { margin-top: 48px; padding: 30px 24px; border-radius: 20px; }
+  .afford-q { font-size: 22px; margin-bottom: 30px; line-height: 1.25; }
+  .afford-controls { gap: 30px; margin: 28px 0 32px; }
+  .afford-control label { font-size: 11px; margin-bottom: 14px; }
+  .afford-control label b { font-size: 15px; }
+  .range { height: 6px; }
+  .range::-webkit-slider-thumb { width: 28px; height: 28px; border: 5px solid white; }
+  .range::-moz-range-thumb { width: 28px; height: 28px; border: 5px solid white; }
+  .afford-answer { padding: 24px 22px; border-radius: 16px; gap: 24px; }
+  .afford-answer .verdict { font-size: 23px; margin-bottom: 12px; }
+  .afford-answer p { font-size: 14px; line-height: 1.5; }
+  .afford-num-row { font-size: 13px; padding-bottom: 12px; }
+  .compare-wrap { margin-top: 48px; border-radius: 20px; display: flex; flex-direction: column; }
+  .compare-col { padding: 32px 26px; }
+  .compare-col + .compare-col { border-left: none; }
+  .compare-col.us { order: -1; border-bottom: 1px solid var(--line); }
+  .compare-name { font-size: 19px; margin-bottom: 24px; }
+  .compare-price .big { font-size: 52px; }
+  .compare-price .unit { font-size: 14px; }
+  .compare-sub { font-size: 11px; margin-bottom: 26px; }
+  .compare-feats { gap: 14px; }
+  .compare-feats li { font-size: 14.5px; padding-left: 24px; line-height: 1.45; }
+  .trust-grid { margin-top: 48px; gap: 14px; }
+  .trust-card { padding: 26px 22px; border-radius: 16px; }
+  .trust-card h4 { font-size: 19px; margin-bottom: 14px; }
+  .trust-card p { font-size: 14px; line-height: 1.55; }
+  .trust-card .num { margin-bottom: 16px; }
+  .waitlist { padding: 92px 0 140px; }
+  .waitlist .mark-wrap { margin-bottom: 32px; }
+  .big-mark { width: 72px; height: 72px; }
+  .waitlist h2 { margin-bottom: 24px; }
+  .waitlist-sub { font-size: 16px; margin-bottom: 36px; }
+  .waitlist-input-wrap { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px; border-radius: 18px; }
+  .waitlist-input-wrap input { padding: 15px 14px; background: var(--paper); border-radius: 12px; font-size: 16px; }
+  .waitlist-submit { width: 100%; padding: 17px; font-size: 15px; border-radius: 12px; }
+  .waitlist-thanks { font-size: 20px; }
+  .waitlist-foot { font-size: 10px; margin-top: 22px; }
+  .footer { padding: 32px 0 100px; }
+  .footer-inner { flex-direction: column; align-items: flex-start; gap: 18px; font-size: 11px; }
+  .footer-links { flex-wrap: wrap; gap: 18px; }
+}
+
+@media (max-width: 380px) {
+  :root { --pad: 20px; }
+  .hero h1 { font-size: 32px; }
+  .section h2 { font-size: 28px; }
+  .manifesto-text { font-size: 22px; }
+  .snapshot-figure { font-size: 44px; }
+  .compare-price .big { font-size: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
   </style>
 </head>
 <body>
+  <div id="root"></div>
 
-<div id="backdrop"></div>
+  <!-- ── Supabase config ── fill in your values from supabase.com/dashboard → Settings → API -->
+  <script>
+    window.SUPABASE_URL     = 'https://ioeqnfqparfunotdjosy.supabase.co';
+    window.SUPABASE_ANON_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
+  </script>
 
-<div id="app">
+  <!-- CDN deps -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <div class="title">
-      <span class="brand">LUCA</span> // AIRLIST TERMINAL &nbsp;&nbsp;v0.1.0
-    </div>
-    <div class="hints">
-      <span class="kbd">[ESC]</span>
-      <span class="kbd">[ENTER]</span>
-    </div>
-  </div>
+  <!-- LucaMark — inline SVG logo (swap src for luca-icon.png once you have the file) -->
+  <script type="text/babel">
+    const LucaMark = ({ size = 32, className = "logo-mark" }) => (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 100 100"
+        width={size}
+        height={size}
+        className={className}
+        style={{ display: "block", width: size, height: size, borderRadius: size * 0.2 }}
+      >
+        <rect width="100" height="100" fill="#ECEFF7" rx="18"/>
+        <g fill="#4F5A97">
+          <rect x="46" y="14" width="8" height="8" rx="1.5"/>
+          <rect x="78" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="46" y="78" width="8" height="8" rx="1.5"/>
+          <rect x="14" y="46" width="8" height="8" rx="1.5"/>
+          <rect x="69" y="23" width="8" height="8" rx="1.5" transform="rotate(45 73 27)"/>
+          <rect x="69" y="69" width="8" height="8" rx="1.5" transform="rotate(45 73 73)"/>
+          <rect x="23" y="69" width="8" height="8" rx="1.5" transform="rotate(45 27 73)"/>
+          <rect x="23" y="23" width="8" height="8" rx="1.5" transform="rotate(45 27 27)"/>
+          <circle cx="50" cy="50" r="17"/>
+          <circle cx="50" cy="50" r="11" fill="#ECEFF7"/>
+          <circle cx="50" cy="50" r="6"/>
+          <circle cx="50" cy="50" r="2.2" fill="#ECEFF7"/>
+        </g>
+      </svg>
+    );
+    window.LucaMark = LucaMark;
+  </script>
 
-  <!-- MAIN SPLIT -->
-  <div id="main">
+  <!-- ChatDemo -->
+  <script type="text/babel">
+    const SUGGESTED = [
+      "Can I afford a house in 3 years?",
+      "Am I saving enough for retirement?",
+      "Where should I move the $32k in my checking?",
+      "Should I pay off my student loans faster?",
+    ];
 
-    <!-- LEFT PANEL -->
-    <div id="left-panel">
-      <div class="panel-title">// STATUS FEED</div>
-      <div id="status-feed"></div>
-    </div>
+    const CANNED = {
+      [SUGGESTED[0]]: "On a $650k place with 20% down, you need **$160k** for the down payment plus closing. At your current $1,170/mo savings rate you'll get there with about $4k to spare — but the $32k sitting in your Chase checking is dragging on returns. Move $24k of it into your Ally HYSA earning 4.2% and you'll add **$1,008/yr** without changing your spending. You're closer than you think, Maya.",
+      [SUGGESTED[1]]: "At 29 with **$84,200** in your 401k and **$19,400** in the Roth, you're ahead of ~78% of your peers. But your 8% contribution is leaving free money on the table — Fidelity's full match runs to 12%. Bump to 10% and you'll add roughly **$280/mo** in matched dollars. Separately, your Roth is **$3,200** short of the 2026 limit. Auto-deposit $78/wk for 41 weeks and we close it before December.",
+      [SUGGESTED[2]]: "Most of it shouldn't be there. Keep **$8,400** in Chase (one month's spend × 2 — your real emergency buffer). The other **$24,000** belongs in your Ally HYSA at 4.2% — that's **$1,008/yr** in interest you're not getting right now. Do it before Friday's paycheck hits and you'll have one clean month of cash flow to read.",
+      [SUGGESTED[3]]: "Probably not. Your loans are at **4.5%** — your Ally HYSA pays **4.2%**. The math is almost identical. Meanwhile your Roth IRA averages **8–9%** long-term, and it's tax-free. Keep the $312/mo minimum, max the Roth first ($3,200 to go this year), and only attack the loans if rates change. The exception: if the 4.5% feels heavy emotionally, paying ahead has real value. Money isn't only math.",
+    };
 
-    <!-- RIGHT PANEL -->
-    <div id="right-panel">
+    const FALLBACK = "In this preview I can answer the four sample questions above using **Maya's** real profile. To see Luca reason about *your* numbers — your income, your accounts, your goals — join the waitlist below. Early access opens summer 2026.";
 
-      <!-- PHASE 1: idle / seed bar -->
-      <div id="phase1">
-        <div class="seed-comments">
-          <div class="seed-comment">// AIRLIST ENROLLMENT PROTOCOL</div>
-          <div class="seed-comment">// Version 2.4.1 — Alpha Node Active</div>
+    const INITIAL_MSG = {
+      role: "luca",
+      text: "Morning, Maya. I just looked at your accounts — your **net worth is $126,260**, up $1,840 this month. Your checking balance is high again. What's on your mind?"
+    };
+
+    const renderBold = (text) => {
+      const parts = text.split(/(\*\*[^*]+\*\*)/g);
+      return parts.map((p, i) => {
+        if (p.startsWith("**") && p.endsWith("**")) {
+          return <strong key={i}>{p.slice(2, -2)}</strong>;
+        }
+        return <React.Fragment key={i}>{p}</React.Fragment>;
+      });
+    };
+
+    const simulateThinking = () => new Promise(r => setTimeout(r, 700 + Math.random() * 600));
+
+    const ChatDemo = () => {
+      const [messages, setMessages] = React.useState([INITIAL_MSG]);
+      const [input, setInput] = React.useState("");
+      const [busy, setBusy] = React.useState(false);
+      const [usedSuggestions, setUsedSuggestions] = React.useState([]);
+      const scrollRef = React.useRef(null);
+
+      React.useEffect(() => {
+        if (scrollRef.current) {
+          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+        }
+      }, [messages, busy]);
+
+      const ask = async (q) => {
+        if (!q.trim() || busy) return;
+        setMessages(prev => [...prev, { role: "user", text: q }]);
+        setInput("");
+        setBusy(true);
+        await simulateThinking();
+        const reply = CANNED[q] || FALLBACK;
+        setMessages(prev => [...prev, { role: "luca", text: reply }]);
+        setBusy(false);
+      };
+
+      const reset = () => {
+        setMessages([INITIAL_MSG]);
+        setUsedSuggestions([]);
+        setInput("");
+      };
+
+      const onSuggest = (q) => {
+        setUsedSuggestions(prev => [...prev, q]);
+        ask(q);
+      };
+
+      return (
+        <div className="demo reveal" data-reveal>
+          <div className="demo-chat">
+            <div className="demo-head">
+              <div className="demo-head-title">
+                <span className="demo-head-dot" />
+                <span className="demo-head-text-full">luca.live — connected to Maya's accounts</span>
+                <span className="demo-head-text-short">luca.live · Maya's accounts</span>
+              </div>
+              <button className="demo-reset" onClick={reset}>↺ reset</button>
+            </div>
+
+            <div className="demo-scroll" ref={scrollRef}>
+              {messages.map((m, i) => (
+                <div key={i} className={`msg ${m.role}`}>
+                  <div className="msg-avatar">{m.role === "luca" ? "L" : "M"}</div>
+                  <div className="msg-bubble">{renderBold(m.text)}</div>
+                </div>
+              ))}
+              {busy && (
+                <div className="msg luca">
+                  <div className="msg-avatar">L</div>
+                  <div className="msg-bubble">
+                    <div className="typing"><span /><span /><span /></div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="demo-input-wrap">
+              <div className="suggest-row">
+                {SUGGESTED.map((s) => (
+                  <button
+                    key={s}
+                    className="suggest-chip"
+                    disabled={busy || usedSuggestions.includes(s)}
+                    onClick={() => onSuggest(s)}
+                  >{s}</button>
+                ))}
+              </div>
+              <form className="demo-input" onSubmit={(e) => { e.preventDefault(); ask(input); }}>
+                <input
+                  type="text"
+                  placeholder="Try one of the questions above…"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  disabled={busy}
+                />
+                <button type="submit" className="demo-send" disabled={busy || !input.trim()} aria-label="Send">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <aside className="demo-profile">
+            <div>
+              <h4>Sample profile</h4>
+              <div className="name">Maya, 29 · NYC</div>
+              <div className="profile-note">Luca's answers below come from her real numbers — connected via Plaid, read-only.</div>
+            </div>
+            <div className="profile-grid">
+              <div className="profile-row"><span>Net worth</span><b>$126,260</b></div>
+              <div className="profile-row"><span>Checking</span><b>$32,400</b></div>
+              <div className="profile-row"><span>HYSA · 4.2%</span><b>$8,100</b></div>
+              <div className="profile-row"><span>401k</span><b>$84,200</b></div>
+              <div className="profile-row"><span>Roth IRA</span><b>$19,400</b></div>
+              <div className="profile-row"><span>Student loans</span><b>−$18,000</b></div>
+              <div className="profile-row"><span>Saves / mo</span><b>$1,170</b></div>
+            </div>
+          </aside>
         </div>
-        <div class="seed-prompt-wrapper" id="prompt-wrapper">
-          <div class="prompt-line" id="prompt-line">
-            <span class="prompt-prefix">▸</span>
-            <input
-              type="email"
-              id="email-input"
-              placeholder="Enter your email to reserve execution slot..."
-              autocomplete="off"
-              spellcheck="false"
-            />
-            <span class="blink-cursor" id="blink-cursor">▋</span>
+      );
+    };
+    window.ChatDemo = ChatDemo;
+  </script>
+
+  <!-- Afford -->
+  <script type="text/babel">
+    const Afford = () => {
+      const [target, setTarget] = React.useState(650000);
+      const [years, setYears] = React.useState(3);
+      const [downPct, setDownPct] = React.useState(20);
+
+      const monthlyIncome = 9333;
+      const monthlySpend = 4171;
+      const currentSavings = 40500;
+      const currentMonthlySave = 1170;
+
+      const downAmount = target * downPct / 100;
+      const closingCosts = target * 0.03;
+      const needed = downAmount + closingCosts;
+      const months = years * 12;
+      const projected = currentSavings * Math.pow(1.042, years) + currentMonthlySave * months * 1.04;
+      const gap = needed - projected;
+      const requiredMonthly = Math.max(0, (needed - currentSavings * Math.pow(1.042, years)) / months);
+      const onTrack = gap <= 0;
+      const stretch = !onTrack && (requiredMonthly - currentMonthlySave) < (monthlyIncome - monthlySpend) * 1.1;
+
+      let verdict, copy;
+      if (onTrack) {
+        verdict = <span><span className="ital">yes</span> — you're already on track.</span>;
+        copy = `At your current savings rate, you'll have enough for the down payment plus closing costs with about $${Math.round(-gap/1000)}k to spare. Don't change much — just keep going.`;
+      } else if (stretch) {
+        verdict = <span><span className="ital">yes</span>, but you'll need to save more.</span>;
+        copy = `You need to save $${Math.round(requiredMonthly).toLocaleString()}/mo (currently $${currentMonthlySave.toLocaleString()}/mo). That's tight but doable — move the $32k checking surplus into a 4.5% HYSA, and redirect ~$${Math.round(requiredMonthly - currentMonthlySave).toLocaleString()}/mo from spending.`;
+      } else {
+        verdict = <span><span className="ital">not</span> at this price.</span>;
+        copy = `You'd need to save $${Math.round(requiredMonthly).toLocaleString()}/mo, more than your current monthly cash flow allows. Consider $${Math.round(target * 0.75 / 10000) * 10000} or stretching to ${years + 2} years.`;
+      }
+
+      return (
+        <div className="afford-stage reveal" data-reveal>
+          <p className="afford-q">
+            Can I afford a <span className="var">${(target/1000).toFixed(0)}k</span> place in <span className="var">{years}</span> {years === 1 ? "year" : "years"} with <span className="var">{downPct}%</span> down<span className="ital">?</span>
+          </p>
+          <div className="afford-controls">
+            <div className="afford-control">
+              <label><span>Home price</span><b>${target.toLocaleString()}</b></label>
+              <input className="range" type="range" min="250000" max="1200000" step="25000" value={target} onChange={(e) => setTarget(+e.target.value)} />
+            </div>
+            <div className="afford-control">
+              <label><span>Timeline</span><b>{years} {years === 1 ? "year" : "years"}</b></label>
+              <input className="range" type="range" min="1" max="10" step="1" value={years} onChange={(e) => setYears(+e.target.value)} />
+            </div>
+            <div className="afford-control">
+              <label><span>Down payment</span><b>{downPct}%</b></label>
+              <input className="range" type="range" min="5" max="30" step="1" value={downPct} onChange={(e) => setDownPct(+e.target.value)} />
+            </div>
+            <div className="afford-control">
+              <label><span>Maya's savings rate</span><b>${currentMonthlySave.toLocaleString()}/mo</b></label>
+              <input className="range" type="range" min="0" max="3500" step="50" value={currentMonthlySave} disabled style={{opacity: 0.5}} />
+            </div>
+          </div>
+          <div className="afford-answer">
+            <div>
+              <div className={`verdict ${onTrack ? "yes" : (stretch ? "" : "no")}`}>{verdict}</div>
+              <p>{copy}</p>
+            </div>
+            <div className="afford-numbers">
+              <div className="afford-num-row"><span className="k">Total needed</span><span className="v">${Math.round(needed).toLocaleString()}</span></div>
+              <div className="afford-num-row"><span className="k">Projected savings</span><span className="v">${Math.round(projected).toLocaleString()}</span></div>
+              <div className="afford-num-row"><span className="k">Gap</span><span className="v" style={{color: onTrack ? "var(--green)" : "#8A3D3D"}}>{onTrack ? `+${Math.round(-gap).toLocaleString()}` : `−${Math.round(gap).toLocaleString()}`}</span></div>
+              <div className="afford-num-row"><span className="k">Save / month to hit it</span><span className="v">${Math.round(requiredMonthly).toLocaleString()}</span></div>
+              <div className="afford-num-row"><span className="k">Where Luca says to park it</span><span className="v">Ally HYSA · 4.2%</span></div>
+            </div>
           </div>
         </div>
-        <div class="error-msg" id="error-msg"></div>
-        <div class="shortcut-row">
-          <div class="shortcut-item"><span class="kbd">[ENTER]</span><span>submit</span></div>
-          <div class="shortcut-item"><span class="kbd">[ESC]</span><span>clear</span></div>
-          <div class="shortcut-item"><span class="kbd">[TAB]</span><span>focus</span></div>
-        </div>
-      </div>
-
-      <!-- PHASE 2: log stream -->
-      <div id="phase2">
-        <div class="phase2-prompt">
-          <span class="phase2-prefix">▸</span>
-          <span class="phase2-email" id="phase2-email"></span>
-        </div>
-        <div id="console-box"></div>
-      </div>
-
-      <!-- PHASE 3: receipt card -->
-      <div id="phase3">
-        <pre id="card-pre"></pre>
-        <button class="card-share-btn" id="share-btn">
-          [ SHARE OPERATIONAL LOG TO EXPEDITE DEPLOYMENT ]
-        </button>
-      </div>
-
-    </div><!-- /right-panel -->
-  </div><!-- /main -->
-
-  <!-- BOTTOM STATUS BAR -->
-  <div id="bottombar">
-    <div class="status-section">
-      uptime: <span class="status-val" id="uptime">00:00:00</span>
-    </div>
-    <div class="status-section">
-      slots: <span class="status-val" id="slots-count">4,891</span> remaining
-    </div>
-    <div class="status-section" id="node-status">
-      node: ALPHA-7 // ONLINE
-    </div>
-  </div>
-
-</div><!-- /app -->
-
-<script>
-/* ================================================================
-   CONFIG
-================================================================ */
-var SUPABASE_URL = 'https://ioeqnfqparfunotdjosy.supabase.co';
-var SUPABASE_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
-
-/* ================================================================
-   STATE
-================================================================ */
-var phase = 1;
-var slotsRemaining = 4891;
-var submittedEmail = '';
-var supabaseResult = null; // null=pending, true=ok, false=err
-
-/* ================================================================
-   UPTIME COUNTER
-================================================================ */
-var startTime = performance.now();
-var uptimeEl = document.getElementById('uptime');
-
-function padTwo(n) { return String(n).padStart(2, '0'); }
-
-function formatUptime(ms) {
-  var total = Math.floor(ms / 1000);
-  var h = Math.floor(total / 3600);
-  var m = Math.floor((total % 3600) / 60);
-  var s = total % 60;
-  return padTwo(h) + ':' + padTwo(m) + ':' + padTwo(s);
-}
-
-setInterval(function() {
-  uptimeEl.textContent = formatUptime(performance.now() - startTime);
-}, 1000);
-
-/* ================================================================
-   SLOTS
-================================================================ */
-var slotsEl = document.getElementById('slots-count');
-
-function formatNumber(n) {
-  return n.toLocaleString('en-US');
-}
-
-/* ================================================================
-   LEFT PANEL — STATUS FEED
-================================================================ */
-var feedEl = document.getElementById('status-feed');
-var MAX_FEED = 100;
-
-var feedPool = {
-  SYS: [
-    'Kernel watchdog nominal. Load: 0.12',
-    'GC sweep: 2.3MB reclaimed',
-    'CPU governor: performance mode active',
-    'Process scheduler: nominal',
-    'Disk I/O: 12ms avg latency',
-    'Entropy pool: 3891 bits available',
-  ],
-  NET: [
-    'Peer mesh sync — 847 active connections',
-    'Routing table updated — 12 new nodes',
-    'BGP route convergence: stable',
-    'Packet loss: 0.01% (acceptable)',
-    'CDN edge latency: 8ms avg',
-    'Socket pool: 256/512 open',
-  ],
-  MEM: [
-    'Heap pressure: 23% (stable)',
-    'Buffer pool: 64/256 slots allocated',
-    'Cache hit ratio: 94.7%',
-    'Memory fragmentation: low',
-    'SWAP usage: 0MB',
-    'Virtual memory paged: 0 faults',
-  ],
-  SEC: [
-    'Auth token rotation cycle complete',
-    'TLS handshake pool refreshed',
-    'Intrusion detection: no anomalies',
-    'Certificate expiry check: all valid',
-    'Rate limiter: nominal thresholds',
-    'API key audit: 0 stale entries',
-  ],
-};
-
-var feedTypes = ['SYS', 'NET', 'MEM', 'SEC'];
-
-function tsFromDate(d) {
-  return '[' + padTwo(d.getHours()) + ':' + padTwo(d.getMinutes()) + ':' + padTwo(d.getSeconds()) + ']';
-}
-
-function nowTs() { return tsFromDate(new Date()); }
-
-function pastTs(secondsAgo) {
-  return tsFromDate(new Date(Date.now() - secondsAgo * 1000));
-}
-
-function addFeedEntry(type, msg, ts) {
-  var timestamp = ts || nowTs();
-  var el = document.createElement('div');
-  el.className = 'feed-entry';
-
-  var timeSpan = document.createElement('span');
-  timeSpan.className = 'feed-time';
-  timeSpan.textContent = timestamp + ' ';
-
-  var bodySpan = document.createElement('span');
-  bodySpan.className = 'feed-type-' + type;
-  bodySpan.textContent = type + '  ' + msg;
-
-  el.appendChild(timeSpan);
-  el.appendChild(bodySpan);
-  feedEl.appendChild(el);
-
-  while (feedEl.children.length > MAX_FEED) {
-    feedEl.removeChild(feedEl.firstChild);
-  }
-
-  feedEl.scrollTop = feedEl.scrollHeight;
-}
-
-// Pre-seed
-var seeds = [
-  { type: 'SYS', msg: 'Kernel watchdog nominal. Load: 0.12',     ago: 180 },
-  { type: 'NET', msg: 'Peer mesh sync — 847 active connections',  ago: 155 },
-  { type: 'MEM', msg: 'Heap pressure: 23% (stable)',              ago: 130 },
-  { type: 'SEC', msg: 'Auth token rotation cycle complete',        ago: 108 },
-  { type: 'SYS', msg: 'GC sweep: 2.3MB reclaimed',               ago: 85  },
-  { type: 'NET', msg: 'Routing table updated — 12 new nodes',     ago: 62  },
-  { type: 'MEM', msg: 'Buffer pool: 64/256 slots allocated',      ago: 40  },
-  { type: 'SEC', msg: 'TLS handshake pool refreshed',             ago: 18  },
-];
-seeds.forEach(function(s) { addFeedEntry(s.type, s.msg, pastTs(s.ago)); });
-
-function scheduleNextFeed() {
-  var delay = 2000 + Math.random() * 2000;
-  setTimeout(function() {
-    var type = feedTypes[Math.floor(Math.random() * feedTypes.length)];
-    var pool = feedPool[type];
-    var msg = pool[Math.floor(Math.random() * pool.length)];
-    addFeedEntry(type, msg);
-    scheduleNextFeed();
-  }, delay);
-}
-scheduleNextFeed();
-
-/* ================================================================
-   EMAIL INPUT
-================================================================ */
-var emailInput   = document.getElementById('email-input');
-var promptLine   = document.getElementById('prompt-line');
-var blinkCursor  = document.getElementById('blink-cursor');
-var backdropEl   = document.getElementById('backdrop');
-var errorMsgEl   = document.getElementById('error-msg');
-var promptWrapper = document.getElementById('prompt-wrapper');
-
-function updateCursor() {
-  if (emailInput.value.length === 0) {
-    blinkCursor.classList.remove('hidden');
-  } else {
-    blinkCursor.classList.add('hidden');
-  }
-}
-
-emailInput.addEventListener('focus', function() {
-  promptLine.classList.add('focused');
-  backdropEl.classList.add('active');
-  updateCursor();
-});
-
-emailInput.addEventListener('blur', function() {
-  promptLine.classList.remove('focused');
-  backdropEl.classList.remove('active');
-  updateCursor();
-});
-
-emailInput.addEventListener('input', function() {
-  updateCursor();
-  clearError();
-});
-
-function clearError() {
-  errorMsgEl.textContent = '';
-  promptLine.classList.remove('error');
-}
-
-function showError(msg) {
-  errorMsgEl.textContent = msg;
-  promptLine.classList.add('error');
-  setTimeout(function() { promptLine.classList.remove('error'); }, 600);
-  setTimeout(function() { errorMsgEl.textContent = ''; }, 2000);
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
-}
-
-/* ================================================================
-   KEYBOARD SHORTCUTS
-================================================================ */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Tab' && document.activeElement !== emailInput && phase === 1) {
-    e.preventDefault();
-    emailInput.focus();
-    return;
-  }
-  if (e.key === 'Escape') {
-    if (phase === 1) emailInput.blur();
-    // phase 2/3: submission is final, ignore
-    return;
-  }
-  if (e.key === 'Enter' && document.activeElement === emailInput) {
-    e.preventDefault();
-    handleSubmit();
-  }
-});
-
-/* ================================================================
-   SUBMISSION
-================================================================ */
-function handleSubmit() {
-  if (phase !== 1) return;
-
-  var email = emailInput.value.trim();
-
-  if (!validateEmail(email)) {
-    showError('// INVALID FORMAT — EXPECTED user@domain.tld');
-    return;
-  }
-
-  submittedEmail = email;
-  phase = 2;
-
-  // Lock input UI
-  emailInput.disabled = true;
-  promptLine.classList.remove('focused');
-  promptLine.classList.add('locked');
-  blinkCursor.classList.add('hidden');
-  backdropEl.classList.remove('active');
-
-  // Shift prompt up
-  promptWrapper.classList.add('shifted');
-
-  // Show phase2 area
-  var phase2El = document.getElementById('phase2');
-  var phase2EmailEl = document.getElementById('phase2-email');
-  phase2El.classList.add('visible');
-  phase2EmailEl.textContent = email;
-
-  // Fire Supabase in parallel
-  fireSupabase(email);
-
-  // Start log stream
-  startLogStream(email);
-}
-
-/* ================================================================
-   SUPABASE
-================================================================ */
-function fireSupabase(email) {
-  fetch(SUPABASE_URL + '/rest/v1/waitlist', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + SUPABASE_KEY,
-      'Prefer': 'return=minimal',
-    },
-    body: JSON.stringify({ email: email, source: 'airlist' }),
-  })
-  .then(function(res) {
-    supabaseResult = (res.ok || res.status === 409) ? true : false;
-  })
-  .catch(function() {
-    supabaseResult = false;
-  });
-}
-
-/* ================================================================
-   LOG STREAM
-================================================================ */
-var LOG_DEFS = [
-  { tag: '[LOG]   ', text: 'Initiating handshake with global routing matrix...',   suffix: '[OK]',   cls: 'log-suffix-ok'   },
-  { tag: '[LOG]   ', text: 'Allocating sandbox memory register (256MB)...',         suffix: '[OK]',   cls: 'log-suffix-ok'   },
-  { tag: '[LOG]   ', text: 'Scanning IANA namespace for collision conflicts...',     suffix: '[OK]',   cls: 'log-suffix-ok'   },
-  { tag: '[LOG]   ', text: 'Reserving hardware slot for {email}...',                suffix: '[OK]',   cls: 'log-suffix-ok'   },
-  { tag: '[STATUS]', text: 'Enrollment signature generated.',                       suffix: '[SIG]',  cls: 'log-suffix-sig'  },
-  { tag: '[STATUS]', text: 'Writing to Alpha Node persistent store...',             suffix: '[OK]',   cls: 'log-suffix-ok'   },
-  { tag: '[STATUS]', text: 'Position secured. Queue depth: 4,891.',                suffix: '[DONE]', cls: 'log-suffix-done' },
-];
-var ERR_DEF = { tag: '[ERR]   ', text: 'Registration write failed — slot reserved locally.', suffix: '[WARN]', cls: 'log-suffix-warn' };
-
-function startLogStream(email) {
-  var consoleBox = document.getElementById('console-box');
-
-  // Resolve email placeholder
-  var lines = LOG_DEFS.map(function(l) {
-    return {
-      tag: l.tag,
-      text: l.text.replace('{email}', email),
-      suffix: l.suffix,
-      cls: l.cls,
+      );
     };
-  });
+    window.Afford = Afford;
+  </script>
 
-  var lineIdx = 0;
+  <!-- Accounts -->
+  <script type="text/babel">
+    const ACCOUNTS = [
+      { id: "chase",    name: "Chase Checking",          meta: "•••• 4821",       balance: 32400,  color: "#117ACA", letter: "C" },
+      { id: "ally",     name: "Ally High-Yield Savings",  meta: "4.2% APY",        balance: 8100,   color: "#660099", letter: "A" },
+      { id: "fidelity", name: "Fidelity 401k",            meta: "Target 2055 Fund", balance: 84200,  color: "#268d3a", letter: "F" },
+      { id: "vanguard", name: "Vanguard Roth IRA",        meta: "VTSAX",           balance: 19400,  color: "#9B1C2E", letter: "V" },
+      { id: "amex",     name: "Chase Sapphire",           meta: "•••• 3304",       balance: -1840,  color: "#0A0A0A", letter: "C" },
+      { id: "sallie",   name: "Federal Student Loans",    meta: "4.5% wt avg",     balance: -18000, color: "#5A5FA8", letter: "S" },
+    ];
 
-  function makeLineEl(def) {
-    var lineEl = document.createElement('div');
-    lineEl.className = 'log-line';
+    const fmtBal = (n) => (n < 0 ? "−$" : "$") + Math.abs(n).toLocaleString();
 
-    var leftEl = document.createElement('div');
-    leftEl.className = 'log-left';
+    const Spark = ({ data }) => {
+      const w = 320, h = 56, pad = 2;
+      if (!data || data.length < 2) return null;
+      const min = Math.min(...data), max = Math.max(...data);
+      const range = max - min || 1;
+      const stepX = (w - pad * 2) / (data.length - 1);
+      const points = data.map((d, i) => [pad + i * stepX, pad + (h - pad * 2) * (1 - (d - min) / range)]);
+      const line = points.map(([x, y], i) => (i === 0 ? `M${x},${y}` : `L${x},${y}`)).join(" ");
+      const fill = `${line} L${w - pad},${h} L${pad},${h} Z`;
+      return (
+        <svg className="spark" viewBox={`0 0 ${w} ${h}`} preserveAspectRatio="none">
+          <path className="fill" d={fill} />
+          <path className="line" d={line} />
+        </svg>
+      );
+    };
 
-    var tagEl = document.createElement('span');
-    tagEl.className = 'log-tag';
-    tagEl.textContent = def.tag;
+    const Accounts = () => {
+      const total  = ACCOUNTS.reduce((s, a) => s + a.balance, 0);
+      const assets = ACCOUNTS.reduce((s, a) => s + (a.balance > 0 ? a.balance : 0), 0);
+      const liab   = ACCOUNTS.reduce((s, a) => s + (a.balance < 0 ? -a.balance : 0), 0);
 
-    var textEl = document.createElement('span');
-    textEl.className = 'log-text';
+      const spark = React.useMemo(() => {
+        const n = 24;
+        return Array.from({ length: n }, (_, i) => {
+          const base = total * (0.55 + 0.45 * (i / (n - 1)));
+          return base + Math.sin(i * 0.7) * 0.04 * total;
+        });
+      }, [total]);
 
-    var cursorEl = document.createElement('span');
-    cursorEl.className = 'log-cursor';
-    cursorEl.textContent = '▋';
+      return (
+        <div className="accounts-stage reveal" data-reveal>
+          <div className="accounts-list">
+            {ACCOUNTS.map((a) => (
+              <div key={a.id} className="account-card connected">
+                <div className="acc-logo" style={{ background: a.color }}>{a.letter}</div>
+                <div className="acc-info">
+                  <div className="acc-name">{a.name}</div>
+                  <div className="acc-meta">{a.meta}</div>
+                </div>
+                <div className="acc-bal">
+                  {fmtBal(a.balance)}
+                  <span className="small">{a.balance < 0 ? "balance owed" : "current balance"}</span>
+                </div>
+              </div>
+            ))}
+          </div>
 
-    leftEl.appendChild(tagEl);
-    leftEl.appendChild(textEl);
-    leftEl.appendChild(cursorEl);
-    lineEl.appendChild(leftEl);
-    consoleBox.appendChild(lineEl);
+          <div className="accounts-snapshot">
+            <div className="snapshot-label">Net worth — live</div>
+            <div className="snapshot-figure">${total.toLocaleString()}</div>
+            <div className="snapshot-delta">↗ +$1,840 this month · {ACCOUNTS.length} accounts linked</div>
+            <div className="snapshot-grid">
+              <div className="snapshot-item"><div className="k">Assets</div><div className="v">${assets.toLocaleString()}</div></div>
+              <div className="snapshot-item"><div className="k">Liabilities</div><div className="v">−${liab.toLocaleString()}</div></div>
+              <div className="snapshot-item"><div className="k">Savings rate</div><div className="v">28%</div></div>
+              <div className="snapshot-item"><div className="k">Cash flow</div><div className="v" style={{ color: "var(--green)" }}>+$1,170</div></div>
+            </div>
+            <div className="snapshot-spark">
+              <Spark data={spark} />
+              <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "var(--mono)", fontSize: 10, color: "var(--muted-2)", marginTop: 4, letterSpacing: "0.04em" }}>
+                <span>24 MONTHS AGO</span><span>TODAY</span>
+              </div>
+            </div>
+            <div className="lucas-read">
+              <div className="lucas-read-tag">Luca's read</div>
+              <p>Your <b>$32,400 in checking</b> is the weak spot. Move $24k into the Ally HYSA and you'll earn <b>$1,008/yr</b> doing nothing else.</p>
+            </div>
+          </div>
+        </div>
+      );
+    };
+    window.Accounts = Accounts;
+  </script>
 
-    return { lineEl: lineEl, textEl: textEl, cursorEl: cursorEl };
-  }
+  <!-- PricingComparison + Waitlist (real Supabase) -->
+  <script type="text/babel">
+    const PricingComparison = () => (
+      <div className="compare-wrap reveal" data-reveal>
+        <div className="compare-col them">
+          <div className="compare-tag">Traditional</div>
+          <div className="compare-name">CFP + investment advisor</div>
+          <div className="compare-price"><span className="big">$320</span><span className="unit">/ hour</span></div>
+          <div className="compare-sub">Plus 1% AUM on managed assets</div>
+          <ul className="compare-feats">
+            <li><b>Quarterly</b> meetings if you're lucky</li>
+            <li>Doesn't actually look at every transaction</li>
+            <li>Generic risk-profile portfolios</li>
+            <li>Costs more the more you save</li>
+            <li>Hard to reach between meetings</li>
+          </ul>
+        </div>
+        <div className="compare-col us">
+          <div className="compare-tag">Luca</div>
+          <div className="compare-name">AI advisor, in your pocket</div>
+          <div className="compare-price"><span className="big">$14.99</span><span className="unit">/ month, flat</span></div>
+          <div className="compare-sub">Cancel anytime. No AUM fees, ever.</div>
+          <ul className="compare-feats">
+            <li><b>Every morning</b> — markets, your numbers, what to do</li>
+            <li>Reads <b>every transaction</b> across every account</li>
+            <li>Advice tied to your actual goals &amp; income</li>
+            <li>Same price whether you have $1k or $1M</li>
+            <li>Always-on chat, instant answers</li>
+          </ul>
+          <div className="savings-ticker">
+            <div className="savings-row"><span>One year of Luca</span><span>$179</span></div>
+            <div className="savings-row"><span>One hour with a CFP</span><span>$320</span></div>
+            <div className="savings-figure-small">Less than one consultation. Every month for a year.</div>
+          </div>
+        </div>
+      </div>
+    );
 
-  function typeLine(def, callback) {
-    var els = makeLineEl(def);
-    var ci = 0;
+    const Waitlist = () => {
+      const [email, setEmail] = React.useState("");
+      const [submitted, setSubmitted] = React.useState(false);
+      const [loading, setLoading] = React.useState(false);
+      const [error, setError] = React.useState("");
 
-    function typeChar() {
-      if (ci < def.text.length) {
-        els.textEl.textContent += def.text[ci];
-        ci++;
-        setTimeout(typeChar, 15);
-      } else {
-        // Done typing — remove cursor, add suffix
-        els.cursorEl.remove();
-        var suffixEl = document.createElement('span');
-        suffixEl.className = 'log-suffix ' + def.cls;
-        suffixEl.textContent = def.suffix;
-        els.lineEl.appendChild(suffixEl);
-        setTimeout(callback, 50);
-      }
-    }
+      const submit = async (e) => {
+        e.preventDefault();
+        if (!email.includes("@")) return;
+        setLoading(true);
+        setError("");
+        try {
+          const res = await fetch(`${window.SUPABASE_URL}/rest/v1/waitlist`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": window.SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${window.SUPABASE_ANON_KEY}`,
+              "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({ email, source: "landing" })
+          });
+          if (res.ok || res.status === 409) {
+            setSubmitted(true);
+          } else {
+            setError("Something went wrong. Try again.");
+          }
+        } catch (_) {
+          setError("Something went wrong. Try again.");
+        } finally {
+          setLoading(false);
+        }
+      };
 
-    typeChar();
-  }
+      return (
+        <section className="waitlist" id="waitlist">
+          <div className="wrap">
+            <div className="mark-wrap">
+              <LucaMark size={96} className="logo-mark big-mark" />
+            </div>
+            <h2>Be one of the first to <span className="ital">talk to your money.</span></h2>
+            <p className="waitlist-sub">
+              Luca is opening up access in waves. Drop your email — first 5,000 get the founder rate of $9.99/mo for life.
+            </p>
+            {!submitted ? (
+              <form className="waitlist-form" onSubmit={submit}>
+                <div className="waitlist-input-wrap">
+                  <input
+                    type="email"
+                    placeholder="you@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    disabled={loading}
+                  />
+                  <button type="submit" className="waitlist-submit" disabled={loading}>
+                    {loading ? "Joining…" : "Request access"}
+                  </button>
+                </div>
+                {error && <div className="waitlist-error">{error}</div>}
+                <div className="waitlist-foot">No credit card · we never sell data · read-only access to accounts</div>
+              </form>
+            ) : (
+              <div className="waitlist-form">
+                <div className="waitlist-thanks">You're on the list.</div>
+                <div className="waitlist-foot" style={{ marginTop: 14 }}>
+                  Check {email} for a confirmation — first wave opens soon.
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      );
+    };
 
-  function nextLine() {
-    if (lineIdx < lines.length) {
-      typeLine(lines[lineIdx], function() {
-        lineIdx++;
-        nextLine();
-      });
-    } else {
-      // All base lines done — wait for supabase or add idle cursor
-      waitForSupabase();
-    }
-  }
+    window.PricingComparison = PricingComparison;
+    window.Waitlist = Waitlist;
+  </script>
 
-  function waitForSupabase() {
-    if (supabaseResult === null) {
-      setTimeout(waitForSupabase, 150);
-      return;
-    }
-    if (supabaseResult === false) {
-      typeLine(ERR_DEF, function() {
-        showIdleCursorThenCard();
-      });
-    } else {
-      showIdleCursorThenCard();
-    }
-  }
+  <!-- App — main composition -->
+  <script type="text/babel">
+    const useReveal = () => {
+      React.useEffect(() => {
+        const els = document.querySelectorAll("[data-reveal]");
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("in"); });
+        }, { threshold: 0.12 });
+        els.forEach(el => io.observe(el));
+        return () => io.disconnect();
+      }, []);
+    };
 
-  function showIdleCursorThenCard() {
-    var idleEl = document.createElement('div');
-    idleEl.innerHTML = '<span class="log-cursor">▋</span>';
-    consoleBox.appendChild(idleEl);
-    setTimeout(showPhase3, 350);
-  }
+    const useScrolled = () => {
+      const [scrolled, setScrolled] = React.useState(false);
+      React.useEffect(() => {
+        const fn = () => setScrolled(window.scrollY > 20);
+        window.addEventListener("scroll", fn);
+        return () => window.removeEventListener("scroll", fn);
+      }, []);
+      return scrolled;
+    };
 
-  nextLine();
-}
+    const Nav = () => {
+      const scrolled = useScrolled();
+      return (
+        <header className={`nav ${scrolled ? "scrolled" : ""}`}>
+          <div className="wrap nav-inner">
+            <a href="#" className="nav-brand">
+              <LucaMark size={26} />
+              <span className="nav-brand-word">Luca</span>
+            </a>
+            <nav className="nav-links">
+              <a href="#how">How it works</a>
+              <a href="#daily">Daily brief</a>
+              <a href="#pricing">Pricing</a>
+              <a href="#waitlist" className="nav-cta">Get early access</a>
+            </nav>
+          </div>
+        </header>
+      );
+    };
 
-/* ================================================================
-   PHASE 3 — RECEIPT CARD
-================================================================ */
-function buildCard(enrollId, queuePos) {
-  var W = 66; // inner width
-  var bar = '';
-  for (var i = 0; i < W; i++) bar += '─';
+    const StickyMobileCTA = () => {
+      const [show, setShow] = React.useState(false);
+      React.useEffect(() => {
+        const fn = () => {
+          const past = window.scrollY > window.innerHeight * 0.6;
+          const nearBottom = window.innerHeight + window.scrollY > document.body.offsetHeight - 600;
+          setShow(past && !nearBottom);
+        };
+        window.addEventListener("scroll", fn, { passive: true });
+        fn();
+        return () => window.removeEventListener("scroll", fn);
+      }, []);
+      return (
+        <a href="#waitlist" className={`sticky-cta ${show ? "in" : ""}`}>
+          <span>Get early access · $9.99 lifetime</span>
+          <span className="arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </a>
+      );
+    };
 
-  function row(inner) {
-    var s = inner;
-    while (s.length < W) s += ' ';
-    if (s.length > W) s = s.substring(0, W);
-    return '│' + s + '│';
-  }
+    const Hero = () => (
+      <section className="hero">
+        <div className="wrap">
+          <div className="eyebrow">Coming summer 2026</div>
+          <h1>Money advice from someone who has read <span className="ital">every line</span> of your statement.</h1>
+          <p className="hero-sub">
+            Luca connects to your real bank, investment, and credit accounts — then has a genuine conversation about your money. Your numbers. Your goals. What to do next.
+          </p>
+          <ChatDemo />
+          <div className="claude-pill">
+            <span className="dot" />
+            Powered by Claude · the most advanced reasoning AI
+          </div>
+        </div>
+      </section>
+    );
 
-  return [
-    '┌' + bar + '┐',
-    row('  SYSTEM REGISTER COMPLIANT // ALPHA NODE ACTIVATED'),
-    '├' + bar + '┤',
-    row(''),
-    row('  ▸ ENROLLMENT ID:   ' + enrollId),
-    row('  ▸ TIER METRIC:     Prosumer Operator'),
-    row('  ▸ NODE:            ALPHA-7'),
-    row('  ▸ QUEUE POSITION:  ' + queuePos),
-    row('  ▸ STATUS:          ACTIVE'),
-    row(''),
-    '└' + bar + '┘',
-  ].join('\n');
-}
+    const Manifesto = () => (
+      <section className="manifesto">
+        <div className="wrap">
+          <div className="manifesto-rule" />
+          <p className="manifesto-text">
+            For decades, real financial advice has been a <span className="ital">luxury good</span>. You needed a hundred thousand in the bank to get someone to actually look at your numbers.
+          </p>
+          <p className="manifesto-text">Luca changes that.</p>
+        </div>
+      </section>
+    );
 
-function showPhase3() {
-  // Decrement slots
-  if (slotsRemaining > 0) slotsRemaining--;
-  slotsEl.textContent = formatNumber(slotsRemaining);
+    const HowItWorks = () => (
+      <section className="section" id="how">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">01</span> What Luca sees</div>
+          <h2>It reads <span className="ital">everything</span>. Then it remembers.</h2>
+          <p className="section-lead">
+            Plaid-secured, read-only access to every account you have. Luca sees every transaction, every balance, every recurring charge. Then it ties them to your goals and tells you what to do.
+          </p>
+          <Accounts />
+        </div>
+      </section>
+    );
 
-  // Pulse node status green
-  var nodeEl = document.getElementById('node-status');
-  nodeEl.classList.add('pulse');
-  setTimeout(function() { nodeEl.classList.remove('pulse'); }, 2000);
+    const DailyBriefSection = () => (
+      <section className="section" id="daily">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">02</span> Every morning</div>
+          <h2>A daily brief tuned to <span className="ital">your</span> money.</h2>
+          <p className="section-lead">
+            Not "the S&amp;P moved 0.3%". Specifically: how today's market matters to your portfolio, what hit your accounts overnight, and what to do about it before lunch.
+          </p>
+          <div className="brief-wrap">
+            <div className="brief-card reveal" data-reveal>
+              <div className="brief-meta">Tuesday · 7:02 AM · for Maya</div>
+              <h3>Fed pause is locking in <span className="accent">4.2% on your savings</span> — which means the $32k in your Chase checking is leaving real money on the table this month.</h3>
+              <p>Overnight, your Roth contribution cleared and Spotify auto-renewed twice (once on Apple, once direct — you've been double-billed since March). I cancelled the dupe.</p>
+              <ul className="brief-bullets">
+                <li><b>Move $24,000</b> from Chase → Ally HYSA before Friday's paycheck. ≈ <b>$84/mo</b> more, doing nothing.</li>
+                <li><b>Roth IRA</b> is $3,200 short of the 2026 limit. You have 41 weeks. <b>$78/wk</b> automated.</li>
+                <li><b>Brooklyn condo</b> goal: you're $2,140 ahead of plan. Nice.</li>
+              </ul>
+            </div>
+            <div>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 12, color: "var(--muted-2)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 16 }}>Real-time alerts</div>
+              <div className="alerts-list">
+                {[
+                  { icon: "Spend",  title: "DoorDash charged you $47 — double the last 30-day avg",    detail: "Hit your \"dining\" envelope by 9th of the month. Want me to budget around it?", time: "2m" },
+                  { icon: "Market", title: "VTSAX hit your $230 alert price",                           detail: "Your scheduled Roth buy lands tomorrow — you'll get more shares for the same dollar.", time: "1h" },
+                  { icon: "Bills",  title: "Recurring charge from Notion went up 25%",                  detail: "New $19.99/mo charge vs. last $15.99. Worth keeping?", time: "3h" },
+                  { icon: "Goal",   title: "You're at 28% savings rate this month — 3 above target",    detail: "If you sustain it through year-end, the condo timeline shortens by 4.5 months.", time: "today" },
+                ].map((a, i) => (
+                  <div key={i} className="alert">
+                    <div className="alert-icon">{a.icon}</div>
+                    <div className="alert-body">
+                      <div className="alert-title">{a.title}</div>
+                      <div className="alert-detail">{a.detail}</div>
+                    </div>
+                    <div className="alert-time">{a.time}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
 
-  // Build card
-  var enrollId = '0x' + btoa(submittedEmail).substring(0, 8) + '...';
-  var queuePos = '#' + formatNumber(slotsRemaining);
-  var cardText = buildCard(enrollId, queuePos);
+    const AffordSection = () => (
+      <section className="section">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">03</span> Big questions, real answers</div>
+          <h2>"Can I afford this?" gets a <span className="ital">numbered</span> answer.</h2>
+          <p className="section-lead">
+            Drag the sliders. This is how Luca reasons about Maya's home goal — projecting savings growth, factoring HYSA yield, and naming the exact monthly number to hit it.
+          </p>
+          <Afford />
+        </div>
+      </section>
+    );
 
-  var phase3El = document.getElementById('phase3');
-  var cardPre  = document.getElementById('card-pre');
-  cardPre.textContent = cardText;
+    const DifferentiatorSection = () => (
+      <section className="section diff-section">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">/</span> One question first</div>
+          <h2>"Isn't this just <span className="ital">ChatGPT</span> for money?"</h2>
+          <p className="section-lead">Fair question. Three structural differences — not features, architecture.</p>
+          <div className="diff-grid">
+            {[
+              { them: "Doesn't know your numbers. It guesses based on what you typed.", us: "Reads every transaction, balance, and recurring charge across your real accounts. Answers come from <b>your</b> numbers, not averages." },
+              { them: "Forgets you between sessions. Every conversation starts from zero.", us: "Remembers your goals, your risk tolerance, the questions you asked last March. Gets sharper the longer you use it." },
+              { them: "Trained to be helpful at everything. Knows a little about taxes, mortgages, asset allocation.", us: "Built only for personal finance, on top of Claude's reasoning. Tax-aware, account-aware, goal-aware. One job, done well." },
+            ].map((row, i) => (
+              <div key={i} className="diff-row reveal" data-reveal>
+                <div className="diff-them"><div className="diff-label">A general AI</div><p>{row.them}</p></div>
+                <div className="diff-us"><div className="diff-label">Luca</div><p dangerouslySetInnerHTML={{ __html: row.us }} /></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
 
-  phase3El.classList.add('visible');
-  phase = 3;
+    const PricingSection = () => (
+      <section className="section" id="pricing">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">05</span> Pricing</div>
+          <h2>The advice a CFP gives, at a fraction of <span className="ital">the cost</span>.</h2>
+          <p className="section-lead">
+            Most people can't afford a Certified Financial Planner. So they get nothing — or worse, generic advice from a blog. Luca closes that gap.
+          </p>
+          <PricingComparison />
+        </div>
+      </section>
+    );
 
-  // Animate in (double rAF to ensure display:block is applied first)
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      phase3El.classList.add('animate');
-    });
-  });
+    const TrustSection = () => (
+      <section className="section">
+        <div className="wrap">
+          <div className="section-eyebrow"><span className="num">06</span> Trust</div>
+          <h2>It can read your money. It <span className="ital">cannot</span> move it.</h2>
+          <p className="section-lead">
+            Not by policy — by architecture. The connection to your accounts is one-way. Luca has no path to transfer funds, place trades, or change settings on your behalf.
+          </p>
+          <div className="trust-grid">
+            {[
+              { num: "→ 01 Read-only by design", h: "Luca physically cannot move money", p: "The Plaid integration we use only exposes balances and transactions. There's no write API. No transfer endpoint. If we wanted to send a dollar, we couldn't." },
+              { num: "→ 02 Bank-grade encryption", h: "Same standard your bank uses", p: "256-bit AES at rest, TLS 1.3 in transit. SOC 2 Type II audited annually. Your credentials never touch Luca's servers — Plaid handles the auth handshake." },
+              { num: "→ 03 Your data, your decision", h: "Disconnect, delete, done", p: "One click revokes Luca's access to any account. Delete your data — really delete it — at any time, no email-support runaround. We don't sell anything to anyone." },
+            ].map((c, i) => (
+              <div key={i} className="trust-card reveal" data-reveal>
+                <div className="num">{c.num}</div>
+                <h4>{c.h}</h4>
+                <p>{c.p}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
 
-  // Wire share button
-  var shareBtn = document.getElementById('share-btn');
-  shareBtn.addEventListener('click', function() {
-    var shareText = 'I just joined the Luca Airlist — reserve your slot before Alpha fills up.';
-    navigator.clipboard.writeText(shareText).catch(function() {});
-    shareBtn.textContent = '[ COPIED TO CLIPBOARD ✓ ]';
-    setTimeout(function() {
-      shareBtn.textContent = '[ SHARE OPERATIONAL LOG TO EXPEDITE DEPLOYMENT ]';
-    }, 2000);
-  });
-}
+    const Footer = () => (
+      <footer className="footer">
+        <div className="wrap footer-inner">
+          <div className="footer-left">
+            <div className="footer-mark"><LucaMark size={20} /> <span>Made in San Diego, CA</span></div>
+            <div className="footer-fine">© 2026 Luca · Not a registered investment advisor. For educational purposes.</div>
+          </div>
+          <div className="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Security</a>
+            <a href="#">Terms</a>
+          </div>
+        </div>
+      </footer>
+    );
 
-/* ================================================================
-   INIT
-================================================================ */
-updateCursor();
-</script>
+    const App = () => {
+      useReveal();
+      return (
+        <>
+          <Nav />
+          <main>
+            <Hero />
+            <Manifesto />
+            <HowItWorks />
+            <DailyBriefSection />
+            <AffordSection />
+            <DifferentiatorSection />
+            <PricingSection />
+            <TrustSection />
+            <Waitlist />
+          </main>
+          <Footer />
+          <StickyMobileCTA />
+        </>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
 </body>
 </html>
