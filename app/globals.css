@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  font-variant-numeric: tabular-nums;
+}
+
+html { scroll-behavior: smooth; }
+
+::selection {
+  background: #F5F5F3;
+  color: #0A0A0A;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #0A0A0A inset;
+  -webkit-text-fill-color: #F5F5F3;
+  transition: background-color 5000s ease-in-out 0s;
+}
