@@ -1166,15 +1166,14 @@ a { color: inherit; text-decoration: none; }
 
   <!-- ── Supabase config ── fill in your values from supabase.com/dashboard → Settings → API -->
   <script>
-    window.SUPABASE_URL     = 'YOUR_SUPABASE_URL';
-    window.SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+    window.SUPABASE_URL     = 'https://ioeqnfqparfunotdjosy.supabase.co';
+    window.SUPABASE_ANON_KEY = 'sb_publishable_WgGtHiiEJJ-EJzYrG5jV7g_XlZnxTAJ';
   </script>
 
   <!-- CDN deps -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <!-- LucaMark — inline SVG logo (swap src for luca-icon.png once you have the file) -->
   <script type="text/babel">
@@ -1570,17 +1569,20 @@ a { color: inherit; text-decoration: none; }
         setLoading(true);
         setError("");
         try {
-          const client = window.supabase.createClient(
-            window.SUPABASE_URL,
-            window.SUPABASE_ANON_KEY
-          );
-          const { error: sbErr } = await client
-            .from("waitlist")
-            .insert([{ email, source: "landing" }]);
-          if (sbErr && sbErr.code !== "23505") {
-            setError("Something went wrong. Try again.");
-          } else {
+          const res = await fetch(`${window.SUPABASE_URL}/rest/v1/waitlist`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": window.SUPABASE_ANON_KEY,
+              "Authorization": `Bearer ${window.SUPABASE_ANON_KEY}`,
+              "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({ email, source: "landing" })
+          });
+          if (res.ok || res.status === 409) {
             setSubmitted(true);
+          } else {
+            setError("Something went wrong. Try again.");
           }
         } catch (_) {
           setError("Something went wrong. Try again.");
